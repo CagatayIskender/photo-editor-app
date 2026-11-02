@@ -90,6 +90,7 @@ public struct CrownBadge: View {
             .foregroundColor(AurumColor.accent)
             .frame(width: size, height: size)
             .background(Circle().fill(AurumColor.background.opacity(0.72)))
+            .aurumShimmer(intensity: 0.45, duration: 3.2)
             .accessibilityElement()
             .accessibilityLabel("Members only")
     }
@@ -127,8 +128,9 @@ public struct Chip: View {
                     .stroke(isSelected ? Color.clear : AurumColor.hairline, lineWidth: 1)
             )
             .contentShape(.hoverEffect, RoundedRectangle(cornerRadius: Radius.chip))
+            .animation(Motion.respectingReduceMotion(.spring(response: 0.3, dampingFraction: 0.8)), value: isSelected)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressableStyle(scale: 0.95))
         .hoverEffect(.highlight)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
@@ -249,19 +251,26 @@ public struct LookThumbnail: View {
                 Group {
                     if let image {
                         image.resizable().scaledToFill()
+                            .transition(.opacity)
                     } else {
                         LinearGradient(colors: swatch, startPoint: .topLeading, endPoint: .bottomTrailing)
+                            .aurumShimmer(intensity: 0.12, duration: 1.6)
                     }
                 }
+                .animation(.easeOut(duration: 0.3), value: image == nil)
                 .frame(width: 62, height: 78)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 if isPremium { CrownBadge(size: 18).padding(5) }
             }
             .overlay(
                 RoundedRectangle(cornerRadius: 14)
-                    .stroke(isSelected ? AurumColor.accent : .clear, lineWidth: 1.5)
+                    .stroke(AurumColor.accent, lineWidth: 1.5)
                     .padding(-3)
+                    .opacity(isSelected ? 1 : 0)
+                    .scaleEffect(isSelected ? 1 : 1.08)
             )
+            .scaleEffect(isSelected ? 1.04 : 1)
+            .animation(Motion.respectingReduceMotion(.spring(response: 0.32, dampingFraction: 0.68)), value: isSelected)
             Text(name)
                 .font(AurumTextStyle.label.font)
                 .foregroundColor(isSelected ? AurumColor.textPrimary : AurumColor.textTertiary)
@@ -293,13 +302,19 @@ public struct ToolRailItem: View {
         Button(action: action) {
             VStack(spacing: 6) {
                 IconView(icon, size: 24)
+                    .scaleEffect(isActive ? 1.08 : 1)
                 Text(title).font(.caption2)
+                Capsule()
+                    .fill(AurumColor.accent)
+                    .frame(width: isActive ? 14 : 0, height: 2)
+                    .opacity(isActive ? 1 : 0)
             }
-            .frame(width: 64, height: 60)
+            .animation(Motion.respectingReduceMotion(.spring(response: 0.35, dampingFraction: 0.7)), value: isActive)
+            .frame(width: 64, height: 64)
             .foregroundColor(isActive ? AurumColor.accent : (isAvailable ? AurumColor.textSecondary : AurumColor.textTertiary.opacity(0.6)))
             .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressableStyle(scale: 0.92))
         .hoverEffect(.highlight)
         .disabled(!isAvailable)
         .accessibilityLabel(isAvailable ? title : "\(title), coming soon")
