@@ -109,7 +109,7 @@ public struct LibraryMediaSource: VideoMediaSource {
     }
 
     /// A library track shipped in the app bundle, or downloaded earlier to Caches/Music.
-    static func bundledURL(for track: MusicTrack) -> URL? {
+    static func bundledURL(for track: AurumCore.MusicTrack) -> URL? {
         let fm = FileManager.default
         var candidates: [URL] = []
         if let resources = Bundle.main.resourceURL {

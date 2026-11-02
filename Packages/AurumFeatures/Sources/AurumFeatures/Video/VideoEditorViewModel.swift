@@ -49,7 +49,7 @@ public enum TransitionChoice: String, CaseIterable, Identifiable {
 
     public static let defaultDuration: Seconds = 0.5
 
-    public init(_ transition: Transition) {
+    public init(_ transition: AurumCore.Transition) {
         switch transition {
         case .cut: self = .cut
         case .dissolve, .ai: self = .dissolve
@@ -59,7 +59,7 @@ public enum TransitionChoice: String, CaseIterable, Identifiable {
         }
     }
 
-    public func transition(duration: Seconds = TransitionChoice.defaultDuration) -> Transition {
+    public func transition(duration: Seconds = TransitionChoice.defaultDuration) -> AurumCore.Transition {
         switch self {
         case .cut: return .cut
         case .dissolve: return .dissolve(duration: duration)
@@ -295,7 +295,7 @@ public final class VideoEditorViewModel: ObservableObject, Identifiable {
         edit { $0.music = music }
     }
 
-    public func useLibraryTrack(_ track: MusicTrack) {
+    public func useLibraryTrack(_ track: AurumCore.MusicTrack) {
         setMusic(MusicSelection(source: .library(trackID: track.id), title: track.title, volume: project.music?.volume ?? 0.8, beats: track.beats))
     }
 

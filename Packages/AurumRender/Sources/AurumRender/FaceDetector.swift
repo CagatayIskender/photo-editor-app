@@ -37,7 +37,7 @@ public enum FaceDetector {
             height: Double(box.height)
         )
 
-        var regions: [FaceGeometry.Region: [NormalizedPoint]] = [:]
+        var regions: [FaceGeometry.Region: [AurumCore.NormalizedPoint]] = [:]
         if let landmarks = observation.landmarks {
             let mapping: [(FaceGeometry.Region, VNFaceLandmarkRegion2D?)] = [
                 (.faceContour, landmarks.faceContour),
@@ -52,7 +52,7 @@ public enum FaceDetector {
             for (region, landmark) in mapping {
                 guard let landmark, landmark.pointCount > 0 else { continue }
                 let points = landmark.pointsInImage(imageSize: imageSize).map { p in
-                    NormalizedPoint(
+                    AurumCore.NormalizedPoint(
                         x: Double(p.x / imageSize.width),
                         y: Double(1 - p.y / imageSize.height)
                     )
