@@ -35,6 +35,8 @@ jobs:
         run: brew install xcodegen
       - name: Generate project
         run: xcodegen generate
+      - name: Boot simulator
+        run: xcrun simctl boot "iPhone 16" || true; xcrun simctl bootstatus "iPhone 16" -b
       - name: Package tests
         run: |
           failed=""
@@ -49,6 +51,7 @@ jobs:
         if: failure()
         run: |
           xcrun xcresulttool get test-results tests --path UITests.xcresult || true
+          xcrun xcresulttool get log --type console --path UITests.xcresult 2>/dev/null | grep AURUM-TIMING || true
           xcrun xcresulttool get test-results summary --path UITests.xcresult || true
       - name: Upload UI test results
         if: failure()
