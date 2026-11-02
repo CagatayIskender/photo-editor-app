@@ -89,7 +89,8 @@ public final class StoreKitPurchaseService: PurchaseService {
             let weeks: Decimal = period == .yearly ? 52 : 1
             let perWeek = (p.price / weeks).formatted(p.priceFormatStyle)
             var trial: Int?
-            if let intro = sub.introductoryOffer, intro.paymentMode == .freeTrial, await sub.isEligibleForIntroOffer {
+            let eligible = await sub.isEligibleForIntroOffer
+            if let intro = sub.introductoryOffer, intro.paymentMode == .freeTrial, eligible {
                 let unit = intro.period.unit
                 trial = intro.period.value * (unit == .week ? 7 : unit == .month ? 30 : unit == .year ? 365 : 1)
             }
