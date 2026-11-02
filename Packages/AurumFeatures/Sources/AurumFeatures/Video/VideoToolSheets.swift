@@ -499,7 +499,7 @@ struct VideoLookSheet: View {
                                 isPremium: look.tier == .member
                             )
                         }
-                        .buttonStyle(.plain)
+                        .buttonStyle(.pressable)
                     }
                 }
                 .padding(.horizontal, Spacing.m)

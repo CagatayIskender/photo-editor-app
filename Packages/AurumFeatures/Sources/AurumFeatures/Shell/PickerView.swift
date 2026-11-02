@@ -55,6 +55,9 @@ struct PickerView: View {
                         .padding(Spacing.m)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
+                if isLoading && items.isEmpty {
+                    skeletonGrid
+                }
                 LazyVGrid(columns: columns, spacing: 2) {
                     ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
                         PickerCell(item: item, photos: app.deps.photos) { app.openPhoto(item) }
@@ -63,14 +66,33 @@ struct PickerView: View {
                     }
                 }
                 if !isLoading && items.isEmpty {
-                    Text("No photos yet.").aurumText(.body, color: AurumColor.textTertiary).padding(Spacing.xl)
+                    VStack(spacing: Spacing.s) {
+                        IconView(.camera, size: 28).foregroundColor(AurumColor.textTertiary)
+                        Text("No photos yet.").aurumText(.body, color: AurumColor.textTertiary)
+                    }
+                    .padding(Spacing.xl)
+                    .frame(maxWidth: .infinity)
+                    .transition(.opacity)
                 }
             }
         }
     }
 
+    /// Placeholder tiles shown until the library answers.
+    private var skeletonGrid: some View {
+        LazyVGrid(columns: columns, spacing: 2) {
+            ForEach(0..<18, id: \.self) { _ in
+                SkeletonBlock(cornerRadius: 0)
+                    .aspectRatio(1, contentMode: .fill)
+            }
+        }
+        .transition(.identity) // leave at once so the real grid never sits below it
+        .accessibilityHidden(true)
+    }
+
     private var deniedState: some View {
         VStack(spacing: Spacing.m) {
+            IconView(.camera, size: 32).foregroundColor(AurumColor.textTertiary)
             Text("Photo access is off").aurumText(.title)
             Text("To edit a photo, allow AURUM to access your photos in Settings.")
                 .aurumText(.body, color: AurumColor.textSecondary)
@@ -95,8 +117,11 @@ struct PickerView: View {
         access = app.deps.photos.access()
         if access == .notDetermined { access = await app.deps.photos.requestAccess() }
         guard access == .full || access == .limited else { isLoading = false; return }
-        items = await app.deps.photos.recentPhotos(limit: 300)
-        isLoading = false
+        let loaded = await app.deps.photos.recentPhotos(limit: 300)
+        withAnimation(Motion.respectingReduceMotion(Motion.velvet)) {
+            items = loaded
+            isLoading = false
+        }
     }
 }
 
@@ -113,12 +138,14 @@ struct PickerCell: View {
                 .overlay {
                     if let image {
                         Image(uiImage: image).resizable().scaledToFill()
+                            .transition(.opacity)
                     }
                 }
                 .clipped()
+                .animation(Motion.respectingReduceMotion(Motion.velvet), value: image != nil)
                 .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.pressable)
         .accessibilityAddTraits(.isButton)
         .task(id: item.id) {
             image = await photos.thumbnail(for: item.id, side: 240)

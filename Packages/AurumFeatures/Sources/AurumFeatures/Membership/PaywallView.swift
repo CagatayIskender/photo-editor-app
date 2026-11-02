@@ -25,22 +25,23 @@ struct PaywallView: View {
                 IconButton(.close, label: String(localized: "Close"), action: onClose)
                     .accessibilityIdentifier("paywall.close")
             }
+            .aurumEntrance(0, distance: 8)
             Text(Localized.dynamic(model.config.paywallHeadline)).aurumText(.display)
-            VStack(alignment: .leading, spacing: Spacing.s) {
-                ForEach(model.config.paywallBenefits, id: \.self) { benefit in
-                    HStack(alignment: .firstTextBaseline, spacing: Spacing.s) {
-                        IconView(.check, size: 16).foregroundColor(AurumColor.accent)
-                        Text(Localized.dynamic(benefit)).aurumText(.body)
-                    }
-                }
-            }
+                .aurumEntrance(1)
+            benefits
             Spacer(minLength: 0)
-            plans
-            purchaseArea
+            plans.aurumEntrance(5)
+            purchaseArea.aurumEntrance(6)
         }
         .padding(Spacing.l)
         .formSheetWidth()
-        .background(AurumColor.background.ignoresSafeArea())
+        .background(
+            ZStack {
+                AurumColor.background
+                AmbientGlow(intensity: 1.1)
+            }
+            .ignoresSafeArea()
+        )
         .preferredColorScheme(.dark)
         .task { await model.load() }
         .onChange(of: model.state) { state in
@@ -52,23 +53,45 @@ struct PaywallView: View {
         }
     }
 
+    private var benefits: some View {
+        let list = Array(model.config.paywallBenefits.enumerated())
+        return VStack(alignment: .leading, spacing: Spacing.s) {
+            ForEach(list, id: \.element) { index, benefit in
+                HStack(alignment: .firstTextBaseline, spacing: Spacing.s) {
+                    IconView(.check, size: 16).foregroundColor(AurumColor.accent)
+                    Text(Localized.dynamic(benefit)).aurumText(.body)
+                }
+                .aurumEntrance(index + 2, distance: 8)
+            }
+        }
+    }
+
     @ViewBuilder
     private var plans: some View {
         switch model.state {
         case .loading:
-            ProgressView().tint(AurumColor.accent).frame(maxWidth: .infinity)
+            VStack(spacing: Spacing.s) {
+                SkeletonBlock(cornerRadius: Radius.card).frame(height: 68)
+                SkeletonBlock(cornerRadius: Radius.card).frame(height: 68)
+            }
+            .transition(.opacity)
         default:
             VStack(spacing: Spacing.s) {
                 ForEach(model.plans) { plan in
                     planRow(plan)
                 }
             }
+            .transition(.opacity)
         }
     }
 
     private func planRow(_ plan: MembershipPlan) -> some View {
         let isSelected = model.selectedPlanID == plan.id
-        return Button { model.selectedPlanID = plan.id } label: {
+        return Button {
+            guard model.selectedPlanID != plan.id else { return }
+            withAnimation(Motion.respectingReduceMotion(Motion.atelier)) { model.selectedPlanID = plan.id }
+            Haptics.detent()
+        } label: {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(plan.period == .yearly ? String(localized: "Yearly") : String(localized: "Weekly")).aurumText(.headline)
@@ -85,10 +108,19 @@ struct PaywallView: View {
                 }
             }
             .padding(Spacing.m)
-            .background(RoundedRectangle(cornerRadius: Radius.card).fill(AurumColor.surface))
+            .background(
+                RoundedRectangle(cornerRadius: Radius.card)
+                    .fill(LinearGradient(
+                        colors: [isSelected ? AurumColor.accent.opacity(0.10) : AurumColor.surfaceRaised, AurumColor.surface],
+                        startPoint: .topLeading, endPoint: .bottomTrailing
+                    ))
+            )
             .overlay(RoundedRectangle(cornerRadius: Radius.card).stroke(isSelected ? AurumColor.accent : AurumColor.hairline, lineWidth: isSelected ? 1.5 : 0.5))
+            .shadow(color: AurumColor.accent.opacity(isSelected ? 0.18 : 0), radius: 14, y: 4)
+            .scaleEffect(isSelected ? 1.01 : 1)
+            .animation(Motion.respectingReduceMotion(Motion.atelier), value: isSelected)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.pressable)
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])
     }
 
@@ -96,19 +128,22 @@ struct PaywallView: View {
         VStack(spacing: Spacing.s) {
             if case .failed(let message) = model.state {
                 Text(message).aurumText(.caption, color: AurumColor.textSecondary)
+                    .transition(.aurumRise)
             }
             if model.state == .pending {
                 Text("Your purchase is waiting for approval. We'll unlock membership as soon as it's approved.")
                     .aurumText(.caption, color: AurumColor.textSecondary)
+                    .transition(.aurumRise)
             }
             Button {
                 Task { await model.purchase() }
             } label: {
                 if model.state == .purchasing { ProgressView().tint(AurumColor.onAccent) } else { Text(model.buttonTitle) }
             }
-            .buttonStyle(GoldButtonStyle())
+            .buttonStyle(GoldSheenButtonStyle())
             .disabled(model.selectedPlan == nil || model.state == .purchasing)
             .accessibilityIdentifier("paywall.purchase")
+            .animation(Motion.respectingReduceMotion(Motion.velvet), value: model.state == .purchasing)
             Text(model.termsLine)
                 .aurumText(.caption, color: AurumColor.textTertiary)
                 .multilineTextAlignment(.center)

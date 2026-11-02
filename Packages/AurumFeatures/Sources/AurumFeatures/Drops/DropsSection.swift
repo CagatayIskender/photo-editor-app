@@ -74,8 +74,9 @@ struct DropsSection: View {
                 if let drop = summary.active {
                     activeCard(drop)
                 }
-                ForEach(summary.upcoming) { drop in
+                ForEach(Array(summary.upcoming.enumerated()), id: \.element.id) { index, drop in
                     upcomingRow(drop)
+                        .aurumEntrance(index + 1, distance: 8)
                 }
             }
         }
@@ -99,7 +100,7 @@ struct DropsSection: View {
                             Button { app.startCreating(withLook: look.id) } label: {
                                 LookThumbnail(name: look.name, image: nil, swatch: look.swatch.map(Color.init(hex:)), isSelected: false, isPremium: look.tier == .member)
                             }
-                            .buttonStyle(.plain)
+                            .buttonStyle(.pressable)
                             .accessibilityHint("Pick a photo to edit with this look")
                         }
                     }
@@ -113,9 +114,21 @@ struct DropsSection: View {
         }
         .padding(Spacing.m)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(RoundedRectangle(cornerRadius: Radius.card).fill(AurumColor.surface))
+        .background(
+            RoundedRectangle(cornerRadius: Radius.card)
+                .fill(LinearGradient(colors: [AurumColor.surfaceRaised, AurumColor.surface], startPoint: .topLeading, endPoint: .bottomTrailing))
+                .overlay(alignment: .topTrailing) {
+                    Circle()
+                        .fill(RadialGradient(colors: [AurumColor.accent.opacity(0.14), .clear], center: .center, startRadius: 0, endRadius: 110))
+                        .frame(width: 220, height: 220)
+                        .offset(x: 70, y: -90)
+                }
+                .clipShape(RoundedRectangle(cornerRadius: Radius.card))
+        )
         .overlay(RoundedRectangle(cornerRadius: Radius.card).stroke(AurumColor.goldHairline, lineWidth: 1))
+        .shadow(color: .black.opacity(0.3), radius: 14, y: 8)
         .padding(.horizontal, Spacing.m)
+        .aurumEntrance(0)
     }
 
     private func upcomingRow(_ drop: Drop) -> some View {
@@ -128,6 +141,9 @@ struct DropsSection: View {
             Spacer()
             Text(String(localized: "From \(starts)")).aurumText(.caption, color: AurumColor.textSecondary)
         }
+        .padding(Spacing.s)
+        .background(RoundedRectangle(cornerRadius: Radius.thumbnail).fill(AurumColor.surface.opacity(0.6)))
+        .overlay(RoundedRectangle(cornerRadius: Radius.thumbnail).stroke(AurumColor.hairline, lineWidth: 0.5))
         .padding(.horizontal, Spacing.m)
         .accessibilityElement(children: .combine)
     }

@@ -23,7 +23,9 @@ struct ExportSheet: View {
                 IconButton(.close, label: String(localized: "Close")) { dismiss() }
             }
             content
+                .transition(.aurumRise)
         }
+        .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.phase)
         .padding(Spacing.m)
         .formSheetWidth()
         .background(AurumColor.surface.ignoresSafeArea())
@@ -43,7 +45,7 @@ struct ExportSheet: View {
         switch model.phase {
         case .rendering:
             HStack(spacing: Spacing.s) {
-                ProgressView().tint(AurumColor.accent)
+                GoldProgressRing(progress: nil, size: 32)
                 Text("Finishing your photo…").aurumText(.body, color: AurumColor.textSecondary)
             }
             .frame(maxWidth: .infinity, minHeight: 120)
@@ -74,7 +76,10 @@ struct ExportSheet: View {
         VStack(alignment: .leading, spacing: Spacing.m) {
             HStack(spacing: Spacing.xs) {
                 ForEach(RenderEngine.ExportFormat.allCases, id: \.self) { f in
-                    Chip(f.fileExtension.uppercased(), isSelected: model.format == f) { model.format = f }
+                    Chip(f.fileExtension.uppercased(), isSelected: model.format == f) {
+                        withAnimation(Motion.respectingReduceMotion(Motion.atelier)) { model.format = f }
+                        Haptics.detent()
+                    }
                 }
             }
             HStack(spacing: Spacing.s) {
@@ -83,7 +88,7 @@ struct ExportSheet: View {
                 } label: {
                     Label { Text("Save") } icon: { IconView(.download, size: 18) }
                 }
-                .buttonStyle(GoldButtonStyle())
+                .buttonStyle(GoldSheenButtonStyle())
                 .accessibilityIdentifier("export.save")
                 Button {
                     Task { await model.export(toPhotos: false) }
@@ -125,9 +130,9 @@ struct ExportSheet: View {
 
     private func done(title: String) -> some View {
         VStack(spacing: Spacing.s) {
-            IconView(.check, size: 32).foregroundColor(AurumColor.accent)
-            Text(title).aurumText(.headline)
-            Button("Done") { dismiss() }.buttonStyle(GoldButtonStyle())
+            DrawnCheckmark(size: 56).transition(.aurumPop)
+            Text(title).aurumText(.headline).aurumEntrance(1, distance: 8)
+            Button("Done") { dismiss() }.buttonStyle(GoldButtonStyle()).aurumEntrance(2, distance: 8)
         }
         .frame(maxWidth: .infinity)
     }

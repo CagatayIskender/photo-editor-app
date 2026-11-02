@@ -22,6 +22,7 @@ struct CameraView: View {
     @State private var holdTask: Task<Void, Never>?
     @State private var startedRecordingFromHold = false
     @State private var message: String?
+    @State private var flashOpacity: Double = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     init(app: AppModel) {
@@ -68,7 +69,7 @@ struct CameraView: View {
             Spacer()
             if isRecording {
                 HStack(spacing: 6) {
-                    Circle().fill(Color.red).frame(width: 8, height: 8)
+                    RecordingDot()
                     Text(verbatim: VideoEditorView.timecode(camera.recordingSeconds))
                         .aurumText(.caption)
                         .monospacedDigit()
@@ -118,8 +119,9 @@ struct CameraView: View {
                     .accessibilityLabel(previewLabel)
                     .accessibilityAddTraits(.isImage)
             } else {
-                ProgressView().tint(AurumColor.accent)
+                GoldProgressRing(progress: nil, size: 36)
             }
+            Color.white.opacity(flashOpacity).allowsHitTesting(false).accessibilityHidden(true)
             if let countdown {
                 Text(verbatim: "\(countdown)")
                     .font(AurumTextStyle.display.font.weight(.light))
@@ -155,7 +157,7 @@ struct CameraView: View {
                 Button { selectLook(nil) } label: {
                     LookThumbnail(name: String(localized: "Original"), image: nil, swatch: [AurumColor.surfaceRaised, AurumColor.surface], isSelected: selectedLookID == nil, isPremium: false)
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(.pressable)
                 ForEach(app.catalog.looks) { look in
                     Button { selectLook(look.id) } label: {
                         LookThumbnail(
@@ -166,13 +168,14 @@ struct CameraView: View {
                             isPremium: look.tier == .member
                         )
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(.pressable)
                 }
             }
             .padding(.horizontal, Spacing.m)
             .padding(.vertical, 4)
         }
         .frame(height: 112)
+        .animation(Motion.respectingReduceMotion(Motion.atelier), value: selectedLookID)
         .disabled(isBusy)
     }
 
@@ -219,6 +222,7 @@ struct CameraView: View {
                 ProgressView().tint(AurumColor.onAccent)
             }
         }
+        .scaleEffect(isPressing && !isRecording && !reduceMotion ? 0.95 : 1)
         .animation(Motion.respectingReduceMotion(Motion.atelier), value: isRecording)
         .animation(Motion.respectingReduceMotion(Motion.velvet), value: isPressing)
         .frame(width: 88, height: 88)
@@ -305,6 +309,7 @@ struct CameraView: View {
             return
         }
         Haptics.success()
+        flashCapture()
         guard let data = Self.jpegData(captured) else {
             message = String(localized: "The photo couldn't be taken. Please try again.")
             return
@@ -321,6 +326,13 @@ struct CameraView: View {
         }
         camera.stop()
         app.openCapturedPhoto(item, lookID: selectedLookID)
+    }
+
+    /// A brief white flash over the preview, like a shutter.
+    private func flashCapture() {
+        guard !reduceMotion else { return }
+        flashOpacity = 0.7
+        withAnimation(.easeOut(duration: 0.35)) { flashOpacity = 0 }
     }
 
     static func jpegData(_ image: CIImage) -> Data? {
@@ -408,6 +420,22 @@ struct CameraView: View {
         .padding(Spacing.xl)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(AurumColor.background.ignoresSafeArea())
+    }
+}
+
+/// A red dot that pulses while recording. Still with Reduce Motion and in UI tests.
+private struct RecordingDot: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var dim = false
+
+    var body: some View {
+        Circle().fill(Color.red)
+            .frame(width: 8, height: 8)
+            .opacity(dim ? 0.35 : 1)
+            .onAppear {
+                guard !reduceMotion, Motion.loopsEnabled else { return }
+                withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) { dim = true }
+            }
     }
 }
 

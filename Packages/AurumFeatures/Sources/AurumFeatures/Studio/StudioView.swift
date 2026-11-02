@@ -18,6 +18,8 @@ struct StudioView: View {
     let onClose: () -> Void
     @ObservedObject var app: AppModel
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var chromeShown = false
 
     var body: some View {
         Group {
@@ -28,6 +30,10 @@ struct StudioView: View {
             }
         }
         .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.activeTool)
+        .onAppear {
+            guard !chromeShown else { return }
+            withAnimation(Motion.respectingReduceMotion(Motion.atelier)) { chromeShown = true }
+        }
         .background(AurumColor.background.ignoresSafeArea())
         .preferredColorScheme(.dark)
         .sheet(isPresented: $model.isExportPresented) {
@@ -42,7 +48,7 @@ struct StudioView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             if let tool = model.activeTool {
                 toolSheet(tool)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .transition(.aurumSheet)
             }
             toolRail
         }
@@ -60,7 +66,7 @@ struct StudioView: View {
                     InspectorColumn(title: tool.title) {
                         toolContent(tool)
                     }
-                    .transition(.move(edge: .trailing).combined(with: .opacity))
+                    .transition(reduceMotion ? .opacity : .move(edge: .trailing).combined(with: .opacity))
                 }
             }
         }
@@ -111,6 +117,8 @@ struct StudioView: View {
         }
         .padding(.horizontal, Spacing.s)
         .frame(height: 52)
+        .opacity(chromeShown ? 1 : 0)
+        .offset(y: chromeShown || reduceMotion ? 0 : -10)
     }
 
     // MARK: Tools
@@ -146,6 +154,7 @@ struct StudioView: View {
         }
         .frame(width: 76)
         .background(AurumColor.background)
+        .opacity(chromeShown ? 1 : 0)
     }
 
     private var toolRail: some View {
@@ -166,6 +175,8 @@ struct StudioView: View {
         }
         .frame(height: 68)
         .background(AurumColor.background)
+        .opacity(chromeShown ? 1 : 0)
+        .offset(y: chromeShown || reduceMotion ? 0 : 14)
     }
 
     private func railItem(_ tool: StudioTool) -> some View {
@@ -210,6 +221,7 @@ struct StudioCanvas: View {
                         .resizable()
                         .frame(width: frame.width, height: frame.height)
                         .position(x: frame.midX, y: frame.midY)
+                        .transition(.opacity)
                         .accessibilityLabel(imageLabel)
                         .accessibilityHint("Swipe left or right with three fingers to change the look")
                         .accessibilityAddTraits(.isImage)
@@ -221,7 +233,7 @@ struct StudioCanvas: View {
                 } else if model.loadFailed {
                     Text("This photo couldn't be opened.").aurumText(.body, color: AurumColor.textTertiary)
                 } else {
-                    ProgressView().tint(AurumColor.accent)
+                    loadingPlaceholder(in: container)
                 }
                 if model.isComparing {
                     Text("ORIGINAL").aurumText(.label, color: AurumColor.textPrimary)
@@ -229,8 +241,11 @@ struct StudioCanvas: View {
                         .background(Capsule().fill(.black.opacity(0.5)))
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                         .padding(.top, Spacing.s)
+                        .transition(.aurumPop)
                 }
             }
+            .animation(Motion.respectingReduceMotion(Motion.velvet), value: scheduler.image != nil)
+            .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.isComparing)
             .contentShape(Rectangle())
             .onTapGesture { model.selectedOverlayID = nil }
             .onLongPressGesture(minimumDuration: 0.2, maximumDistance: 12, pressing: { pressing in
@@ -240,6 +255,15 @@ struct StudioCanvas: View {
             .simultaneousGesture(swipe)
         }
         .clipped()
+    }
+
+    private func loadingPlaceholder(in container: CGRect) -> some View {
+        ZStack {
+            SkeletonBlock(cornerRadius: Radius.chip)
+                .frame(width: container.width * 0.8, height: container.height * 0.8)
+            GoldProgressRing(progress: nil, size: 36)
+        }
+        .transition(.opacity)
     }
 
     private var swipe: some Gesture {

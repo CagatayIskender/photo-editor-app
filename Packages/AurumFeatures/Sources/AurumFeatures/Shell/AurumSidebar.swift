@@ -15,6 +15,7 @@ struct AurumSidebar: View {
                     .padding(.horizontal, Spacing.xs)
                     .padding(.bottom, Spacing.l)
                     .accessibilityAddTraits(.isHeader)
+                    .aurumEntrance(0)
                 createButton
                     .padding(.bottom, Spacing.m)
                 tabRow(.salon, icon: .salon, id: "salon", title: String(localized: "Salon"))
@@ -58,6 +59,7 @@ struct AurumSidebar: View {
             }
         }
         .buttonStyle(GoldButtonStyle())
+        .aurumEntrance(1)
         .accessibilityLabel("Create")
         .accessibilityHint("Pick a photo to edit")
         .accessibilityIdentifier("tab.create")
@@ -67,12 +69,13 @@ struct AurumSidebar: View {
     private func tabRow(_ tab: AppTab, icon: AurumIcon, id: String, title: String) -> some View {
         let isSelected = app.selectedTab == tab
         return Button {
-            app.selectedTab = tab
+            guard app.selectedTab != tab else { return }
+            withAnimation(Motion.respectingReduceMotion(Motion.atelier)) { app.selectedTab = tab }
             Haptics.detent()
         } label: {
             SidebarRowLabel(icon: icon, title: title, isSelected: isSelected)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.pressable)
         .hoverEffect(.highlight)
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])
         .accessibilityIdentifier("tab.\(id)")
@@ -85,7 +88,7 @@ struct AurumSidebar: View {
         } label: {
             SidebarRowLabel(icon: icon, title: title, isSelected: false)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.pressable)
         .hoverEffect(.highlight)
         .accessibilityIdentifier("sidebar.\(id)")
     }
@@ -112,6 +115,13 @@ private struct SidebarRowLabel: View {
             RoundedRectangle(cornerRadius: Radius.chip)
                 .fill(isSelected ? AurumColor.surfaceRaised : Color.clear)
         )
+        .overlay(alignment: .leading) {
+            Capsule()
+                .fill(AurumColor.accent)
+                .frame(width: 2.5, height: isSelected ? 20 : 4)
+                .opacity(isSelected ? 1 : 0)
+        }
+        .animation(Motion.respectingReduceMotion(Motion.atelier), value: isSelected)
         .contentShape(RoundedRectangle(cornerRadius: Radius.chip))
     }
 }

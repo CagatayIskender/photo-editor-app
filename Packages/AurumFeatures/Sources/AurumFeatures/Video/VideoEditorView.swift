@@ -113,7 +113,7 @@ struct VideoEditorView: View {
                     .frame(width: Size.touch, height: Size.touch)
                     .contentShape(Rectangle())
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.pressable)
             .hoverEffect(.highlight)
             .accessibilityLabel(model.isPlaying ? String(localized: "Pause") : String(localized: "Play"))
             .accessibilityIdentifier("video.play")
@@ -122,12 +122,14 @@ struct VideoEditorView: View {
                 .monospacedDigit()
             Spacer()
             if model.isBuilding {
-                ProgressView().tint(AurumColor.accent).scaleEffect(0.8)
+                GoldProgressRing(progress: nil, size: 20)
+                    .transition(.opacity)
                     .accessibilityLabel("Updating preview")
             }
         }
         .padding(.horizontal, Spacing.s)
         .frame(height: 44)
+        .animation(Motion.respectingReduceMotion(Motion.velvet), value: model.isBuilding)
     }
 
     /// "m:ss" for a time in seconds.
@@ -202,7 +204,7 @@ struct VideoPlayerArea: View {
                         .aurumText(.body, color: AurumColor.textTertiary)
                         .position(x: frame.midX, y: frame.midY)
                 } else if model.isBuilding && model.player.currentItem == nil {
-                    ProgressView().tint(AurumColor.accent)
+                    GoldProgressRing(progress: nil, size: 36)
                         .position(x: frame.midX, y: frame.midY)
                 }
             }
@@ -363,6 +365,7 @@ struct VideoTimeline: View {
             let isSelected = model.selectedClipID == clip.id
             TimelineClipCell(clip: clip, photos: photos, isSelected: isSelected, showsFilmstrip: showsFilmstrip)
                 .frame(width: max(CGFloat(clip.duration) * pps - 2, 8), height: Self.clipHeight)
+                .aurumEntrance(index, distance: 8)
                 .overlay(alignment: .leading) { if isSelected { trimHandle(clip, leading: true) } }
                 .overlay(alignment: .trailing) { if isSelected { trimHandle(clip, leading: false) } }
                 .offset(x: CGFloat(starts.indices.contains(index) ? starts[index] : 0) * pps + 1)
@@ -498,6 +501,8 @@ struct TimelineClipCell: View {
             RoundedRectangle(cornerRadius: Radius.chip)
                 .stroke(isSelected ? AurumColor.accent : AurumColor.hairline, lineWidth: isSelected ? 2 : 1)
         )
+        .shadow(color: AurumColor.accent.opacity(isSelected ? 0.28 : 0), radius: 6)
+        .animation(Motion.respectingReduceMotion(Motion.atelier), value: isSelected)
         .overlay(alignment: .leading) {
             if clip.transitionIn != .cut {
                 Rectangle()

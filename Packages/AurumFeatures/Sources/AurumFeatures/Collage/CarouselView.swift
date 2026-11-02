@@ -34,10 +34,17 @@ struct CarouselView: View {
                     statusLine
                 }
                 .padding(Spacing.m)
+                .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.phase)
             }
             controls
         }
-        .background(AurumColor.background.ignoresSafeArea())
+        .background(
+            ZStack {
+                AurumColor.background
+                AmbientGlow(intensity: 0.4)
+            }
+            .ignoresSafeArea()
+        )
         .preferredColorScheme(.dark)
         .sheet(isPresented: $isPicking) {
             MediaPickerView(app: app, required: 1, title: String(localized: "Choose a wide photo")) { picked in
@@ -65,9 +72,11 @@ struct CarouselView: View {
                 AtelierImage(image: nil, placeholder: String(localized: "Choose a wide photo to begin"))
                     .frame(height: 220)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.pressable)
         } else if model.phase == .loading {
-            ProgressView().tint(AurumColor.accent).frame(maxWidth: .infinity, minHeight: 160)
+            GoldProgressRing(progress: nil, size: 40)
+                .frame(maxWidth: .infinity, minHeight: 160)
+                .transition(.opacity)
         }
     }
 
@@ -86,6 +95,7 @@ struct CarouselView: View {
                                 .background(Capsule().fill(.black.opacity(0.45)))
                                 .padding(6)
                         }
+                        .aurumEntrance(index, distance: 10)
                         .accessibilityLabel(String(localized: "Panel \(index + 1) of \(model.panels.count)"))
                         .accessibilityAddTraits(.isImage)
                 }
@@ -99,11 +109,16 @@ struct CarouselView: View {
         switch model.phase {
         case .exporting(let done, let total):
             HStack(spacing: Spacing.s) {
-                ProgressView(value: Double(done), total: Double(max(total, 1))).tint(AurumColor.accent)
+                GoldProgressRing(progress: Double(done) / Double(max(total, 1)), size: 26)
                 Text("Saving \(done) of \(total)…").aurumText(.caption, color: AurumColor.textSecondary)
             }
+            .transition(.aurumRise)
         case .saved(let n):
-            Text("\(n) panels saved to Photos, in order.").aurumText(.caption, color: AurumColor.accent)
+            HStack(spacing: Spacing.xs) {
+                DrawnCheckmark(size: 20)
+                Text("\(n) panels saved to Photos, in order.").aurumText(.caption, color: AurumColor.accent)
+            }
+            .transition(.aurumPop)
         case .failed(let message):
             Text(message).aurumText(.caption, color: AurumColor.textSecondary)
         default:

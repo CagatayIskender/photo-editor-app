@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 // The AURUM motion kit. Every modifier here reads the system "Reduce Motion"
 // setting and falls back to a plain cross-fade or to no motion at all, so a
@@ -190,10 +191,10 @@ public struct AmbientGlow: View {
 public struct GoldSheenButtonStyle: ButtonStyle {
     public init() {}
     public func makeBody(configuration: Configuration) -> some View {
-        Body(configuration: configuration)
+        SheenBody(configuration: configuration)
     }
 
-    private struct Body: View {
+    private struct SheenBody: View {
         let configuration: Configuration
         @Environment(\.isEnabled) private var isEnabled
         @Environment(\.accessibilityReduceMotion) private var reduceMotion

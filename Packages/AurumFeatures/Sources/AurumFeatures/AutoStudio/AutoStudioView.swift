@@ -45,20 +45,26 @@ struct AutoStudioView: View {
                                 AutoFeatureCard(feature: feature)
                             }
                             .buttonStyle(CreateTileButtonStyle())
-                            .opacity(hasAppeared || reduceMotion ? 1 : 0)
-                            .offset(y: hasAppeared || reduceMotion ? 0 : 12)
-                            .animation(Motion.respectingReduceMotion(Motion.atelier.delay(Double(index) * 0.04)), value: hasAppeared)
+                            .aurumEntrance(index + 2)
                             .accessibilityIdentifier("auto.card.\(feature.rawValue)")
                         }
                         Button { app.openDepthMotion() } label: { motionCard }
                             .buttonStyle(CreateTileButtonStyle())
+                            .aurumEntrance(AutoFeature.allCases.count + 2)
                             .accessibilityIdentifier("auto.card.depthMotion")
                     }
                     .padding(.horizontal, Spacing.m)
                 }
                 .padding(.vertical, Spacing.m)
             }
-            .background(AurumColor.background.ignoresSafeArea())
+            .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.isAnalysing)
+            .background(
+                ZStack {
+                    AurumColor.background
+                    AmbientGlow(intensity: 0.6)
+                }
+                .ignoresSafeArea()
+            )
             .navigationTitle("Auto Studio")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -92,13 +98,14 @@ struct AutoStudioView: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
         .padding(.horizontal, Spacing.m)
+        .aurumEntrance(0)
     }
 
     @ViewBuilder
     private var photoSection: some View {
         VStack(alignment: .leading, spacing: Spacing.xs) {
             if let preview = model.sourcePreview {
-                AtelierImage(image: preview)
+                AtelierImage(image: preview, isScanning: model.isAnalysing)
                     .frame(maxWidth: .infinity)
                     .frame(height: 240)
                     .accessibilityLabel(String(localized: "Your photo"))
@@ -111,7 +118,7 @@ struct AutoStudioView: View {
                     AtelierImage(image: nil, placeholder: String(localized: "Choose a photo to begin"))
                         .frame(height: 160)
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(.pressable)
                 .accessibilityIdentifier("auto.choosePhoto")
             }
             if case .failed(let message) = model.phase, model.sourcePreview == nil {
@@ -119,28 +126,28 @@ struct AutoStudioView: View {
             }
         }
         .padding(.horizontal, Spacing.m)
+        .aurumEntrance(1)
     }
 
     @ViewBuilder
     private var suggestionSection: some View {
         if model.isAnalysing {
-            HStack(spacing: Spacing.s) {
-                ProgressView().tint(AurumColor.accent)
-                Text("Looking at your photo…").aurumText(.caption, color: AurumColor.textSecondary)
-            }
-            .padding(.horizontal, Spacing.m)
+            analysingRow
+                .padding(.horizontal, Spacing.m)
+                .transition(.aurumRise)
         } else if !model.suggestions.isEmpty {
             VStack(alignment: .leading, spacing: Spacing.xs) {
                 Text("Suggested for this photo").aurumText(.label, color: AurumColor.textTertiary)
                     .padding(.horizontal, Spacing.m)
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: Spacing.xs) {
-                        ForEach(model.suggestions) { suggestion in
+                        ForEach(Array(model.suggestions.enumerated()), id: \.element.id) { index, suggestion in
                             Chip(AutoStudioViewModel.title(for: suggestion), isSelected: false, leadingIcon: suggestion.feature.tier == .member ? .crown : nil) {
                                 Haptics.detent()
                                 path = [suggestion.feature]
                                 Task { await model.apply(suggestion) }
                             }
+                            .aurumEntrance(index, distance: 10)
                             .accessibilityIdentifier("auto.suggestion.\(suggestion.kind.rawValue)")
                         }
                     }
@@ -148,6 +155,18 @@ struct AutoStudioView: View {
                 }
             }
         }
+    }
+
+    private var analysingRow: some View {
+        HStack(spacing: Spacing.s) {
+            GoldProgressRing(progress: nil, size: 22)
+            Text("Looking at your photo…").aurumText(.caption, color: AurumColor.textSecondary)
+            Spacer(minLength: 0)
+        }
+        .padding(Spacing.s)
+        .background(RoundedRectangle(cornerRadius: Radius.thumbnail).fill(AurumColor.surface))
+        .overlay(RoundedRectangle(cornerRadius: Radius.thumbnail).stroke(AurumColor.goldHairline, lineWidth: 1))
+        .aurumShimmer(true, intensity: 0.12, duration: 2.2)
     }
 
     private var motionCard: some View {
@@ -160,7 +179,7 @@ struct AutoStudioView: View {
         }
         .padding(Spacing.s)
         .frame(maxWidth: .infinity, minHeight: 150, alignment: .topLeading)
-        .background(RoundedRectangle(cornerRadius: Radius.thumbnail).fill(AurumColor.surface))
+        .background(RoundedRectangle(cornerRadius: Radius.thumbnail).fill(LinearGradient(colors: [AurumColor.surfaceRaised, AurumColor.surface], startPoint: .top, endPoint: .bottom)))
         .overlay(RoundedRectangle(cornerRadius: Radius.thumbnail).stroke(AurumColor.hairline, lineWidth: 1))
         .accessibilityElement(children: .combine)
     }
@@ -192,7 +211,7 @@ struct AutoFeatureCard: View {
         }
         .padding(Spacing.s)
         .frame(maxWidth: .infinity, minHeight: 150, alignment: .topLeading)
-        .background(RoundedRectangle(cornerRadius: Radius.thumbnail).fill(AurumColor.surface))
+        .background(RoundedRectangle(cornerRadius: Radius.thumbnail).fill(LinearGradient(colors: [AurumColor.surfaceRaised, AurumColor.surface], startPoint: .top, endPoint: .bottom)))
         .overlay(RoundedRectangle(cornerRadius: Radius.thumbnail).stroke(AurumColor.hairline, lineWidth: 1))
         .accessibilityElement(children: .combine)
     }

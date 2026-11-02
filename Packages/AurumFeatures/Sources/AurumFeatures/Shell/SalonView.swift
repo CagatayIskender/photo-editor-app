@@ -15,23 +15,31 @@ struct SalonView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.xl) {
-                header
-                hero
+                header.aurumEntrance(0, distance: 8)
+                hero.aurumEntrance(1)
                 if isRegular {
-                    regularCreateGrid
+                    regularCreateGrid.aurumEntrance(2)
                 } else {
-                    createRow
+                    createRow.aurumEntrance(2)
                     AtelierCreateRow(app: app)
                 }
                 DropsSection(app: app)
-                if !app.drafts.isEmpty { continueRow }
-                ForEach(orderedCollections) { collection in
+                if !app.drafts.isEmpty { continueRow.transition(.aurumRise) }
+                ForEach(Array(orderedCollections.enumerated()), id: \.element.id) { index, collection in
                     collectionRow(collection)
+                        .aurumEntrance(min(index, 4) + 3)
                 }
             }
             .padding(.bottom, Spacing.xl)
+            .animation(Motion.respectingReduceMotion(Motion.atelier), value: app.drafts.isEmpty)
         }
-        .background(AurumColor.background.ignoresSafeArea())
+        .background(
+            ZStack {
+                AurumColor.background
+                AmbientGlow(intensity: 0.6)
+            }
+            .ignoresSafeArea()
+        )
     }
 
     /// The user's chosen aesthetics first, then the rest in catalogue order.
@@ -63,6 +71,7 @@ struct SalonView: View {
         let swatch = looks.first?.swatch.map(Color.init(hex:)) ?? [AurumColor.surface, AurumColor.surfaceRaised]
         return VStack(alignment: .leading, spacing: Spacing.xs) {
             Spacer()
+            Capsule().fill(AurumColor.accent).frame(width: 28, height: 2).padding(.bottom, Spacing.xxs)
             Text("FEATURED COLLECTION").aurumText(.label, color: AurumColor.accent)
             Text(collection?.name ?? "").aurumText(.display)
             Text(collection?.tagline ?? "").aurumText(.body, color: AurumColor.textSecondary)
@@ -78,6 +87,14 @@ struct SalonView: View {
                 .overlay(LinearGradient(colors: [.clear, AurumColor.background.opacity(0.9)], startPoint: .top, endPoint: .bottom))
         )
         .clipShape(RoundedRectangle(cornerRadius: Radius.card))
+        .overlay(
+            RoundedRectangle(cornerRadius: Radius.card)
+                .stroke(
+                    LinearGradient(colors: [AurumColor.goldHairline, AurumColor.hairline], startPoint: .topLeading, endPoint: .bottomTrailing),
+                    lineWidth: 1
+                )
+        )
+        .shadow(color: .black.opacity(0.35), radius: 18, y: 10)
         .padding(.horizontal, Spacing.m)
     }
 
@@ -150,7 +167,7 @@ struct SalonView: View {
                         Button { Task { await app.openDraft(id: draft.id) } } label: {
                             DraftTile(draft: draft, width: 104)
                         }
-                        .buttonStyle(.plain)
+                        .buttonStyle(.pressable)
                     }
                 }
                 .padding(.horizontal, Spacing.m)
@@ -194,7 +211,7 @@ struct SalonView: View {
         Button { app.startCreating(withLook: look.id) } label: {
             LookThumbnail(name: look.name, image: nil, swatch: look.swatch.map(Color.init(hex:)), isSelected: false, isPremium: look.tier == .member)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.pressable)
         .hoverEffect(.lift)
         .accessibilityHint("Pick a photo to edit with this look")
     }
@@ -216,6 +233,7 @@ struct DraftTile: View {
             }
             .frame(width: width, height: width * 1.25)
             .clipShape(RoundedRectangle(cornerRadius: Radius.thumbnail))
+            .overlay(RoundedRectangle(cornerRadius: Radius.thumbnail).stroke(AurumColor.hairline, lineWidth: 0.5))
             Text(draft.title).aurumText(.caption).lineLimit(1)
             Text(draft.modifiedAt, style: .relative).aurumText(.label, color: AurumColor.textTertiary)
         }
@@ -247,7 +265,10 @@ struct CreateTile: View {
             }
             .padding(Spacing.s)
             .frame(maxWidth: .infinity, minHeight: 116, alignment: .topLeading)
-            .background(RoundedRectangle(cornerRadius: Radius.thumbnail).fill(AurumColor.surface))
+            .background(
+                RoundedRectangle(cornerRadius: Radius.thumbnail)
+                    .fill(LinearGradient(colors: [AurumColor.surfaceRaised, AurumColor.surface], startPoint: .topLeading, endPoint: .bottomTrailing))
+            )
             .overlay(RoundedRectangle(cornerRadius: Radius.thumbnail).stroke(AurumColor.hairline, lineWidth: 1))
             .contentShape(RoundedRectangle(cornerRadius: Radius.thumbnail))
         }
@@ -262,9 +283,18 @@ struct CreateTile: View {
 /// A gentle press: the tile settles slightly, without motion when reduced.
 struct CreateTileButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.97 : 1)
-            .opacity(configuration.isPressed ? 0.85 : 1)
-            .animation(Motion.respectingReduceMotion(Motion.velvet), value: configuration.isPressed)
+        TileBody(configuration: configuration)
+    }
+
+    private struct TileBody: View {
+        let configuration: Configuration
+        @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+        var body: some View {
+            configuration.label
+                .scaleEffect(configuration.isPressed && !reduceMotion ? 0.965 : 1)
+                .opacity(configuration.isPressed ? 0.85 : 1)
+                .animation(.spring(response: 0.28, dampingFraction: 0.72), value: configuration.isPressed)
+        }
     }
 }

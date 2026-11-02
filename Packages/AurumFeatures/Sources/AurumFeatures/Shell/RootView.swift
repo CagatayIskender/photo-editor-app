@@ -77,8 +77,10 @@ struct MainTabsView: View {
             if let notice = app.notice {
                 NoticeBanner(text: notice) { app.notice = nil }
                     .padding(.top, Spacing.xs)
+                    .transition(.move(edge: .top).combined(with: .opacity))
             }
         }
+        .animation(Motion.respectingReduceMotion(Motion.atelier), value: app.notice)
     }
 
     /// The phone's bottom tab bar on compact width; a leading sidebar on iPad.
@@ -102,11 +104,12 @@ struct MainTabsView: View {
     private var tabContent: some View {
         Group {
             switch app.selectedTab {
-            case .salon: SalonView(app: app)
-            case .vault: VaultView(app: app)
+            case .salon: SalonView(app: app).transition(.opacity)
+            case .vault: VaultView(app: app).transition(.opacity)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .animation(Motion.respectingReduceMotion(Motion.velvet), value: app.selectedTab)
     }
 }
 
@@ -126,7 +129,7 @@ struct AurumTabBar: View {
                     .background(Circle().fill(AurumColor.accent))
                     .shadow(color: AurumColor.accent.opacity(0.35), radius: 14, y: 4)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.pressable)
             .accessibilityLabel("Create")
             .accessibilityHint("Pick a photo to edit")
             .accessibilityIdentifier("tab.create")
@@ -145,17 +148,25 @@ struct AurumTabBar: View {
     private func tab(_ tab: AppTab, icon: AurumIcon, id: String, title: String) -> some View {
         let isSelected = selected == tab
         return Button {
-            selected = tab
+            guard selected != tab else { return }
+            withAnimation(Motion.respectingReduceMotion(Motion.atelier)) { selected = tab }
             Haptics.detent()
         } label: {
             VStack(spacing: 4) {
                 IconView(icon, size: 24)
+                    .scaleEffect(isSelected ? 1.08 : 1)
                 Text(title).font(.caption2)
+                Circle()
+                    .fill(AurumColor.accent)
+                    .frame(width: 4, height: 4)
+                    .opacity(isSelected ? 1 : 0)
+                    .scaleEffect(isSelected ? 1 : 0.3)
             }
             .foregroundColor(isSelected ? AurumColor.accent : AurumColor.textTertiary)
             .frame(minWidth: Size.touch, minHeight: Size.touch)
+            .animation(Motion.respectingReduceMotion(Motion.atelier), value: isSelected)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.pressable)
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])
         .accessibilityIdentifier("tab.\(id)")
     }

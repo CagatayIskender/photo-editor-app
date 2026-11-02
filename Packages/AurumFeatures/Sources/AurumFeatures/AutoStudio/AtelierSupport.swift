@@ -78,10 +78,12 @@ struct AtelierNote: View {
     }
 }
 
-/// A picked photo shown at its aspect ratio, or a placeholder.
+/// A picked photo shown at its aspect ratio, or a placeholder. Fades in when
+/// it arrives; while `isScanning` a slow gold shimmer passes over it.
 struct AtelierImage: View {
     let image: CGImage?
     var placeholder: String = ""
+    var isScanning: Bool = false
 
     var body: some View {
         Group {
@@ -90,10 +92,64 @@ struct AtelierImage: View {
                     .resizable()
                     .scaledToFit()
                     .clipShape(RoundedRectangle(cornerRadius: Radius.chip))
+                    .overlay(scanFrame)
+                    .aurumShimmer(isScanning, intensity: 0.3, duration: 2.2)
+                    .transition(.opacity)
             } else {
                 RoundedRectangle(cornerRadius: Radius.card)
-                    .fill(AurumColor.surface)
+                    .fill(LinearGradient(colors: [AurumColor.surfaceRaised, AurumColor.surface], startPoint: .top, endPoint: .bottom))
+                    .overlay(RoundedRectangle(cornerRadius: Radius.card).stroke(AurumColor.hairline, lineWidth: 1))
                     .overlay(Text(placeholder).aurumText(.caption, color: AurumColor.textTertiary).padding(Spacing.m))
+                    .transition(.opacity)
+            }
+        }
+        .animation(Motion.respectingReduceMotion(Motion.atelier), value: image != nil)
+    }
+
+    private var scanFrame: some View {
+        RoundedRectangle(cornerRadius: Radius.chip)
+            .stroke(AurumColor.accent.opacity(isScanning ? 0.45 : 0), lineWidth: 1)
+            .animation(Motion.respectingReduceMotion(Motion.atelier), value: isScanning)
+    }
+}
+
+/// The result revealed over the original with a gold edge that wipes across
+/// once. Under Reduce Motion the result simply appears.
+struct BeforeAfterReveal: View {
+    let before: CGImage?
+    let after: CGImage
+    @State private var progress: CGFloat = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        GeometryReader { geo in
+            ZStack {
+                if let before {
+                    Image(decorative: before, scale: 1)
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: Radius.chip))
+                }
+                Image(decorative: after, scale: 1)
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(RoundedRectangle(cornerRadius: Radius.chip))
+                    .mask(alignment: .leading) {
+                        Rectangle().frame(width: geo.size.width * progress)
+                    }
+                Rectangle()
+                    .fill(AurumColor.accent)
+                    .frame(width: 1.5)
+                    .opacity(progress > 0 && progress < 1 ? 0.8 : 0)
+                    .position(x: geo.size.width * progress, y: geo.size.height / 2)
+            }
+            .frame(width: geo.size.width, height: geo.size.height)
+        }
+        .onAppear {
+            if reduceMotion || before == nil {
+                progress = 1
+            } else {
+                withAnimation(.easeInOut(duration: 0.8)) { progress = 1 }
             }
         }
     }
