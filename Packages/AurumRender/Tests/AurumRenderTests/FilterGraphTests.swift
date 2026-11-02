@@ -116,3 +116,19 @@ final class FilterGraphTests: XCTestCase {
         XCTAssertNil(OverlayRasterizer.render([], canvasSize: CGSize(width: 10, height: 10), watermark: nil))
     }
 }
+
+final class ImageStatsTests: XCTestCase {
+    func testGreyPixelsHaveNoSaturation() {
+        let px: [UInt8] = [128, 128, 128, 255, 200, 200, 200, 255]
+        let stats = RenderEngine.stats(fromRGBA: px)
+        XCTAssertEqual(stats.saturation, 0, accuracy: 1e-9)
+        XCTAssertEqual(stats.warmth, 0, accuracy: 1e-9)
+    }
+
+    func testRedAndBlueAverageToGreyButStaySaturated() {
+        let px: [UInt8] = [255, 0, 0, 255, 0, 0, 255, 255]
+        let stats = RenderEngine.stats(fromRGBA: px)
+        XCTAssertEqual(stats.saturation, 1, accuracy: 1e-9)
+        XCTAssertEqual(stats.warmth, 0, accuracy: 1e-9)
+    }
+}
