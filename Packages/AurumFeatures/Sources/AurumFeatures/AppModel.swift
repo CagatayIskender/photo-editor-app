@@ -106,7 +106,7 @@ public final class AppModel: ObservableObject {
 
     /// Starts editing a photo from the library. The Studio opens at once and
     /// shows the photo as soon as the proxy loads, with a suggested look applied.
-    public func openPhoto(_ item: LibraryItem) {
+    public func openPhoto(_ item: LibraryPhoto) {
         isPickerPresented = false
         let document = EditDocument(source: SourceAsset(localIdentifier: item.id, pixelSize: item.pixelSize))
         let model = makeStudio(document: document, isNew: true)

@@ -7,7 +7,7 @@ import AurumServices
 /// Limited access is respected and explained, never nagged about.
 struct PickerView: View {
     @ObservedObject var app: AppModel
-    @State private var items: [LibraryItem] = []
+    @State private var items: [LibraryPhoto] = []
     @State private var access: LibraryAccess = .notDetermined
     @State private var isLoading = true
 
@@ -76,7 +76,7 @@ struct PickerView: View {
         .frame(maxHeight: .infinity)
     }
 
-    private func cellLabel(_ item: LibraryItem, index: Int) -> String {
+    private func cellLabel(_ item: LibraryPhoto, index: Int) -> String {
         if let date = item.creationDate {
             return "Photo, \(date.formatted(date: .abbreviated, time: .shortened))"
         }
@@ -93,7 +93,7 @@ struct PickerView: View {
 }
 
 struct PickerCell: View {
-    let item: LibraryItem
+    let item: LibraryPhoto
     let photos: PhotoLibraryService
     let onSelect: () -> Void
     @State private var image: UIImage?

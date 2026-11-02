@@ -5,7 +5,7 @@ import AurumCore
 
 /// A photo the user can pick, independent of PhotoKit so previews and tests
 /// can supply their own.
-public struct LibraryItem: Identifiable, Hashable, Sendable {
+public struct LibraryPhoto: Identifiable, Hashable, Sendable {
     public let id: String
     public let pixelSize: PixelSize
     public let creationDate: Date?
@@ -25,7 +25,7 @@ public protocol PhotoLibraryService: Sendable {
     func access() -> LibraryAccess
     func requestAccess() async -> LibraryAccess
     /// Most recent photos first.
-    func recentPhotos(limit: Int) async -> [LibraryItem]
+    func recentPhotos(limit: Int) async -> [LibraryPhoto]
     func thumbnail(for id: String, side: CGFloat) async -> UIImage?
     /// Loads the photo as a CIImage, downscaled so its longest side is at most
     /// `maxPixelSize` (nil loads full resolution).
@@ -63,15 +63,15 @@ public final class LivePhotoLibrary: PhotoLibraryService, @unchecked Sendable {
         }
     }
 
-    public func recentPhotos(limit: Int) async -> [LibraryItem] {
+    public func recentPhotos(limit: Int) async -> [LibraryPhoto] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         options.fetchLimit = limit
         let result = PHAsset.fetchAssets(with: .image, options: options)
-        var items: [LibraryItem] = []
+        var items: [LibraryPhoto] = []
         items.reserveCapacity(result.count)
         result.enumerateObjects { asset, _, _ in
-            items.append(LibraryItem(id: asset.localIdentifier, pixelSize: PixelSize(width: asset.pixelWidth, height: asset.pixelHeight), creationDate: asset.creationDate))
+            items.append(LibraryPhoto(id: asset.localIdentifier, pixelSize: PixelSize(width: asset.pixelWidth, height: asset.pixelHeight), creationDate: asset.creationDate))
         }
         return items
     }
@@ -153,8 +153,8 @@ public final class SamplePhotoLibrary: PhotoLibraryService, @unchecked Sendable 
     public func access() -> LibraryAccess { .full }
     public func requestAccess() async -> LibraryAccess { .full }
 
-    public func recentPhotos(limit: Int) async -> [LibraryItem] {
-        (0..<min(limit, 24)).map { LibraryItem(id: "sample-\($0)", pixelSize: PixelSize(width: 1600, height: 2000), creationDate: nil) }
+    public func recentPhotos(limit: Int) async -> [LibraryPhoto] {
+        (0..<min(limit, 24)).map { LibraryPhoto(id: "sample-\($0)", pixelSize: PixelSize(width: 1600, height: 2000), creationDate: nil) }
     }
 
     static func index(of id: String) -> Int {
