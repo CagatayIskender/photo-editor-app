@@ -14,6 +14,9 @@ public struct FilterGraph: Sendable {
     public let catalog: LookCatalog
     /// Seed for deterministic grain, normally derived from the document ID.
     public var grainSeed: UInt64
+    /// Faces in the source image, normalised with a top-left origin, for the
+    /// retouch operation. Empty means retouching has nothing to work on.
+    public var faces: [FaceGeometry] = []
 
     public init(catalog: LookCatalog, grainSeed: UInt64 = 0) {
         self.catalog = catalog
@@ -31,6 +34,8 @@ public struct FilterGraph: Sendable {
                 image = applyLook(application, to: image, seed: seed)
             case .adjust(let adjustments):
                 image = applyAdjustments(adjustments, to: image, seed: seed)
+            case .retouch(let settings):
+                image = RetouchRenderer.apply(settings, faces: faces, to: image)
             }
         }
         return applyCrop(document.crop, to: image)
