@@ -53,6 +53,9 @@ targets:
           - Fonts/Inter-Regular.ttf
           - Fonts/Inter-Medium.ttf
           - Fonts/Inter-SemiBold.ttf
+          - Fonts/CormorantGaramond-MediumItalic.ttf
+          - Fonts/Italiana-Regular.ttf
+          - Fonts/BodoniModa-Medium.ttf
         CFBundleURLTypes:
           - CFBundleURLSchemes: [aurum]
         LSApplicationQueriesSchemes: [instagram-stories]

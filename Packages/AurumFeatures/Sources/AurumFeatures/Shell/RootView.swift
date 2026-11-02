@@ -1,0 +1,134 @@
+import SwiftUI
+import AurumCore
+import AurumDesign
+
+/// The app's root: onboarding on first launch, then the Salon and Vault tabs
+/// around a centre "+" that opens the photo picker. The Studio covers
+/// everything while editing.
+public struct RootView: View {
+    @ObservedObject var app: AppModel
+
+    public init(app: AppModel) {
+        self.app = app
+    }
+
+    public var body: some View {
+        Group {
+            if app.hasCompletedOnboarding {
+                MainTabsView(app: app)
+            } else {
+                OnboardingView(app: app)
+                    .transition(.opacity)
+            }
+        }
+        .animation(Motion.respectingReduceMotion(Motion.velvet), value: app.hasCompletedOnboarding)
+        .background(AurumColor.background.ignoresSafeArea())
+        .preferredColorScheme(.dark)
+        .task { await app.start() }
+        .onOpenURL { app.handle(url: $0) }
+    }
+}
+
+struct MainTabsView: View {
+    @ObservedObject var app: AppModel
+
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            Group {
+                switch app.selectedTab {
+                case .salon: SalonView(app: app)
+                case .vault: VaultView(app: app)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 72) }
+
+            AurumTabBar(selected: $app.selectedTab, onCreate: { app.startCreating() })
+        }
+        .sheet(isPresented: $app.isPickerPresented) {
+            PickerView(app: app)
+        }
+        .fullScreenCover(item: $app.studio) { model in
+            StudioView(model: model, onClose: { app.closeStudio() }, app: app)
+        }
+        .overlay(alignment: .top) {
+            if let notice = app.notice {
+                NoticeBanner(text: notice) { app.notice = nil }
+                    .padding(.top, Spacing.xs)
+            }
+        }
+    }
+}
+
+/// Salon, a gold "+", Vault. The "+" is the fastest way into an edit.
+struct AurumTabBar: View {
+    @Binding var selected: AppTab
+    let onCreate: () -> Void
+
+    var body: some View {
+        HStack {
+            tab(.salon, icon: .salon, title: "Salon")
+            Spacer()
+            Button(action: onCreate) {
+                IconView(.plus, size: 26, lineWidth: 1.6)
+                    .foregroundColor(AurumColor.onAccent)
+                    .frame(width: 58, height: 58)
+                    .background(Circle().fill(AurumColor.accent))
+                    .shadow(color: AurumColor.accent.opacity(0.35), radius: 14, y: 4)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Create")
+            .accessibilityHint("Pick a photo to edit")
+            .accessibilityIdentifier("tab.create")
+            Spacer()
+            tab(.vault, icon: .vault, title: "Vault")
+        }
+        .padding(.horizontal, Spacing.xxl)
+        .padding(.top, Spacing.xs)
+        .background(
+            AurumColor.background.opacity(0.94)
+                .overlay(alignment: .top) { Rectangle().fill(AurumColor.hairline).frame(height: 0.5) }
+                .ignoresSafeArea(edges: .bottom)
+        )
+    }
+
+    private func tab(_ tab: AppTab, icon: AurumIcon, title: String) -> some View {
+        let isSelected = selected == tab
+        return Button {
+            selected = tab
+            Haptics.detent()
+        } label: {
+            VStack(spacing: 4) {
+                IconView(icon, size: 24)
+                Text(title).font(.caption2)
+            }
+            .foregroundColor(isSelected ? AurumColor.accent : AurumColor.textTertiary)
+            .frame(minWidth: Size.touch, minHeight: Size.touch)
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? [.isSelected] : [])
+        .accessibilityIdentifier("tab.\(title.lowercased())")
+    }
+}
+
+struct NoticeBanner: View {
+    let text: String
+    let onDismiss: () -> Void
+
+    var body: some View {
+        Text(text)
+            .aurumText(.caption)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, Spacing.m)
+            .padding(.vertical, Spacing.s)
+            .background(Capsule().fill(AurumColor.surfaceRaised))
+            .overlay(Capsule().stroke(AurumColor.goldHairline, lineWidth: 1))
+            .padding(.horizontal, Spacing.m)
+            .onTapGesture(perform: onDismiss)
+            .task {
+                try? await Task.sleep(nanoseconds: 4_000_000_000)
+                onDismiss()
+            }
+            .accessibilityAddTraits(.isStaticText)
+    }
+}
