@@ -35,10 +35,28 @@ jobs:
         run: brew install xcodegen
       - name: Generate project
         run: xcodegen generate
+      - name: Boot simulator
+        run: xcrun simctl boot "iPhone 16" || true; xcrun simctl bootstatus "iPhone 16" -b
       - name: Package tests
         run: |
+          failed=""
           for p in AurumCore AurumDesign AurumRender AurumServices AurumFeatures; do
-            (cd "Packages/$p" && xcodebuild test -scheme "$p" -destination 'platform=iOS Simulator,name=iPhone 16' -quiet) || exit 1
+            (cd "Packages/$p" && xcodebuild test -scheme "$p" -destination 'platform=iOS Simulator,name=iPhone 16' -quiet) || failed="$failed $p"
           done
-      - name: App build
-        run: xcodebuild build -project Aurum.xcodeproj -scheme Aurum -destination 'platform=iOS Simulator,name=iPhone 16' CODE_SIGNING_ALLOWED=NO -quiet
+          if [ -n "$failed" ]; then echo "Failed:$failed"; exit 1; fi
+      - name: App build and UI test
+        if: always()
+        run: xcodebuild test -project Aurum.xcodeproj -scheme Aurum -destination 'platform=iOS Simulator,name=iPhone 16' CODE_SIGNING_ALLOWED=NO -resultBundlePath UITests.xcresult -quiet
+      - name: Show UI test failures
+        if: failure()
+        run: |
+          xcrun xcresulttool get test-results tests --path UITests.xcresult || true
+          xcrun xcresulttool get log --type console --path UITests.xcresult 2>/dev/null | grep AURUM-TIMING || true
+          xcrun xcresulttool get test-results summary --path UITests.xcresult || true
+      - name: Upload UI test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-test-results
+          path: UITests.xcresult
+          retention-days: 5

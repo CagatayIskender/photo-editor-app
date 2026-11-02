@@ -1,0 +1,3229 @@
+{
+  "collections": [
+    {
+      "id": "film-analog",
+      "name": "Film & Analog",
+      "tagline": "Grain, warmth and the honesty of a single frame."
+    },
+    {
+      "id": "cinematic",
+      "name": "Cinematic",
+      "tagline": "Teal shadows, amber skin, a story in every still."
+    },
+    {
+      "id": "noir",
+      "name": "Noir",
+      "tagline": "Black and white, with a little velvet in the shadows."
+    },
+    {
+      "id": "haze",
+      "name": "Soft Haze",
+      "tagline": "Low contrast, lifted blacks, a slow afternoon."
+    },
+    {
+      "id": "glow",
+      "name": "Glow & Bloom",
+      "tagline": "Light that lingers on skin and silk."
+    },
+    {
+      "id": "retro",
+      "name": "Retro Tape",
+      "tagline": "Nineties home video, kept in a velvet box."
+    },
+    {
+      "id": "riviera",
+      "name": "Riviera",
+      "tagline": "Sun on stone, salt in the air."
+    },
+    {
+      "id": "nocturne",
+      "name": "Nocturne",
+      "tagline": "Deep shadows and cool, quiet light."
+    },
+    {
+      "id": "prism",
+      "name": "Prism & Neon",
+      "tagline": "City light, refracted."
+    },
+    {
+      "id": "seasons",
+      "name": "Seasons",
+      "tagline": "Collections for the calendar's best days."
+    }
+  ],
+  "looks": [
+    {
+      "collection": "film-analog",
+      "id": "film-analog.linen",
+      "lut": null,
+      "name": "Linen",
+      "params": {
+        "contrast": -0.06,
+        "fade": 0.16,
+        "grain": 0.28,
+        "highlightsTint": [
+          1.04,
+          1.0,
+          0.92
+        ],
+        "saturation": -0.08,
+        "shadowsTint": [
+          1.02,
+          1.0,
+          0.94
+        ],
+        "vignette": 0.12,
+        "warmth": 0.18
+      },
+      "swatch": [
+        "#E9C9A0",
+        "#7A4E30"
+      ],
+      "tags": [
+        "film",
+        "analog",
+        "grain",
+        "warm",
+        "35mm"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "film-analog",
+      "id": "film-analog.matinee",
+      "lut": null,
+      "name": "Matinee",
+      "params": {
+        "contrast": -0.06,
+        "fade": 0.2,
+        "grain": 0.28,
+        "highlightsTint": [
+          1.04,
+          1.0,
+          0.92
+        ],
+        "saturation": -0.08,
+        "shadowsTint": [
+          1.02,
+          1.0,
+          0.94
+        ],
+        "vignette": 0.12,
+        "warmth": 0.26
+      },
+      "swatch": [
+        "#E9C9A0",
+        "#7A4E30"
+      ],
+      "tags": [
+        "film",
+        "analog",
+        "grain",
+        "warm",
+        "35mm"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "film-analog",
+      "id": "film-analog.contact-sheet",
+      "lut": null,
+      "name": "Contact Sheet",
+      "params": {
+        "contrast": 0.02,
+        "fade": 0.16,
+        "grain": 0.28,
+        "highlightsTint": [
+          1.04,
+          1.0,
+          0.92
+        ],
+        "saturation": -0.14,
+        "shadowsTint": [
+          1.02,
+          1.0,
+          0.94
+        ],
+        "vignette": 0.12,
+        "warmth": 0.18
+      },
+      "swatch": [
+        "#E9C9A0",
+        "#7A4E30"
+      ],
+      "tags": [
+        "film",
+        "analog",
+        "grain",
+        "warm",
+        "35mm"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "film-analog",
+      "id": "film-analog.darkroom",
+      "lut": null,
+      "name": "Darkroom",
+      "params": {
+        "contrast": -0.06,
+        "exposure": -0.06,
+        "fade": 0.16,
+        "grain": 0.28,
+        "highlightsTint": [
+          1.04,
+          1.0,
+          0.92
+        ],
+        "saturation": -0.08,
+        "shadowsTint": [
+          1.02,
+          1.0,
+          0.94
+        ],
+        "vignette": 0.2,
+        "warmth": 0.18
+      },
+      "swatch": [
+        "#E9C9A0",
+        "#7A4E30"
+      ],
+      "tags": [
+        "film",
+        "analog",
+        "grain",
+        "warm",
+        "35mm"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "film-analog",
+      "id": "film-analog.sunday-roll",
+      "lut": null,
+      "name": "Sunday Roll",
+      "params": {
+        "contrast": -0.06,
+        "fade": 0.16,
+        "grain": 0.28,
+        "highlightsTint": [
+          1.04,
+          1.0,
+          0.92
+        ],
+        "saturation": -0.08,
+        "shadowsTint": [
+          1.02,
+          1.0,
+          0.94
+        ],
+        "tint": -0.04,
+        "vignette": 0.12,
+        "warmth": 0.08
+      },
+      "swatch": [
+        "#E9C9A0",
+        "#7A4E30"
+      ],
+      "tags": [
+        "film",
+        "analog",
+        "grain",
+        "warm",
+        "35mm"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "film-analog",
+      "id": "film-analog.postcard",
+      "lut": null,
+      "name": "Postcard",
+      "params": {
+        "contrast": -0.06,
+        "fade": 0.16,
+        "grain": 0.28,
+        "highlightsTint": [
+          1.04,
+          1.0,
+          0.92
+        ],
+        "saturation": 0.02,
+        "shadowsTint": [
+          1.02,
+          1.0,
+          0.94
+        ],
+        "vibrance": 0.08,
+        "vignette": 0.12,
+        "warmth": 0.18
+      },
+      "swatch": [
+        "#E9C9A0",
+        "#7A4E30"
+      ],
+      "tags": [
+        "film",
+        "analog",
+        "grain",
+        "warm",
+        "35mm"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "film-analog",
+      "id": "film-analog.half-frame",
+      "lut": null,
+      "name": "Half Frame",
+      "params": {
+        "contrast": -0.14,
+        "fade": 0.26,
+        "grain": 0.28,
+        "highlightsTint": [
+          1.04,
+          1.0,
+          0.92
+        ],
+        "saturation": -0.08,
+        "shadowsTint": [
+          1.02,
+          1.0,
+          0.94
+        ],
+        "vignette": 0.12,
+        "warmth": 0.18
+      },
+      "swatch": [
+        "#E9C9A0",
+        "#7A4E30"
+      ],
+      "tags": [
+        "film",
+        "analog",
+        "grain",
+        "warm",
+        "35mm"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "film-analog",
+      "id": "film-analog.keepsake",
+      "lut": null,
+      "name": "Keepsake",
+      "params": {
+        "contrast": -0.06,
+        "fade": 0.16,
+        "grain": 0.4,
+        "highlightsTint": [
+          1.04,
+          1.0,
+          0.92
+        ],
+        "lightLeak": 0.12,
+        "saturation": -0.08,
+        "shadowsTint": [
+          1.02,
+          1.0,
+          0.94
+        ],
+        "vignette": 0.12,
+        "warmth": 0.18
+      },
+      "swatch": [
+        "#E9C9A0",
+        "#7A4E30"
+      ],
+      "tags": [
+        "film",
+        "analog",
+        "grain",
+        "warm",
+        "35mm"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "film-analog",
+      "id": "film-analog.amber-leader",
+      "lut": null,
+      "name": "Amber Leader",
+      "params": {
+        "bloom": 0.14,
+        "contrast": -0.06,
+        "exposure": 0.04,
+        "fade": 0.16,
+        "grain": 0.28,
+        "highlightsTint": [
+          1.04,
+          1.0,
+          0.92
+        ],
+        "saturation": -0.08,
+        "shadowsTint": [
+          1.02,
+          1.0,
+          0.94
+        ],
+        "vignette": 0.12,
+        "warmth": 0.18
+      },
+      "swatch": [
+        "#E9C9A0",
+        "#7A4E30"
+      ],
+      "tags": [
+        "film",
+        "analog",
+        "grain",
+        "warm",
+        "35mm"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "film-analog",
+      "id": "film-analog.box-camera",
+      "lut": null,
+      "name": "Box Camera",
+      "params": {
+        "contrast": 0.06,
+        "fade": 0.16,
+        "grain": 0.28,
+        "highlights": -0.1,
+        "highlightsTint": [
+          1.04,
+          1.0,
+          0.92
+        ],
+        "saturation": -0.08,
+        "shadows": 0.06,
+        "shadowsTint": [
+          1.02,
+          1.0,
+          0.94
+        ],
+        "vignette": 0.12,
+        "warmth": 0.18
+      },
+      "swatch": [
+        "#E9C9A0",
+        "#7A4E30"
+      ],
+      "tags": [
+        "film",
+        "analog",
+        "grain",
+        "warm",
+        "35mm"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "cinematic",
+      "id": "cinematic.opening-night",
+      "lut": null,
+      "name": "Opening Night",
+      "params": {
+        "contrast": 0.14,
+        "highlights": -0.12,
+        "highlightsTint": [
+          1.08,
+          1.0,
+          0.9
+        ],
+        "saturation": 0.04,
+        "shadows": 0.08,
+        "shadowsTint": [
+          0.9,
+          1.0,
+          1.08
+        ],
+        "vignette": 0.2,
+        "warmth": 0.06
+      },
+      "swatch": [
+        "#E6B884",
+        "#1F4A55"
+      ],
+      "tags": [
+        "cinematic",
+        "teal",
+        "orange",
+        "movie",
+        "dramatic"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "cinematic",
+      "id": "cinematic.last-reel",
+      "lut": null,
+      "name": "Last Reel",
+      "params": {
+        "contrast": 0.14,
+        "fade": 0.04,
+        "highlights": -0.12,
+        "highlightsTint": [
+          1.08,
+          1.0,
+          0.9
+        ],
+        "saturation": 0.04,
+        "shadows": 0.08,
+        "shadowsTint": [
+          0.9,
+          1.0,
+          1.08
+        ],
+        "vignette": 0.2,
+        "warmth": 0.14
+      },
+      "swatch": [
+        "#E6B884",
+        "#1F4A55"
+      ],
+      "tags": [
+        "cinematic",
+        "teal",
+        "orange",
+        "movie",
+        "dramatic"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "cinematic",
+      "id": "cinematic.anamorphic",
+      "lut": null,
+      "name": "Anamorphic",
+      "params": {
+        "contrast": 0.22,
+        "highlights": -0.12,
+        "highlightsTint": [
+          1.08,
+          1.0,
+          0.9
+        ],
+        "saturation": -0.02,
+        "shadows": 0.08,
+        "shadowsTint": [
+          0.9,
+          1.0,
+          1.08
+        ],
+        "vignette": 0.2,
+        "warmth": 0.06
+      },
+      "swatch": [
+        "#E6B884",
+        "#1F4A55"
+      ],
+      "tags": [
+        "cinematic",
+        "teal",
+        "orange",
+        "movie",
+        "dramatic"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "cinematic",
+      "id": "cinematic.golden-hour-set",
+      "lut": null,
+      "name": "Golden Hour Set",
+      "params": {
+        "contrast": 0.14,
+        "exposure": -0.06,
+        "highlights": -0.12,
+        "highlightsTint": [
+          1.08,
+          1.0,
+          0.9
+        ],
+        "saturation": 0.04,
+        "shadows": 0.08,
+        "shadowsTint": [
+          0.9,
+          1.0,
+          1.08
+        ],
+        "vignette": 0.28,
+        "warmth": 0.06
+      },
+      "swatch": [
+        "#E6B884",
+        "#1F4A55"
+      ],
+      "tags": [
+        "cinematic",
+        "teal",
+        "orange",
+        "movie",
+        "dramatic"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "cinematic",
+      "id": "cinematic.night-shoot",
+      "lut": null,
+      "name": "Night Shoot",
+      "params": {
+        "contrast": 0.14,
+        "highlights": -0.12,
+        "highlightsTint": [
+          1.08,
+          1.0,
+          0.9
+        ],
+        "saturation": 0.04,
+        "shadows": 0.08,
+        "shadowsTint": [
+          0.9,
+          1.0,
+          1.08
+        ],
+        "tint": -0.04,
+        "vignette": 0.2,
+        "warmth": -0.04
+      },
+      "swatch": [
+        "#E6B884",
+        "#1F4A55"
+      ],
+      "tags": [
+        "cinematic",
+        "teal",
+        "orange",
+        "movie",
+        "dramatic"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "cinematic",
+      "id": "cinematic.director-s-chair",
+      "lut": null,
+      "name": "Director's Chair",
+      "params": {
+        "contrast": 0.14,
+        "highlights": -0.12,
+        "highlightsTint": [
+          1.08,
+          1.0,
+          0.9
+        ],
+        "saturation": 0.14,
+        "shadows": 0.08,
+        "shadowsTint": [
+          0.9,
+          1.0,
+          1.08
+        ],
+        "vibrance": 0.08,
+        "vignette": 0.2,
+        "warmth": 0.06
+      },
+      "swatch": [
+        "#E6B884",
+        "#1F4A55"
+      ],
+      "tags": [
+        "cinematic",
+        "teal",
+        "orange",
+        "movie",
+        "dramatic"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "cinematic",
+      "id": "cinematic.wide-release",
+      "lut": null,
+      "name": "Wide Release",
+      "params": {
+        "contrast": 0.06,
+        "fade": 0.1,
+        "highlights": -0.12,
+        "highlightsTint": [
+          1.08,
+          1.0,
+          0.9
+        ],
+        "saturation": 0.04,
+        "shadows": 0.08,
+        "shadowsTint": [
+          0.9,
+          1.0,
+          1.08
+        ],
+        "vignette": 0.2,
+        "warmth": 0.06
+      },
+      "swatch": [
+        "#E6B884",
+        "#1F4A55"
+      ],
+      "tags": [
+        "cinematic",
+        "teal",
+        "orange",
+        "movie",
+        "dramatic"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "cinematic",
+      "id": "cinematic.score",
+      "lut": null,
+      "name": "Score",
+      "params": {
+        "contrast": 0.14,
+        "grain": 0.12,
+        "highlights": -0.12,
+        "highlightsTint": [
+          1.08,
+          1.0,
+          0.9
+        ],
+        "lightLeak": 0.12,
+        "saturation": 0.04,
+        "shadows": 0.08,
+        "shadowsTint": [
+          0.9,
+          1.0,
+          1.08
+        ],
+        "vignette": 0.2,
+        "warmth": 0.06
+      },
+      "swatch": [
+        "#E6B884",
+        "#1F4A55"
+      ],
+      "tags": [
+        "cinematic",
+        "teal",
+        "orange",
+        "movie",
+        "dramatic"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "cinematic",
+      "id": "cinematic.location",
+      "lut": null,
+      "name": "Location",
+      "params": {
+        "bloom": 0.14,
+        "contrast": 0.14,
+        "exposure": 0.04,
+        "highlights": -0.12,
+        "highlightsTint": [
+          1.08,
+          1.0,
+          0.9
+        ],
+        "saturation": 0.04,
+        "shadows": 0.08,
+        "shadowsTint": [
+          0.9,
+          1.0,
+          1.08
+        ],
+        "vignette": 0.2,
+        "warmth": 0.06
+      },
+      "swatch": [
+        "#E6B884",
+        "#1F4A55"
+      ],
+      "tags": [
+        "cinematic",
+        "teal",
+        "orange",
+        "movie",
+        "dramatic"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "cinematic",
+      "id": "cinematic.dailies",
+      "lut": null,
+      "name": "Dailies",
+      "params": {
+        "contrast": 0.26,
+        "highlights": -0.22,
+        "highlightsTint": [
+          1.08,
+          1.0,
+          0.9
+        ],
+        "saturation": 0.04,
+        "shadows": 0.14,
+        "shadowsTint": [
+          0.9,
+          1.0,
+          1.08
+        ],
+        "vignette": 0.2,
+        "warmth": 0.06
+      },
+      "swatch": [
+        "#E6B884",
+        "#1F4A55"
+      ],
+      "tags": [
+        "cinematic",
+        "teal",
+        "orange",
+        "movie",
+        "dramatic"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "noir",
+      "id": "noir.graphite",
+      "lut": null,
+      "name": "Graphite",
+      "params": {
+        "contrast": 0.22,
+        "grain": 0.18,
+        "monochrome": true,
+        "saturation": -1.0,
+        "vignette": 0.22
+      },
+      "swatch": [
+        "#E6E2DC",
+        "#202022"
+      ],
+      "tags": [
+        "bw",
+        "monochrome",
+        "black and white",
+        "noir",
+        "classic"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "noir",
+      "id": "noir.charcoal",
+      "lut": null,
+      "name": "Charcoal",
+      "params": {
+        "contrast": 0.22,
+        "fade": 0.04,
+        "grain": 0.18,
+        "monochrome": true,
+        "saturation": -1.0,
+        "vignette": 0.22,
+        "warmth": 0.08
+      },
+      "swatch": [
+        "#E6E2DC",
+        "#202022"
+      ],
+      "tags": [
+        "bw",
+        "monochrome",
+        "black and white",
+        "noir",
+        "classic"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "noir",
+      "id": "noir.silver-gelatin",
+      "lut": null,
+      "name": "Silver Gelatin",
+      "params": {
+        "contrast": 0.3,
+        "grain": 0.18,
+        "monochrome": true,
+        "saturation": -1,
+        "vignette": 0.22
+      },
+      "swatch": [
+        "#E6E2DC",
+        "#202022"
+      ],
+      "tags": [
+        "bw",
+        "monochrome",
+        "black and white",
+        "noir",
+        "classic"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "noir",
+      "id": "noir.ink",
+      "lut": null,
+      "name": "Ink",
+      "params": {
+        "contrast": 0.22,
+        "exposure": -0.06,
+        "grain": 0.18,
+        "monochrome": true,
+        "saturation": -1.0,
+        "vignette": 0.3
+      },
+      "swatch": [
+        "#E6E2DC",
+        "#202022"
+      ],
+      "tags": [
+        "bw",
+        "monochrome",
+        "black and white",
+        "noir",
+        "classic"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "noir",
+      "id": "noir.salon-noir",
+      "lut": null,
+      "name": "Salon Noir",
+      "params": {
+        "contrast": 0.22,
+        "grain": 0.18,
+        "monochrome": true,
+        "saturation": -1.0,
+        "tint": -0.04,
+        "vignette": 0.22,
+        "warmth": -0.1
+      },
+      "swatch": [
+        "#E6E2DC",
+        "#202022"
+      ],
+      "tags": [
+        "bw",
+        "monochrome",
+        "black and white",
+        "noir",
+        "classic"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "noir",
+      "id": "noir.pearl",
+      "lut": null,
+      "name": "Pearl",
+      "params": {
+        "contrast": 0.22,
+        "grain": 0.18,
+        "monochrome": true,
+        "saturation": -0.9,
+        "vibrance": 0.08,
+        "vignette": 0.22
+      },
+      "swatch": [
+        "#E6E2DC",
+        "#202022"
+      ],
+      "tags": [
+        "bw",
+        "monochrome",
+        "black and white",
+        "noir",
+        "classic"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "noir",
+      "id": "noir.smoke",
+      "lut": null,
+      "name": "Smoke",
+      "params": {
+        "contrast": 0.14,
+        "fade": 0.1,
+        "grain": 0.18,
+        "monochrome": true,
+        "saturation": -1.0,
+        "vignette": 0.22
+      },
+      "swatch": [
+        "#E6E2DC",
+        "#202022"
+      ],
+      "tags": [
+        "bw",
+        "monochrome",
+        "black and white",
+        "noir",
+        "classic"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "noir",
+      "id": "noir.onyx",
+      "lut": null,
+      "name": "Onyx",
+      "params": {
+        "contrast": 0.22,
+        "grain": 0.3,
+        "lightLeak": 0.12,
+        "monochrome": true,
+        "saturation": -1.0,
+        "vignette": 0.22
+      },
+      "swatch": [
+        "#E6E2DC",
+        "#202022"
+      ],
+      "tags": [
+        "bw",
+        "monochrome",
+        "black and white",
+        "noir",
+        "classic"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "noir",
+      "id": "noir.chalk",
+      "lut": null,
+      "name": "Chalk",
+      "params": {
+        "bloom": 0.14,
+        "contrast": 0.22,
+        "exposure": 0.04,
+        "grain": 0.18,
+        "monochrome": true,
+        "saturation": -1.0,
+        "vignette": 0.22
+      },
+      "swatch": [
+        "#E6E2DC",
+        "#202022"
+      ],
+      "tags": [
+        "bw",
+        "monochrome",
+        "black and white",
+        "noir",
+        "classic"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "noir",
+      "id": "noir.midnight-print",
+      "lut": null,
+      "name": "Midnight Print",
+      "params": {
+        "contrast": 0.34,
+        "grain": 0.18,
+        "highlights": -0.1,
+        "monochrome": true,
+        "saturation": -1.0,
+        "shadows": 0.06,
+        "vignette": 0.22
+      },
+      "swatch": [
+        "#E6E2DC",
+        "#202022"
+      ],
+      "tags": [
+        "bw",
+        "monochrome",
+        "black and white",
+        "noir",
+        "classic"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "haze",
+      "id": "haze.velours",
+      "lut": null,
+      "name": "Velours",
+      "params": {
+        "bloom": 0.22,
+        "contrast": -0.2,
+        "exposure": 0.06,
+        "fade": 0.28,
+        "highlightsTint": [
+          1.03,
+          0.99,
+          1.02
+        ],
+        "saturation": -0.12
+      },
+      "swatch": [
+        "#F2DCE0",
+        "#A88A9A"
+      ],
+      "tags": [
+        "dreamy",
+        "haze",
+        "soft",
+        "pastel",
+        "airy"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "haze",
+      "id": "haze.chiffon",
+      "lut": null,
+      "name": "Chiffon",
+      "params": {
+        "bloom": 0.22,
+        "contrast": -0.2,
+        "exposure": 0.06,
+        "fade": 0.32,
+        "highlightsTint": [
+          1.03,
+          0.99,
+          1.02
+        ],
+        "saturation": -0.12,
+        "warmth": 0.08
+      },
+      "swatch": [
+        "#F2DCE0",
+        "#A88A9A"
+      ],
+      "tags": [
+        "dreamy",
+        "haze",
+        "soft",
+        "pastel",
+        "airy"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "haze",
+      "id": "haze.blush-veil",
+      "lut": null,
+      "name": "Blush Veil",
+      "params": {
+        "bloom": 0.22,
+        "contrast": -0.12,
+        "exposure": 0.06,
+        "fade": 0.28,
+        "highlightsTint": [
+          1.03,
+          0.99,
+          1.02
+        ],
+        "saturation": -0.18
+      },
+      "swatch": [
+        "#F2DCE0",
+        "#A88A9A"
+      ],
+      "tags": [
+        "dreamy",
+        "haze",
+        "soft",
+        "pastel",
+        "airy"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "haze",
+      "id": "haze.morning-room",
+      "lut": null,
+      "name": "Morning Room",
+      "params": {
+        "bloom": 0.22,
+        "contrast": -0.2,
+        "exposure": 0.0,
+        "fade": 0.28,
+        "highlightsTint": [
+          1.03,
+          0.99,
+          1.02
+        ],
+        "saturation": -0.12,
+        "vignette": 0.08
+      },
+      "swatch": [
+        "#F2DCE0",
+        "#A88A9A"
+      ],
+      "tags": [
+        "dreamy",
+        "haze",
+        "soft",
+        "pastel",
+        "airy"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "haze",
+      "id": "haze.linen-sheets",
+      "lut": null,
+      "name": "Linen Sheets",
+      "params": {
+        "bloom": 0.22,
+        "contrast": -0.2,
+        "exposure": 0.06,
+        "fade": 0.28,
+        "highlightsTint": [
+          1.03,
+          0.99,
+          1.02
+        ],
+        "saturation": -0.12,
+        "tint": -0.04,
+        "warmth": -0.1
+      },
+      "swatch": [
+        "#F2DCE0",
+        "#A88A9A"
+      ],
+      "tags": [
+        "dreamy",
+        "haze",
+        "soft",
+        "pastel",
+        "airy"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "haze",
+      "id": "haze.petal",
+      "lut": null,
+      "name": "Petal",
+      "params": {
+        "bloom": 0.22,
+        "contrast": -0.2,
+        "exposure": 0.06,
+        "fade": 0.28,
+        "highlightsTint": [
+          1.03,
+          0.99,
+          1.02
+        ],
+        "saturation": -0.02,
+        "vibrance": 0.08
+      },
+      "swatch": [
+        "#F2DCE0",
+        "#A88A9A"
+      ],
+      "tags": [
+        "dreamy",
+        "haze",
+        "soft",
+        "pastel",
+        "airy"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "haze",
+      "id": "haze.cloud-nine",
+      "lut": null,
+      "name": "Cloud Nine",
+      "params": {
+        "bloom": 0.22,
+        "contrast": -0.28,
+        "exposure": 0.06,
+        "fade": 0.38,
+        "highlightsTint": [
+          1.03,
+          0.99,
+          1.02
+        ],
+        "saturation": -0.12
+      },
+      "swatch": [
+        "#F2DCE0",
+        "#A88A9A"
+      ],
+      "tags": [
+        "dreamy",
+        "haze",
+        "soft",
+        "pastel",
+        "airy"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "haze",
+      "id": "haze.powder",
+      "lut": null,
+      "name": "Powder",
+      "params": {
+        "bloom": 0.22,
+        "contrast": -0.2,
+        "exposure": 0.06,
+        "fade": 0.28,
+        "grain": 0.12,
+        "highlightsTint": [
+          1.03,
+          0.99,
+          1.02
+        ],
+        "lightLeak": 0.12,
+        "saturation": -0.12
+      },
+      "swatch": [
+        "#F2DCE0",
+        "#A88A9A"
+      ],
+      "tags": [
+        "dreamy",
+        "haze",
+        "soft",
+        "pastel",
+        "airy"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "haze",
+      "id": "haze.organza",
+      "lut": null,
+      "name": "Organza",
+      "params": {
+        "bloom": 0.36,
+        "contrast": -0.2,
+        "exposure": 0.1,
+        "fade": 0.28,
+        "highlightsTint": [
+          1.03,
+          0.99,
+          1.02
+        ],
+        "saturation": -0.12
+      },
+      "swatch": [
+        "#F2DCE0",
+        "#A88A9A"
+      ],
+      "tags": [
+        "dreamy",
+        "haze",
+        "soft",
+        "pastel",
+        "airy"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "haze",
+      "id": "haze.daydream",
+      "lut": null,
+      "name": "Daydream",
+      "params": {
+        "bloom": 0.22,
+        "contrast": -0.08,
+        "exposure": 0.06,
+        "fade": 0.28,
+        "highlights": -0.1,
+        "highlightsTint": [
+          1.03,
+          0.99,
+          1.02
+        ],
+        "saturation": -0.12,
+        "shadows": 0.06
+      },
+      "swatch": [
+        "#F2DCE0",
+        "#A88A9A"
+      ],
+      "tags": [
+        "dreamy",
+        "haze",
+        "soft",
+        "pastel",
+        "airy"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "glow",
+      "id": "glow.gilt",
+      "lut": null,
+      "name": "Gilt",
+      "params": {
+        "bloom": 0.42,
+        "contrast": 0.02,
+        "exposure": 0.04,
+        "highlights": -0.06,
+        "saturation": 0.06,
+        "warmth": 0.12
+      },
+      "swatch": [
+        "#F2D79A",
+        "#8A5A2A"
+      ],
+      "tags": [
+        "glow",
+        "bloom",
+        "golden",
+        "radiant",
+        "warm",
+        "sparkle"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "glow",
+      "id": "glow.candlelight",
+      "lut": null,
+      "name": "Candlelight",
+      "params": {
+        "bloom": 0.42,
+        "contrast": 0.02,
+        "exposure": 0.04,
+        "fade": 0.04,
+        "highlights": -0.06,
+        "saturation": 0.06,
+        "warmth": 0.2
+      },
+      "swatch": [
+        "#F2D79A",
+        "#8A5A2A"
+      ],
+      "tags": [
+        "glow",
+        "bloom",
+        "golden",
+        "radiant",
+        "warm",
+        "sparkle"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "glow",
+      "id": "glow.halo",
+      "lut": null,
+      "name": "Halo",
+      "params": {
+        "bloom": 0.42,
+        "contrast": 0.1,
+        "exposure": 0.04,
+        "highlights": -0.06,
+        "saturation": 0.0,
+        "warmth": 0.12
+      },
+      "swatch": [
+        "#F2D79A",
+        "#8A5A2A"
+      ],
+      "tags": [
+        "glow",
+        "bloom",
+        "golden",
+        "radiant",
+        "warm",
+        "sparkle"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "glow",
+      "id": "glow.honey",
+      "lut": null,
+      "name": "Honey",
+      "params": {
+        "bloom": 0.42,
+        "contrast": 0.02,
+        "exposure": -0.02,
+        "highlights": -0.06,
+        "saturation": 0.06,
+        "vignette": 0.08,
+        "warmth": 0.12
+      },
+      "swatch": [
+        "#F2D79A",
+        "#8A5A2A"
+      ],
+      "tags": [
+        "glow",
+        "bloom",
+        "golden",
+        "radiant",
+        "warm",
+        "sparkle"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "glow",
+      "id": "glow.vermeil",
+      "lut": null,
+      "name": "Vermeil",
+      "params": {
+        "bloom": 0.42,
+        "contrast": 0.02,
+        "exposure": 0.04,
+        "highlights": -0.06,
+        "saturation": 0.06,
+        "tint": -0.04,
+        "warmth": 0.02
+      },
+      "swatch": [
+        "#F2D79A",
+        "#8A5A2A"
+      ],
+      "tags": [
+        "glow",
+        "bloom",
+        "golden",
+        "radiant",
+        "warm",
+        "sparkle"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "glow",
+      "id": "glow.lantern",
+      "lut": null,
+      "name": "Lantern",
+      "params": {
+        "bloom": 0.42,
+        "contrast": 0.02,
+        "exposure": 0.04,
+        "highlights": -0.06,
+        "saturation": 0.16,
+        "vibrance": 0.08,
+        "warmth": 0.12
+      },
+      "swatch": [
+        "#F2D79A",
+        "#8A5A2A"
+      ],
+      "tags": [
+        "glow",
+        "bloom",
+        "golden",
+        "radiant",
+        "warm",
+        "sparkle"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "glow",
+      "id": "glow.afterglow",
+      "lut": null,
+      "name": "Afterglow",
+      "params": {
+        "bloom": 0.42,
+        "contrast": -0.06,
+        "exposure": 0.04,
+        "fade": 0.1,
+        "highlights": -0.06,
+        "saturation": 0.06,
+        "warmth": 0.12
+      },
+      "swatch": [
+        "#F2D79A",
+        "#8A5A2A"
+      ],
+      "tags": [
+        "glow",
+        "bloom",
+        "golden",
+        "radiant",
+        "warm",
+        "sparkle"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "glow",
+      "id": "glow.champagne",
+      "lut": null,
+      "name": "Champagne",
+      "params": {
+        "bloom": 0.42,
+        "contrast": 0.02,
+        "exposure": 0.04,
+        "grain": 0.12,
+        "highlights": -0.06,
+        "lightLeak": 0.12,
+        "saturation": 0.06,
+        "warmth": 0.12
+      },
+      "swatch": [
+        "#F2D79A",
+        "#8A5A2A"
+      ],
+      "tags": [
+        "glow",
+        "bloom",
+        "golden",
+        "radiant",
+        "warm",
+        "sparkle"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "glow",
+      "id": "glow.aurora-gold",
+      "lut": null,
+      "name": "Aurora Gold",
+      "params": {
+        "bloom": 0.56,
+        "contrast": 0.02,
+        "exposure": 0.08,
+        "highlights": -0.06,
+        "saturation": 0.06,
+        "warmth": 0.12
+      },
+      "swatch": [
+        "#F2D79A",
+        "#8A5A2A"
+      ],
+      "tags": [
+        "glow",
+        "bloom",
+        "golden",
+        "radiant",
+        "warm",
+        "sparkle"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "glow",
+      "id": "glow.lumi\u00e8re",
+      "lut": null,
+      "name": "Lumi\u00e8re",
+      "params": {
+        "bloom": 0.42,
+        "contrast": 0.14,
+        "exposure": 0.04,
+        "highlights": -0.16,
+        "saturation": 0.06,
+        "shadows": 0.06,
+        "warmth": 0.12
+      },
+      "swatch": [
+        "#F2D79A",
+        "#8A5A2A"
+      ],
+      "tags": [
+        "glow",
+        "bloom",
+        "golden",
+        "radiant",
+        "warm",
+        "sparkle"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "retro",
+      "id": "retro.rewind",
+      "lut": null,
+      "name": "Rewind",
+      "params": {
+        "contrast": 0.08,
+        "fade": 0.12,
+        "grain": 0.34,
+        "grainSize": 1.6,
+        "lightLeak": 0.18,
+        "saturation": 0.14,
+        "shadowsTint": [
+          0.96,
+          1.0,
+          1.06
+        ],
+        "tint": 0.06
+      },
+      "swatch": [
+        "#D98A9A",
+        "#2E2A5A"
+      ],
+      "tags": [
+        "90s",
+        "retro",
+        "vhs",
+        "camcorder",
+        "tape"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "retro",
+      "id": "retro.tracking",
+      "lut": null,
+      "name": "Tracking",
+      "params": {
+        "contrast": 0.08,
+        "fade": 0.16,
+        "grain": 0.34,
+        "grainSize": 1.6,
+        "lightLeak": 0.18,
+        "saturation": 0.14,
+        "shadowsTint": [
+          0.96,
+          1.0,
+          1.06
+        ],
+        "tint": 0.06,
+        "warmth": 0.08
+      },
+      "swatch": [
+        "#D98A9A",
+        "#2E2A5A"
+      ],
+      "tags": [
+        "90s",
+        "retro",
+        "vhs",
+        "camcorder",
+        "tape"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "retro",
+      "id": "retro.mixtape",
+      "lut": null,
+      "name": "Mixtape",
+      "params": {
+        "contrast": 0.16,
+        "fade": 0.12,
+        "grain": 0.34,
+        "grainSize": 1.6,
+        "lightLeak": 0.18,
+        "saturation": 0.08,
+        "shadowsTint": [
+          0.96,
+          1.0,
+          1.06
+        ],
+        "tint": 0.06
+      },
+      "swatch": [
+        "#D98A9A",
+        "#2E2A5A"
+      ],
+      "tags": [
+        "90s",
+        "retro",
+        "vhs",
+        "camcorder",
+        "tape"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "retro",
+      "id": "retro.saturday-tape",
+      "lut": null,
+      "name": "Saturday Tape",
+      "params": {
+        "contrast": 0.08,
+        "exposure": -0.06,
+        "fade": 0.12,
+        "grain": 0.34,
+        "grainSize": 1.6,
+        "lightLeak": 0.18,
+        "saturation": 0.14,
+        "shadowsTint": [
+          0.96,
+          1.0,
+          1.06
+        ],
+        "tint": 0.06,
+        "vignette": 0.08
+      },
+      "swatch": [
+        "#D98A9A",
+        "#2E2A5A"
+      ],
+      "tags": [
+        "90s",
+        "retro",
+        "vhs",
+        "camcorder",
+        "tape"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "retro",
+      "id": "retro.arcade",
+      "lut": null,
+      "name": "Arcade",
+      "params": {
+        "contrast": 0.08,
+        "fade": 0.12,
+        "grain": 0.34,
+        "grainSize": 1.6,
+        "lightLeak": 0.18,
+        "saturation": 0.14,
+        "shadowsTint": [
+          0.96,
+          1.0,
+          1.06
+        ],
+        "tint": 0.02,
+        "warmth": -0.1
+      },
+      "swatch": [
+        "#D98A9A",
+        "#2E2A5A"
+      ],
+      "tags": [
+        "90s",
+        "retro",
+        "vhs",
+        "camcorder",
+        "tape"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "retro",
+      "id": "retro.prom-night",
+      "lut": null,
+      "name": "Prom Night",
+      "params": {
+        "contrast": 0.08,
+        "fade": 0.12,
+        "grain": 0.34,
+        "grainSize": 1.6,
+        "lightLeak": 0.18,
+        "saturation": 0.24,
+        "shadowsTint": [
+          0.96,
+          1.0,
+          1.06
+        ],
+        "tint": 0.06,
+        "vibrance": 0.08
+      },
+      "swatch": [
+        "#D98A9A",
+        "#2E2A5A"
+      ],
+      "tags": [
+        "90s",
+        "retro",
+        "vhs",
+        "camcorder",
+        "tape"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "retro",
+      "id": "retro.pager",
+      "lut": null,
+      "name": "Pager",
+      "params": {
+        "contrast": 0.0,
+        "fade": 0.22,
+        "grain": 0.34,
+        "grainSize": 1.6,
+        "lightLeak": 0.18,
+        "saturation": 0.14,
+        "shadowsTint": [
+          0.96,
+          1.0,
+          1.06
+        ],
+        "tint": 0.06
+      },
+      "swatch": [
+        "#D98A9A",
+        "#2E2A5A"
+      ],
+      "tags": [
+        "90s",
+        "retro",
+        "vhs",
+        "camcorder",
+        "tape"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "retro",
+      "id": "retro.boombox",
+      "lut": null,
+      "name": "Boombox",
+      "params": {
+        "contrast": 0.08,
+        "fade": 0.12,
+        "grain": 0.46,
+        "grainSize": 1.6,
+        "lightLeak": 0.3,
+        "saturation": 0.14,
+        "shadowsTint": [
+          0.96,
+          1.0,
+          1.06
+        ],
+        "tint": 0.06
+      },
+      "swatch": [
+        "#D98A9A",
+        "#2E2A5A"
+      ],
+      "tags": [
+        "90s",
+        "retro",
+        "vhs",
+        "camcorder",
+        "tape"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "retro",
+      "id": "retro.static",
+      "lut": null,
+      "name": "Static",
+      "params": {
+        "bloom": 0.14,
+        "contrast": 0.08,
+        "exposure": 0.04,
+        "fade": 0.12,
+        "grain": 0.34,
+        "grainSize": 1.6,
+        "lightLeak": 0.18,
+        "saturation": 0.14,
+        "shadowsTint": [
+          0.96,
+          1.0,
+          1.06
+        ],
+        "tint": 0.06
+      },
+      "swatch": [
+        "#D98A9A",
+        "#2E2A5A"
+      ],
+      "tags": [
+        "90s",
+        "retro",
+        "vhs",
+        "camcorder",
+        "tape"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "retro",
+      "id": "retro.freeze-frame",
+      "lut": null,
+      "name": "Freeze Frame",
+      "params": {
+        "contrast": 0.2,
+        "fade": 0.12,
+        "grain": 0.34,
+        "grainSize": 1.6,
+        "highlights": -0.1,
+        "lightLeak": 0.18,
+        "saturation": 0.14,
+        "shadows": 0.06,
+        "shadowsTint": [
+          0.96,
+          1.0,
+          1.06
+        ],
+        "tint": 0.06
+      },
+      "swatch": [
+        "#D98A9A",
+        "#2E2A5A"
+      ],
+      "tags": [
+        "90s",
+        "retro",
+        "vhs",
+        "camcorder",
+        "tape"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "riviera",
+      "id": "riviera.riviera",
+      "lut": null,
+      "name": "Riviera",
+      "params": {
+        "contrast": 0.1,
+        "exposure": 0.06,
+        "saturation": 0.22,
+        "shadowsTint": [
+          0.94,
+          1.0,
+          1.06
+        ],
+        "vibrance": 0.18,
+        "warmth": 0.1
+      },
+      "swatch": [
+        "#F2C98A",
+        "#2E6A7A"
+      ],
+      "tags": [
+        "summer",
+        "sunny",
+        "travel",
+        "vivid",
+        "warm"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "riviera",
+      "id": "riviera.corniche",
+      "lut": null,
+      "name": "Corniche",
+      "params": {
+        "contrast": 0.1,
+        "exposure": 0.06,
+        "fade": 0.04,
+        "saturation": 0.22,
+        "shadowsTint": [
+          0.94,
+          1.0,
+          1.06
+        ],
+        "vibrance": 0.18,
+        "warmth": 0.18
+      },
+      "swatch": [
+        "#F2C98A",
+        "#2E6A7A"
+      ],
+      "tags": [
+        "summer",
+        "sunny",
+        "travel",
+        "vivid",
+        "warm"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "riviera",
+      "id": "riviera.lido",
+      "lut": null,
+      "name": "Lido",
+      "params": {
+        "contrast": 0.18,
+        "exposure": 0.06,
+        "saturation": 0.16,
+        "shadowsTint": [
+          0.94,
+          1.0,
+          1.06
+        ],
+        "vibrance": 0.18,
+        "warmth": 0.1
+      },
+      "swatch": [
+        "#F2C98A",
+        "#2E6A7A"
+      ],
+      "tags": [
+        "summer",
+        "sunny",
+        "travel",
+        "vivid",
+        "warm"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "riviera",
+      "id": "riviera.limoncello",
+      "lut": null,
+      "name": "Limoncello",
+      "params": {
+        "contrast": 0.1,
+        "exposure": 0.0,
+        "saturation": 0.22,
+        "shadowsTint": [
+          0.94,
+          1.0,
+          1.06
+        ],
+        "vibrance": 0.18,
+        "vignette": 0.08,
+        "warmth": 0.1
+      },
+      "swatch": [
+        "#F2C98A",
+        "#2E6A7A"
+      ],
+      "tags": [
+        "summer",
+        "sunny",
+        "travel",
+        "vivid",
+        "warm"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "riviera",
+      "id": "riviera.cabana",
+      "lut": null,
+      "name": "Cabana",
+      "params": {
+        "contrast": 0.1,
+        "exposure": 0.06,
+        "saturation": 0.22,
+        "shadowsTint": [
+          0.94,
+          1.0,
+          1.06
+        ],
+        "tint": -0.04,
+        "vibrance": 0.18,
+        "warmth": 0.0
+      },
+      "swatch": [
+        "#F2C98A",
+        "#2E6A7A"
+      ],
+      "tags": [
+        "summer",
+        "sunny",
+        "travel",
+        "vivid",
+        "warm"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "riviera",
+      "id": "riviera.azure-steps",
+      "lut": null,
+      "name": "Azure Steps",
+      "params": {
+        "contrast": 0.1,
+        "exposure": 0.06,
+        "saturation": 0.32,
+        "shadowsTint": [
+          0.94,
+          1.0,
+          1.06
+        ],
+        "vibrance": 0.26,
+        "warmth": 0.1
+      },
+      "swatch": [
+        "#F2C98A",
+        "#2E6A7A"
+      ],
+      "tags": [
+        "summer",
+        "sunny",
+        "travel",
+        "vivid",
+        "warm"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "riviera",
+      "id": "riviera.terrace",
+      "lut": null,
+      "name": "Terrace",
+      "params": {
+        "contrast": 0.02,
+        "exposure": 0.06,
+        "fade": 0.1,
+        "saturation": 0.22,
+        "shadowsTint": [
+          0.94,
+          1.0,
+          1.06
+        ],
+        "vibrance": 0.18,
+        "warmth": 0.1
+      },
+      "swatch": [
+        "#F2C98A",
+        "#2E6A7A"
+      ],
+      "tags": [
+        "summer",
+        "sunny",
+        "travel",
+        "vivid",
+        "warm"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "riviera",
+      "id": "riviera.siesta",
+      "lut": null,
+      "name": "Siesta",
+      "params": {
+        "contrast": 0.1,
+        "exposure": 0.06,
+        "grain": 0.12,
+        "lightLeak": 0.12,
+        "saturation": 0.22,
+        "shadowsTint": [
+          0.94,
+          1.0,
+          1.06
+        ],
+        "vibrance": 0.18,
+        "warmth": 0.1
+      },
+      "swatch": [
+        "#F2C98A",
+        "#2E6A7A"
+      ],
+      "tags": [
+        "summer",
+        "sunny",
+        "travel",
+        "vivid",
+        "warm"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "riviera",
+      "id": "riviera.harbour",
+      "lut": null,
+      "name": "Harbour",
+      "params": {
+        "bloom": 0.14,
+        "contrast": 0.1,
+        "exposure": 0.1,
+        "saturation": 0.22,
+        "shadowsTint": [
+          0.94,
+          1.0,
+          1.06
+        ],
+        "vibrance": 0.18,
+        "warmth": 0.1
+      },
+      "swatch": [
+        "#F2C98A",
+        "#2E6A7A"
+      ],
+      "tags": [
+        "summer",
+        "sunny",
+        "travel",
+        "vivid",
+        "warm"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "riviera",
+      "id": "riviera.marina-blue",
+      "lut": null,
+      "name": "Marina Blue",
+      "params": {
+        "contrast": 0.22,
+        "exposure": 0.06,
+        "highlights": -0.1,
+        "saturation": 0.22,
+        "shadows": 0.06,
+        "shadowsTint": [
+          0.94,
+          1.0,
+          1.06
+        ],
+        "vibrance": 0.18,
+        "warmth": 0.1
+      },
+      "swatch": [
+        "#F2C98A",
+        "#2E6A7A"
+      ],
+      "tags": [
+        "summer",
+        "sunny",
+        "travel",
+        "vivid",
+        "warm"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "nocturne",
+      "id": "nocturne.nocturne",
+      "lut": null,
+      "name": "Nocturne",
+      "params": {
+        "contrast": 0.24,
+        "exposure": -0.12,
+        "saturation": -0.2,
+        "shadowsTint": [
+          0.9,
+          0.96,
+          1.1
+        ],
+        "vignette": 0.32,
+        "warmth": -0.16
+      },
+      "swatch": [
+        "#9AA8B6",
+        "#1C232B"
+      ],
+      "tags": [
+        "moody",
+        "dark",
+        "cool",
+        "night",
+        "shadow"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "nocturne",
+      "id": "nocturne.velvet-hour",
+      "lut": null,
+      "name": "Velvet Hour",
+      "params": {
+        "contrast": 0.24,
+        "exposure": -0.12,
+        "fade": 0.04,
+        "saturation": -0.2,
+        "shadowsTint": [
+          0.9,
+          0.96,
+          1.1
+        ],
+        "vignette": 0.32,
+        "warmth": -0.08
+      },
+      "swatch": [
+        "#9AA8B6",
+        "#1C232B"
+      ],
+      "tags": [
+        "moody",
+        "dark",
+        "cool",
+        "night",
+        "shadow"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "nocturne",
+      "id": "nocturne.blue-salon",
+      "lut": null,
+      "name": "Blue Salon",
+      "params": {
+        "contrast": 0.32,
+        "exposure": -0.12,
+        "saturation": -0.26,
+        "shadowsTint": [
+          0.9,
+          0.96,
+          1.1
+        ],
+        "vignette": 0.32,
+        "warmth": -0.16
+      },
+      "swatch": [
+        "#9AA8B6",
+        "#1C232B"
+      ],
+      "tags": [
+        "moody",
+        "dark",
+        "cool",
+        "night",
+        "shadow"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "nocturne",
+      "id": "nocturne.opera",
+      "lut": null,
+      "name": "Opera",
+      "params": {
+        "contrast": 0.24,
+        "exposure": -0.18,
+        "saturation": -0.2,
+        "shadowsTint": [
+          0.9,
+          0.96,
+          1.1
+        ],
+        "vignette": 0.4,
+        "warmth": -0.16
+      },
+      "swatch": [
+        "#9AA8B6",
+        "#1C232B"
+      ],
+      "tags": [
+        "moody",
+        "dark",
+        "cool",
+        "night",
+        "shadow"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "nocturne",
+      "id": "nocturne.slate",
+      "lut": null,
+      "name": "Slate",
+      "params": {
+        "contrast": 0.24,
+        "exposure": -0.12,
+        "saturation": -0.2,
+        "shadowsTint": [
+          0.9,
+          0.96,
+          1.1
+        ],
+        "tint": -0.04,
+        "vignette": 0.32,
+        "warmth": -0.26
+      },
+      "swatch": [
+        "#9AA8B6",
+        "#1C232B"
+      ],
+      "tags": [
+        "moody",
+        "dark",
+        "cool",
+        "night",
+        "shadow"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "nocturne",
+      "id": "nocturne.moonlit",
+      "lut": null,
+      "name": "Moonlit",
+      "params": {
+        "contrast": 0.24,
+        "exposure": -0.12,
+        "saturation": -0.1,
+        "shadowsTint": [
+          0.9,
+          0.96,
+          1.1
+        ],
+        "vibrance": 0.08,
+        "vignette": 0.32,
+        "warmth": -0.16
+      },
+      "swatch": [
+        "#9AA8B6",
+        "#1C232B"
+      ],
+      "tags": [
+        "moody",
+        "dark",
+        "cool",
+        "night",
+        "shadow"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "nocturne",
+      "id": "nocturne.after-hours",
+      "lut": null,
+      "name": "After Hours",
+      "params": {
+        "contrast": 0.16,
+        "exposure": -0.12,
+        "fade": 0.1,
+        "saturation": -0.2,
+        "shadowsTint": [
+          0.9,
+          0.96,
+          1.1
+        ],
+        "vignette": 0.32,
+        "warmth": -0.16
+      },
+      "swatch": [
+        "#9AA8B6",
+        "#1C232B"
+      ],
+      "tags": [
+        "moody",
+        "dark",
+        "cool",
+        "night",
+        "shadow"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "nocturne",
+      "id": "nocturne.storm",
+      "lut": null,
+      "name": "Storm",
+      "params": {
+        "contrast": 0.24,
+        "exposure": -0.12,
+        "grain": 0.12,
+        "lightLeak": 0.12,
+        "saturation": -0.2,
+        "shadowsTint": [
+          0.9,
+          0.96,
+          1.1
+        ],
+        "vignette": 0.32,
+        "warmth": -0.16
+      },
+      "swatch": [
+        "#9AA8B6",
+        "#1C232B"
+      ],
+      "tags": [
+        "moody",
+        "dark",
+        "cool",
+        "night",
+        "shadow"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "nocturne",
+      "id": "nocturne.indigo",
+      "lut": null,
+      "name": "Indigo",
+      "params": {
+        "bloom": 0.14,
+        "contrast": 0.24,
+        "exposure": -0.08,
+        "saturation": -0.2,
+        "shadowsTint": [
+          0.9,
+          0.96,
+          1.1
+        ],
+        "vignette": 0.32,
+        "warmth": -0.16
+      },
+      "swatch": [
+        "#9AA8B6",
+        "#1C232B"
+      ],
+      "tags": [
+        "moody",
+        "dark",
+        "cool",
+        "night",
+        "shadow"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "nocturne",
+      "id": "nocturne.last-call",
+      "lut": null,
+      "name": "Last Call",
+      "params": {
+        "contrast": 0.36,
+        "exposure": -0.12,
+        "highlights": -0.1,
+        "saturation": -0.2,
+        "shadows": 0.06,
+        "shadowsTint": [
+          0.9,
+          0.96,
+          1.1
+        ],
+        "vignette": 0.32,
+        "warmth": -0.16
+      },
+      "swatch": [
+        "#9AA8B6",
+        "#1C232B"
+      ],
+      "tags": [
+        "moody",
+        "dark",
+        "cool",
+        "night",
+        "shadow"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "prism",
+      "id": "prism.prism",
+      "lut": null,
+      "name": "Prism",
+      "params": {
+        "bloom": 0.2,
+        "contrast": 0.18,
+        "highlightsTint": [
+          1.06,
+          0.96,
+          1.04
+        ],
+        "saturation": 0.3,
+        "shadowsTint": [
+          0.96,
+          0.9,
+          1.12
+        ],
+        "tint": 0.12,
+        "vibrance": 0.2
+      },
+      "swatch": [
+        "#D9B8F0",
+        "#2A0E3A"
+      ],
+      "tags": [
+        "neon",
+        "night city",
+        "prism",
+        "rainbow",
+        "vivid"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "prism",
+      "id": "prism.spectre",
+      "lut": null,
+      "name": "Spectre",
+      "params": {
+        "bloom": 0.2,
+        "contrast": 0.18,
+        "fade": 0.04,
+        "highlightsTint": [
+          1.06,
+          0.96,
+          1.04
+        ],
+        "saturation": 0.3,
+        "shadowsTint": [
+          0.96,
+          0.9,
+          1.12
+        ],
+        "tint": 0.12,
+        "vibrance": 0.2,
+        "warmth": 0.08
+      },
+      "swatch": [
+        "#D9B8F0",
+        "#2A0E3A"
+      ],
+      "tags": [
+        "neon",
+        "night city",
+        "prism",
+        "rainbow",
+        "vivid"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "prism",
+      "id": "prism.neon-atelier",
+      "lut": null,
+      "name": "Neon Atelier",
+      "params": {
+        "bloom": 0.2,
+        "contrast": 0.26,
+        "highlightsTint": [
+          1.06,
+          0.96,
+          1.04
+        ],
+        "saturation": 0.24,
+        "shadowsTint": [
+          0.96,
+          0.9,
+          1.12
+        ],
+        "tint": 0.12,
+        "vibrance": 0.2
+      },
+      "swatch": [
+        "#D9B8F0",
+        "#2A0E3A"
+      ],
+      "tags": [
+        "neon",
+        "night city",
+        "prism",
+        "rainbow",
+        "vivid"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "prism",
+      "id": "prism.refraction",
+      "lut": null,
+      "name": "Refraction",
+      "params": {
+        "bloom": 0.2,
+        "contrast": 0.18,
+        "exposure": -0.06,
+        "highlightsTint": [
+          1.06,
+          0.96,
+          1.04
+        ],
+        "saturation": 0.3,
+        "shadowsTint": [
+          0.96,
+          0.9,
+          1.12
+        ],
+        "tint": 0.12,
+        "vibrance": 0.2,
+        "vignette": 0.08
+      },
+      "swatch": [
+        "#D9B8F0",
+        "#2A0E3A"
+      ],
+      "tags": [
+        "neon",
+        "night city",
+        "prism",
+        "rainbow",
+        "vivid"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "prism",
+      "id": "prism.electric-rose",
+      "lut": null,
+      "name": "Electric Rose",
+      "params": {
+        "bloom": 0.2,
+        "contrast": 0.18,
+        "highlightsTint": [
+          1.06,
+          0.96,
+          1.04
+        ],
+        "saturation": 0.3,
+        "shadowsTint": [
+          0.96,
+          0.9,
+          1.12
+        ],
+        "tint": 0.08,
+        "vibrance": 0.2,
+        "warmth": -0.1
+      },
+      "swatch": [
+        "#D9B8F0",
+        "#2A0E3A"
+      ],
+      "tags": [
+        "neon",
+        "night city",
+        "prism",
+        "rainbow",
+        "vivid"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "prism",
+      "id": "prism.afterparty",
+      "lut": null,
+      "name": "Afterparty",
+      "params": {
+        "bloom": 0.2,
+        "contrast": 0.18,
+        "highlightsTint": [
+          1.06,
+          0.96,
+          1.04
+        ],
+        "saturation": 0.4,
+        "shadowsTint": [
+          0.96,
+          0.9,
+          1.12
+        ],
+        "tint": 0.12,
+        "vibrance": 0.28
+      },
+      "swatch": [
+        "#D9B8F0",
+        "#2A0E3A"
+      ],
+      "tags": [
+        "neon",
+        "night city",
+        "prism",
+        "rainbow",
+        "vivid"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "prism",
+      "id": "prism.chromatic",
+      "lut": null,
+      "name": "Chromatic",
+      "params": {
+        "bloom": 0.2,
+        "contrast": 0.1,
+        "fade": 0.1,
+        "highlightsTint": [
+          1.06,
+          0.96,
+          1.04
+        ],
+        "saturation": 0.3,
+        "shadowsTint": [
+          0.96,
+          0.9,
+          1.12
+        ],
+        "tint": 0.12,
+        "vibrance": 0.2
+      },
+      "swatch": [
+        "#D9B8F0",
+        "#2A0E3A"
+      ],
+      "tags": [
+        "neon",
+        "night city",
+        "prism",
+        "rainbow",
+        "vivid"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "prism",
+      "id": "prism.signal",
+      "lut": null,
+      "name": "Signal",
+      "params": {
+        "bloom": 0.2,
+        "contrast": 0.18,
+        "grain": 0.12,
+        "highlightsTint": [
+          1.06,
+          0.96,
+          1.04
+        ],
+        "lightLeak": 0.12,
+        "saturation": 0.3,
+        "shadowsTint": [
+          0.96,
+          0.9,
+          1.12
+        ],
+        "tint": 0.12,
+        "vibrance": 0.2
+      },
+      "swatch": [
+        "#D9B8F0",
+        "#2A0E3A"
+      ],
+      "tags": [
+        "neon",
+        "night city",
+        "prism",
+        "rainbow",
+        "vivid"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "prism",
+      "id": "prism.ultraviolet",
+      "lut": null,
+      "name": "Ultraviolet",
+      "params": {
+        "bloom": 0.34,
+        "contrast": 0.18,
+        "exposure": 0.04,
+        "highlightsTint": [
+          1.06,
+          0.96,
+          1.04
+        ],
+        "saturation": 0.3,
+        "shadowsTint": [
+          0.96,
+          0.9,
+          1.12
+        ],
+        "tint": 0.12,
+        "vibrance": 0.2
+      },
+      "swatch": [
+        "#D9B8F0",
+        "#2A0E3A"
+      ],
+      "tags": [
+        "neon",
+        "night city",
+        "prism",
+        "rainbow",
+        "vivid"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "prism",
+      "id": "prism.glasshouse",
+      "lut": null,
+      "name": "Glasshouse",
+      "params": {
+        "bloom": 0.2,
+        "contrast": 0.3,
+        "highlights": -0.1,
+        "highlightsTint": [
+          1.06,
+          0.96,
+          1.04
+        ],
+        "saturation": 0.3,
+        "shadows": 0.06,
+        "shadowsTint": [
+          0.96,
+          0.9,
+          1.12
+        ],
+        "tint": 0.12,
+        "vibrance": 0.2
+      },
+      "swatch": [
+        "#D9B8F0",
+        "#2A0E3A"
+      ],
+      "tags": [
+        "neon",
+        "night city",
+        "prism",
+        "rainbow",
+        "vivid"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "seasons",
+      "id": "seasons.winter-atelier",
+      "lut": null,
+      "name": "Winter Atelier",
+      "params": {
+        "bloom": 0.12,
+        "contrast": 0.06,
+        "fade": 0.08,
+        "saturation": 0.04,
+        "shadowsTint": [
+          0.92,
+          0.97,
+          1.08
+        ],
+        "warmth": -0.2
+      },
+      "swatch": [
+        "#C8D2DA",
+        "#6A2A2A"
+      ],
+      "tags": [
+        "seasonal",
+        "holiday",
+        "winter",
+        "autumn",
+        "festive"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "seasons",
+      "id": "seasons.first-snow",
+      "lut": null,
+      "name": "First Snow",
+      "params": {
+        "bloom": 0.12,
+        "contrast": 0.06,
+        "exposure": 0.1,
+        "fade": 0.24,
+        "saturation": 0.04,
+        "warmth": -0.06
+      },
+      "swatch": [
+        "#C8D2DA",
+        "#6A2A2A"
+      ],
+      "tags": [
+        "seasonal",
+        "holiday",
+        "winter",
+        "autumn",
+        "festive"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "seasons",
+      "id": "seasons.frost",
+      "lut": null,
+      "name": "Frost",
+      "params": {
+        "bloom": 0.12,
+        "contrast": 0.14,
+        "fade": 0.08,
+        "saturation": -0.16,
+        "warmth": -0.26
+      },
+      "swatch": [
+        "#C8D2DA",
+        "#6A2A2A"
+      ],
+      "tags": [
+        "seasonal",
+        "holiday",
+        "winter",
+        "autumn",
+        "festive"
+      ],
+      "tier": "free"
+    },
+    {
+      "collection": "seasons",
+      "id": "seasons.mulled",
+      "lut": null,
+      "name": "Mulled",
+      "params": {
+        "bloom": 0.12,
+        "contrast": 0.06,
+        "exposure": -0.06,
+        "fade": 0.08,
+        "saturation": 0.12,
+        "tint": 0.06,
+        "vignette": 0.08,
+        "warmth": 0.24
+      },
+      "swatch": [
+        "#C8D2DA",
+        "#6A2A2A"
+      ],
+      "tags": [
+        "seasonal",
+        "holiday",
+        "winter",
+        "autumn",
+        "festive"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "seasons",
+      "id": "seasons.evergreen",
+      "lut": null,
+      "name": "Evergreen",
+      "params": {
+        "bloom": 0.12,
+        "contrast": 0.06,
+        "fade": 0.08,
+        "saturation": 0.1,
+        "shadowsTint": [
+          0.94,
+          1.04,
+          0.98
+        ],
+        "tint": -0.16,
+        "warmth": -0.1
+      },
+      "swatch": [
+        "#C8D2DA",
+        "#6A2A2A"
+      ],
+      "tags": [
+        "seasonal",
+        "holiday",
+        "winter",
+        "autumn",
+        "festive"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "seasons",
+      "id": "seasons.valentine",
+      "lut": null,
+      "name": "Valentine",
+      "params": {
+        "bloom": 0.32,
+        "contrast": 0.06,
+        "fade": 0.08,
+        "highlightsTint": [
+          1.08,
+          0.96,
+          1.0
+        ],
+        "saturation": 0.14,
+        "tint": 0.18,
+        "vibrance": 0.08,
+        "warmth": 0.08
+      },
+      "swatch": [
+        "#C8D2DA",
+        "#6A2A2A"
+      ],
+      "tags": [
+        "seasonal",
+        "holiday",
+        "winter",
+        "autumn",
+        "festive"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "seasons",
+      "id": "seasons.harvest",
+      "lut": null,
+      "name": "Harvest",
+      "params": {
+        "bloom": 0.12,
+        "contrast": -0.02,
+        "fade": 0.18,
+        "saturation": 0.14,
+        "warmth": 0.2
+      },
+      "swatch": [
+        "#C8D2DA",
+        "#6A2A2A"
+      ],
+      "tags": [
+        "seasonal",
+        "holiday",
+        "winter",
+        "autumn",
+        "festive"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "seasons",
+      "id": "seasons.ember",
+      "lut": null,
+      "name": "Ember",
+      "params": {
+        "bloom": 0.12,
+        "contrast": 0.16,
+        "fade": 0.08,
+        "grain": 0.12,
+        "lightLeak": 0.12,
+        "saturation": 0.04,
+        "vignette": 0.2,
+        "warmth": 0.3
+      },
+      "swatch": [
+        "#C8D2DA",
+        "#6A2A2A"
+      ],
+      "tags": [
+        "seasonal",
+        "holiday",
+        "winter",
+        "autumn",
+        "festive"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "seasons",
+      "id": "seasons.masquerade",
+      "lut": null,
+      "name": "Masquerade",
+      "params": {
+        "bloom": 0.26,
+        "contrast": 0.26,
+        "exposure": 0.04,
+        "fade": 0.08,
+        "saturation": -0.06,
+        "tint": 0.1,
+        "vignette": 0.3
+      },
+      "swatch": [
+        "#C8D2DA",
+        "#6A2A2A"
+      ],
+      "tags": [
+        "seasonal",
+        "holiday",
+        "winter",
+        "autumn",
+        "festive"
+      ],
+      "tier": "member"
+    },
+    {
+      "collection": "seasons",
+      "id": "seasons.new-year",
+      "lut": null,
+      "name": "New Year",
+      "params": {
+        "bloom": 0.42,
+        "contrast": 0.28,
+        "fade": 0.08,
+        "highlights": -0.1,
+        "saturation": 0.16,
+        "shadows": 0.06
+      },
+      "swatch": [
+        "#C8D2DA",
+        "#6A2A2A"
+      ],
+      "tags": [
+        "seasonal",
+        "holiday",
+        "winter",
+        "autumn",
+        "festive"
+      ],
+      "tier": "member"
+    }
+  ],
+  "version": 1
+}

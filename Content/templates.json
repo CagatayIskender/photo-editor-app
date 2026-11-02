@@ -1,0 +1,772 @@
+[
+ {
+  "id": "first-look",
+  "name": "First Look",
+  "tagline": "Five frames, one reveal.",
+  "tier": "free",
+  "aspect": "story",
+  "slots": [
+   {
+    "beats": 4,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 2,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 2,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 2,
+    "transition": {
+     "type": "dissolve",
+     "duration": 0.25
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 6,
+    "transition": {
+     "type": "dissolve",
+     "duration": 0.5
+    },
+    "motion": "pullOut"
+   }
+  ],
+  "bpm": 100,
+  "lookID": "cinematic.opening-night",
+  "effects": [],
+  "intro": {
+   "presetID": "curtain",
+   "duration": 1.5
+  }
+ },
+ {
+  "id": "atelier-diary",
+  "name": "Atelier Diary",
+  "tagline": "A slow day in good light.",
+  "tier": "free",
+  "aspect": "story",
+  "slots": [
+   {
+    "beats": 4,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "driftLeft"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "dissolve",
+     "duration": 0.5
+    },
+    "motion": "driftRight"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "dissolve",
+     "duration": 0.5
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "dissolve",
+     "duration": 0.5
+    },
+    "motion": "pullOut"
+   }
+  ],
+  "bpm": 84,
+  "lookID": "film-analog.linen",
+  "effects": [
+   {
+    "id": "00000000-0000-0000-0000-000000000002",
+    "kind": "flicker",
+    "intensity": 0.3,
+    "rate": 1.0,
+    "start": 0,
+    "seed": 2,
+    "tier": "free"
+   }
+  ],
+  "outro": {
+   "presetID": "monogram",
+   "duration": 1.5
+  }
+ },
+ {
+  "id": "weekend-reel",
+  "name": "Weekend Reel",
+  "tagline": "Quick cuts for a good weekend.",
+  "tier": "free",
+  "aspect": "story",
+  "slots": [
+   {
+    "beats": 2,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 2,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 2,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 2,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "zoom",
+     "duration": 0.3
+    },
+    "motion": "pushIn"
+   }
+  ],
+  "bpm": 120,
+  "lookID": "riviera.riviera",
+  "effects": [
+   {
+    "id": "00000000-0000-0000-0000-000000000003",
+    "kind": "zoomPulse",
+    "intensity": 0.4,
+    "rate": 2,
+    "start": 0,
+    "seed": 3,
+    "tier": "free"
+   }
+  ]
+ },
+ {
+  "id": "after-hours",
+  "name": "After Hours",
+  "tagline": "Neon, motion, midnight.",
+  "tier": "member",
+  "aspect": "story",
+  "slots": [
+   {
+    "beats": 2,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 2,
+    "transition": {
+     "type": "slide",
+     "duration": 0.2
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 2,
+    "transition": {
+     "type": "slide",
+     "duration": 0.2
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 2,
+    "transition": {
+     "type": "slide",
+     "duration": 0.2
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "zoom",
+     "duration": 0.3
+    },
+    "motion": "pushIn"
+   }
+  ],
+  "bpm": 124,
+  "lookID": "prism.neon-atelier",
+  "effects": [
+   {
+    "id": "00000000-0000-0000-0000-000000000004",
+    "kind": "glitter",
+    "intensity": 0.4,
+    "rate": 1.0,
+    "start": 0,
+    "seed": 4,
+    "tier": "member"
+   },
+   {
+    "id": "00000000-0000-0000-0000-000000000005",
+    "kind": "shake",
+    "intensity": 0.3,
+    "rate": 1.5,
+    "start": 0,
+    "seed": 5,
+    "tier": "free"
+   }
+  ],
+  "intro": {
+   "presetID": "spotlight",
+   "duration": 1.5
+  }
+ },
+ {
+  "id": "tape-memories",
+  "name": "Tape Memories",
+  "tagline": "Home-video warmth.",
+  "tier": "free",
+  "aspect": "story",
+  "slots": [
+   {
+    "beats": 4,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "dipToBlack",
+     "duration": 0.3
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "dipToBlack",
+     "duration": 0.3
+    },
+    "motion": "none"
+   }
+  ],
+  "bpm": 96,
+  "lookID": "retro.rewind",
+  "effects": [
+   {
+    "id": "00000000-0000-0000-0000-000000000006",
+    "kind": "vhsTracking",
+    "intensity": 0.5,
+    "rate": 1.0,
+    "start": 0,
+    "seed": 6,
+    "tier": "free"
+   }
+  ],
+  "intro": {
+   "presetID": "tape-start",
+   "duration": 1.2
+  }
+ },
+ {
+  "id": "gilded",
+  "name": "Gilded",
+  "tagline": "Everything catches the light.",
+  "tier": "member",
+  "aspect": "story",
+  "slots": [
+   {
+    "beats": 4,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "dissolve",
+     "duration": 0.5
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "dissolve",
+     "duration": 0.5
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 8,
+    "transition": {
+     "type": "dissolve",
+     "duration": 0.75
+    },
+    "motion": "pullOut"
+   }
+  ],
+  "bpm": 92,
+  "lookID": "glow.gilt",
+  "effects": [
+   {
+    "id": "00000000-0000-0000-0000-000000000007",
+    "kind": "lightLeak",
+    "intensity": 0.6,
+    "rate": 0.8,
+    "start": 0,
+    "seed": 7,
+    "tier": "free"
+   },
+   {
+    "id": "00000000-0000-0000-0000-000000000008",
+    "kind": "glitter",
+    "intensity": 0.3,
+    "rate": 1.0,
+    "start": 0,
+    "seed": 8,
+    "tier": "member"
+   }
+  ],
+  "intro": {
+   "presetID": "curtain",
+   "duration": 1.5
+  },
+  "outro": {
+   "presetID": "monogram",
+   "duration": 1.5
+  }
+ },
+ {
+  "id": "silver-screen",
+  "name": "Silver Screen",
+  "tagline": "Black and white, with feeling.",
+  "tier": "free",
+  "aspect": "story",
+  "slots": [
+   {
+    "beats": 4,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "dissolve",
+     "duration": 0.75
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "dissolve",
+     "duration": 0.75
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "dipToBlack",
+     "duration": 0.5
+    },
+    "motion": "pushIn"
+   }
+  ],
+  "bpm": 72,
+  "lookID": "noir.graphite",
+  "effects": [
+   {
+    "id": "00000000-0000-0000-0000-000000000009",
+    "kind": "flicker",
+    "intensity": 0.5,
+    "rate": 1.0,
+    "start": 0,
+    "seed": 9,
+    "tier": "free"
+   }
+  ],
+  "intro": {
+   "presetID": "title-card",
+   "duration": 2.0
+  },
+  "outro": {
+   "presetID": "the-end",
+   "duration": 2.0
+  }
+ },
+ {
+  "id": "postcard",
+  "name": "Postcard",
+  "tagline": "Wish you were here.",
+  "tier": "free",
+  "aspect": "story",
+  "slots": [
+   {
+    "beats": 4,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "driftRight"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "slide",
+     "duration": 0.3
+    },
+    "motion": "driftLeft"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "slide",
+     "duration": 0.3
+    },
+    "motion": "driftRight"
+   }
+  ],
+  "bpm": 104,
+  "lookID": "riviera.corniche",
+  "effects": [],
+  "outro": {
+   "presetID": "postmark",
+   "duration": 1.5
+  }
+ },
+ {
+  "id": "soft-focus",
+  "name": "Soft Focus",
+  "tagline": "Hazy, slow, tender.",
+  "tier": "free",
+  "aspect": "story",
+  "slots": [
+   {
+    "beats": 6,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "pullOut"
+   },
+   {
+    "beats": 6,
+    "transition": {
+     "type": "dissolve",
+     "duration": 1.0
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 6,
+    "transition": {
+     "type": "dissolve",
+     "duration": 1.0
+    },
+    "motion": "pushIn"
+   }
+  ],
+  "bpm": 76,
+  "lookID": "haze.velours",
+  "effects": [
+   {
+    "id": "00000000-0000-0000-0000-000000000010",
+    "kind": "lightLeak",
+    "intensity": 0.4,
+    "rate": 0.5,
+    "start": 0,
+    "seed": 10,
+    "tier": "free"
+   }
+  ]
+ },
+ {
+  "id": "countdown",
+  "name": "Countdown",
+  "tagline": "Twelve beats to midnight.",
+  "tier": "member",
+  "aspect": "story",
+  "slots": [
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "zoom",
+     "duration": 0.3
+    },
+    "motion": "pushIn"
+   }
+  ],
+  "bpm": 128,
+  "lookID": "seasons.winter-atelier",
+  "effects": [
+   {
+    "id": "00000000-0000-0000-0000-000000000011",
+    "kind": "zoomPulse",
+    "intensity": 0.6,
+    "rate": 2.13,
+    "start": 0,
+    "seed": 11,
+    "tier": "free"
+   },
+   {
+    "id": "00000000-0000-0000-0000-000000000012",
+    "kind": "glitter",
+    "intensity": 0.5,
+    "rate": 1.0,
+    "start": 0,
+    "seed": 12,
+    "tier": "member"
+   }
+  ],
+  "outro": {
+   "presetID": "fireworks",
+   "duration": 2.0
+  }
+ },
+ {
+  "id": "blue-hour",
+  "name": "Blue Hour",
+  "tagline": "Between day and night.",
+  "tier": "member",
+  "aspect": "story",
+  "slots": [
+   {
+    "beats": 4,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "dissolve",
+     "duration": 0.5
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "dissolve",
+     "duration": 0.5
+    },
+    "motion": "pushIn"
+   },
+   {
+    "beats": 4,
+    "transition": {
+     "type": "dissolve",
+     "duration": 0.5
+    },
+    "motion": "pushIn"
+   }
+  ],
+  "bpm": 88,
+  "lookID": "nocturne.velvet-hour",
+  "effects": [
+   {
+    "id": "00000000-0000-0000-0000-000000000013",
+    "kind": "lightLeak",
+    "intensity": 0.3,
+    "rate": 0.6,
+    "start": 0,
+    "seed": 13,
+    "tier": "free"
+   }
+  ]
+ },
+ {
+  "id": "contact-sheet",
+  "name": "Contact Sheet",
+  "tagline": "A roll of film, frame by frame.",
+  "tier": "free",
+  "aspect": "story",
+  "slots": [
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 1,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   },
+   {
+    "beats": 2,
+    "transition": {
+     "type": "cut"
+    },
+    "motion": "none"
+   }
+  ],
+  "bpm": 112,
+  "lookID": "film-analog.contact-sheet",
+  "effects": [
+   {
+    "id": "00000000-0000-0000-0000-000000000014",
+    "kind": "flicker",
+    "intensity": 0.4,
+    "rate": 1.0,
+    "start": 0,
+    "seed": 14,
+    "tier": "free"
+   },
+   {
+    "id": "00000000-0000-0000-0000-000000000015",
+    "kind": "shake",
+    "intensity": 0.2,
+    "rate": 1.0,
+    "start": 0,
+    "seed": 15,
+    "tier": "free"
+   }
+  ],
+  "intro": {
+   "presetID": "film-leader",
+   "duration": 2.0
+  }
+ }
+]

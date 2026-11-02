@@ -8,3 +8,4 @@ DerivedData/
 Packages/*/.build/
 App/Resources/Fonts/*.ttf
 __pycache__/
+Packages/AurumCore/Info.plist
