@@ -123,7 +123,7 @@ final class AIStudioTests: XCTestCase {
 
         XCTAssertEqual(AIJobRequest(feature: .replaceBackground, prompt: "   ", inputs: [P3.photo]).validate(), [.promptRequired])
         XCTAssertEqual(AIJobRequest(feature: .replaceBackground, inputs: [P3.photo]).validate(), [.promptRequired])
-        XCTAssertEqual(AIJobRequest(feature: .enhance, prompt: "sharper", inputs: [P3.photo]).validate(), [.promptNotSupported])
+        XCTAssertEqual(AIJobRequest(feature: .enhance, prompt: "sharper", inputs: [P3.frame]).validate(), [.promptNotSupported])
     }
 
     func testMaskRules() {
