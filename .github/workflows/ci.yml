@@ -44,4 +44,16 @@ jobs:
           if [ -n "$failed" ]; then echo "Failed:$failed"; exit 1; fi
       - name: App build and UI test
         if: always()
-        run: xcodebuild test -project Aurum.xcodeproj -scheme Aurum -destination 'platform=iOS Simulator,name=iPhone 16' CODE_SIGNING_ALLOWED=NO -quiet
+        run: xcodebuild test -project Aurum.xcodeproj -scheme Aurum -destination 'platform=iOS Simulator,name=iPhone 16' CODE_SIGNING_ALLOWED=NO -resultBundlePath UITests.xcresult -quiet
+      - name: Show UI test failures
+        if: failure()
+        run: |
+          xcrun xcresulttool get test-results tests --path UITests.xcresult || true
+          xcrun xcresulttool get test-results summary --path UITests.xcresult || true
+      - name: Upload UI test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-test-results
+          path: UITests.xcresult
+          retention-days: 5
