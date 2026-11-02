@@ -20,7 +20,7 @@ struct ExportSheet: View {
             HStack {
                 Text("Export").aurumText(.title)
                 Spacer()
-                IconButton(.close, label: "Close") { dismiss() }
+                IconButton(.close, label: String(localized: "Close")) { dismiss() }
             }
             content
         }
@@ -47,7 +47,7 @@ struct ExportSheet: View {
             }
             .frame(maxWidth: .infinity, minHeight: 120)
         case .saved:
-            done(title: "Saved to Photos")
+            done(title: String(localized: "Saved to Photos"))
         case .shareReady(let url):
             VStack(spacing: Spacing.s) {
                 ShareLink(item: url) {
@@ -108,7 +108,7 @@ struct ExportSheet: View {
                 ForEach(items, id: \.self) { item in
                     HStack(spacing: Spacing.xs) {
                         CrownBadge(size: 16)
-                        Text(item.displayName).aurumText(.body)
+                        Text(item.localizedName).aurumText(.body)
                     }
                 }
             }

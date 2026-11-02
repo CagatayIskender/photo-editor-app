@@ -14,7 +14,7 @@ struct StickersSheet: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Spacing.xs) {
                     ForEach(StickerDefinition.categories, id: \.self) { c in
-                        Chip(c, isSelected: c == category) { category = c }
+                        Chip(Localized.dynamic(c), isSelected: c == category) { category = c }
                     }
                     if model.selectedOverlay.map(Self.isSticker) == true {
                         Button("Remove") { model.removeSelectedOverlay() }
@@ -38,7 +38,7 @@ struct StickersSheet: View {
                                 }
                         }
                         .buttonStyle(.plain)
-                        .accessibilityLabel(sticker.tier == .member ? "\(sticker.name), members only" : sticker.name)
+                        .accessibilityLabel(sticker.tier == .member ? String(localized: "\(Localized.dynamic(sticker.name)), members only") : Localized.dynamic(sticker.name))
                     }
                 }
                 .padding(.horizontal, Spacing.m)

@@ -67,7 +67,7 @@ struct AurumTabBar: View {
 
     var body: some View {
         HStack {
-            tab(.salon, icon: .salon, title: "Salon")
+            tab(.salon, icon: .salon, id: "salon", title: String(localized: "Salon"))
             Spacer()
             Button(action: onCreate) {
                 IconView(.plus, size: 26, lineWidth: 1.6)
@@ -81,7 +81,7 @@ struct AurumTabBar: View {
             .accessibilityHint("Pick a photo to edit")
             .accessibilityIdentifier("tab.create")
             Spacer()
-            tab(.vault, icon: .vault, title: "Vault")
+            tab(.vault, icon: .vault, id: "vault", title: String(localized: "Vault"))
         }
         .padding(.horizontal, Spacing.xxl)
         .padding(.top, Spacing.xs)
@@ -92,7 +92,7 @@ struct AurumTabBar: View {
         )
     }
 
-    private func tab(_ tab: AppTab, icon: AurumIcon, title: String) -> some View {
+    private func tab(_ tab: AppTab, icon: AurumIcon, id: String, title: String) -> some View {
         let isSelected = selected == tab
         return Button {
             selected = tab
@@ -107,7 +107,7 @@ struct AurumTabBar: View {
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])
-        .accessibilityIdentifier("tab.\(title.lowercased())")
+        .accessibilityIdentifier("tab.\(id)")
     }
 }
 

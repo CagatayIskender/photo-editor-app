@@ -13,11 +13,11 @@ public enum StudioTool: String, CaseIterable, Identifiable {
 
     public var title: String {
         switch self {
-        case .looks: return "Looks"
-        case .adjust: return "Adjust"
-        case .crop: return "Crop"
-        case .text: return "Text"
-        case .stickers: return "Stickers"
+        case .looks: return String(localized: "Looks")
+        case .adjust: return String(localized: "Adjust")
+        case .crop: return String(localized: "Crop")
+        case .text: return String(localized: "Text")
+        case .stickers: return String(localized: "Stickers")
         }
     }
 }
@@ -290,7 +290,7 @@ public final class StudioViewModel: ObservableObject, Identifiable {
     }
 
     @discardableResult
-    public func addText(_ text: String = "Your words") -> UUID {
+    public func addText(_ text: String = String(localized: "Your words")) -> UUID {
         let overlay = Overlay(content: .text(TextOverlay(text: text)))
         edit { $0.addOverlay(overlay) }
         selectedOverlayID = overlay.id

@@ -37,7 +37,7 @@ struct StudioView: View {
 
     private var topBar: some View {
         HStack(spacing: Spacing.xs) {
-            IconButton(.close, label: "Close") {
+            IconButton(.close, label: String(localized: "Close")) {
                 Task {
                     await model.saveDraft()
                     onClose()
@@ -45,8 +45,8 @@ struct StudioView: View {
             }
             .accessibilityIdentifier("studio.close")
             Spacer()
-            IconButton(.undo, label: "Undo", isEnabled: model.canUndo) { model.undo() }
-            IconButton(.redo, label: "Redo", isEnabled: model.canRedo) { model.redo() }
+            IconButton(.undo, label: String(localized: "Undo"), isEnabled: model.canUndo) { model.undo() }
+            IconButton(.redo, label: String(localized: "Redo"), isEnabled: model.canRedo) { model.redo() }
             Spacer()
             Button("Export") {
                 model.isExportPresented = true
@@ -161,9 +161,9 @@ struct StudioCanvas: View {
 
     private var imageLabel: String {
         if let look = model.activeLookRecipe {
-            return "Your photo, with the \(look.name) look"
+            return String(localized: "Your photo, with the \(look.name) look")
         }
-        return "Your photo"
+        return String(localized: "Your photo")
     }
 
     /// The largest rect with the image's aspect ratio that fits in `container`.

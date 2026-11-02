@@ -127,7 +127,7 @@ public final class AppModel: ObservableObject {
             studio = model
             await model.load(startingLook: nil, preset: nil)
         } catch {
-            notice = "This draft could not be opened."
+            notice = String(localized: "This draft could not be opened.")
         }
     }
 
@@ -176,11 +176,11 @@ public final class AppModel: ObservableObject {
     public func handle(url: URL) -> Bool {
         let codec = PresetLinkCodec(scheme: deps.brand.urlScheme)
         guard let preset = try? codec.preset(from: url) else {
-            if url.scheme == deps.brand.urlScheme { notice = "That link isn't a preset AURUM can open." }
+            if url.scheme == deps.brand.urlScheme { notice = String(localized: "That link isn't a preset AURUM can open.") }
             return false
         }
         queuedPreset = preset
-        notice = "“\(preset.name)” is ready. Pick a photo to use it."
+        notice = String(localized: "“\(preset.name)” is ready. Pick a photo to use it.")
         isPickerPresented = true
         return true
     }

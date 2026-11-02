@@ -58,12 +58,12 @@ public final class ExportViewModel: ObservableObject {
     public var summary: String {
         switch decision {
         case .requiresMembership(let items):
-            return items.count == 1 ? "1 member item in this edit" : "\(items.count) member items in this edit"
+            return items.count == 1 ? String(localized: "1 member item in this edit") : String(localized: "\(items.count) member items in this edit")
         case .allowed(let watermark, let maxPixelSize):
             if watermark, let maxPixelSize {
-                return "Free export: up to \(maxPixelSize) px with a small \(deps.brand.watermarkText) mark"
+                return String(localized: "Free export: up to \(maxPixelSize) px with a small \(deps.brand.watermarkText) mark")
             }
-            return "Full resolution, no watermark"
+            return String(localized: "Full resolution, no watermark")
         }
     }
 
@@ -109,9 +109,9 @@ public final class ExportViewModel: ObservableObject {
             }
             deps.analytics.track(.exportCompleted(format: format.rawValue, watermark: options.watermark != nil, seconds: Date().timeIntervalSince(started)))
         } catch PhotoLibraryError.notAuthorized {
-            phase = .failed("AURUM needs permission to add photos. You can allow it in Settings.")
+            phase = .failed(String(localized: "AURUM needs permission to add photos. You can allow it in Settings."))
         } catch {
-            phase = .failed("The export didn't finish. Please try again.")
+            phase = .failed(String(localized: "The export didn't finish. Please try again."))
         }
     }
 

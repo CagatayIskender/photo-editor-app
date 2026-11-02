@@ -12,7 +12,7 @@ struct CropSheet: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Spacing.xs) {
                     ForEach(AspectPreset.allCases.filter { $0 != .free }, id: \.self) { aspect in
-                        Chip(aspect.label, isSelected: model.document.crop.aspect == aspect) {
+                        Chip(Localized.dynamic(aspect.label), isSelected: model.document.crop.aspect == aspect) {
                             model.setAspect(aspect)
                         }
                     }
@@ -24,14 +24,14 @@ struct CropSheet: View {
                 value: model.binding({ model.document.crop.straightenDegrees }, { model.setStraighten($0) }),
                 in: -45...45,
                 detentStep: 5,
-                label: "Straighten",
+                label: String(localized: "Straighten"),
                 onEditingChanged: model.sliderEditing
             )
             .padding(.horizontal, Spacing.m)
 
             HStack(spacing: Spacing.l) {
-                IconButton(.rotate, label: "Rotate 90 degrees") { model.rotateQuarterTurn() }
-                IconButton(.flip, label: "Flip horizontally") { model.flipHorizontal() }
+                IconButton(.rotate, label: String(localized: "Rotate 90 degrees")) { model.rotateQuarterTurn() }
+                IconButton(.flip, label: String(localized: "Flip horizontally")) { model.flipHorizontal() }
                 Spacer()
                 Button("Reset") { model.resetCrop() }
                     .buttonStyle(TextActionButtonStyle())
