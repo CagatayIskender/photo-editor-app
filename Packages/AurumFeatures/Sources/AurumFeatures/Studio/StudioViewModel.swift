@@ -95,7 +95,11 @@ public final class StudioViewModel: ObservableObject, Identifiable {
     /// Separated from `load` so tests can supply an image directly.
     func loaded(proxy: CIImage, startingLook: String?, preset: Preset?) async {
         scheduler.setProxy(proxy)
-        thumbnailProxy = RenderEngine.proxy(of: proxy, maxPixelSize: Self.thumbnailPixelSize)
+        let thumb = RenderEngine.proxy(of: proxy, maxPixelSize: Self.thumbnailPixelSize)
+        // Look thumbnails are only requested once `thumbnailProxy` is set, so it is
+        // published after the suggestion: otherwise a strip of thumbnail renders
+        // queues ahead of the stats in the engine and Export stays disabled.
+        defer { thumbnailProxy = thumb }
         if isNew {
             var doc = document
             if let preset {
@@ -103,7 +107,7 @@ public final class StudioViewModel: ObservableObject, Identifiable {
             } else if let startingLook, catalog.look(id: startingLook) != nil {
                 doc.applyLook(startingLook)
             } else {
-                let stats = await deps.engine.stats(of: thumbnailProxy ?? proxy)
+                let stats = await deps.engine.stats(of: thumb)
                 if let look = LookSuggestion.suggest(for: stats, vibes: deps.preferences.vibes, catalog: catalog) {
                     doc.applyLook(look.id)
                 }
