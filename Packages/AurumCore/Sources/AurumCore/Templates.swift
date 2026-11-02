@@ -167,3 +167,21 @@ public enum TemplateBuilder {
         return project
     }
 }
+
+/// An intro or outro style offered in the video editor.
+public struct BookendPreset: Codable, Equatable, Identifiable, Sendable {
+    public enum Kind: String, Codable, Sendable { case intro, outro }
+    public var id: String
+    public var name: String
+    public var kind: Kind
+    public var duration: Seconds
+    public var tier: Tier
+
+    public init(id: String, name: String, kind: Kind, duration: Seconds, tier: Tier) {
+        self.id = id
+        self.name = name
+        self.kind = kind
+        self.duration = duration
+        self.tier = tier
+    }
+}

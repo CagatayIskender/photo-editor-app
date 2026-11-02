@@ -31,6 +31,8 @@ targets:
           - "**/*.md"
       - path: Looks/catalog.json
         buildPhase: resources
+      - path: Content
+        buildPhase: resources
       - path: Brand/brand.json
         buildPhase: resources
     dependencies:
