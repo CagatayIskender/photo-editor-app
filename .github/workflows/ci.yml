@@ -37,8 +37,11 @@ jobs:
         run: xcodegen generate
       - name: Package tests
         run: |
+          failed=""
           for p in AurumCore AurumDesign AurumRender AurumServices AurumFeatures; do
-            (cd "Packages/$p" && xcodebuild test -scheme "$p" -destination 'platform=iOS Simulator,name=iPhone 16' -quiet) || exit 1
+            (cd "Packages/$p" && xcodebuild test -scheme "$p" -destination 'platform=iOS Simulator,name=iPhone 16' -quiet) || failed="$failed $p"
           done
-      - name: App build
-        run: xcodebuild build -project Aurum.xcodeproj -scheme Aurum -destination 'platform=iOS Simulator,name=iPhone 16' CODE_SIGNING_ALLOWED=NO -quiet
+          if [ -n "$failed" ]; then echo "Failed:$failed"; exit 1; fi
+      - name: App build and UI test
+        if: always()
+        run: xcodebuild test -project Aurum.xcodeproj -scheme Aurum -destination 'platform=iOS Simulator,name=iPhone 16' CODE_SIGNING_ALLOWED=NO -quiet
