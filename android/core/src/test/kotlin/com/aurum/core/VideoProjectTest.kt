@@ -75,7 +75,7 @@ class VideoProjectTest {
     @Test fun roundTripThroughJSON() {
         var project = VideoProject(clips = listOf(video(4.0), Clip.photo(asset)))
         project = project.copy(
-            clips = project.clips.mapIndexed { i, c -> if (i == 1) c.copy(transitionIn = Transition.Ai("job-1", 0.8)) else c },
+            clips = project.clips.mapIndexed { i, c -> if (i == 1) c.copy(transitionIn = Transition.Slide(0.8)) else c },
             layers = listOf(TimedLayer.of(Overlay(content = OverlayContent.Text(TextOverlay("Hi"))), 1.0, 3.0, animationIn = LayerAnimation.rise)),
             music = MusicSelection(MusicSource.Library("t1"), "Velvet", beats = BeatGrid.of(96.0)),
             effects = listOf(AnimatedEffect.of(AnimatedEffect.Kind.lightLeak)),

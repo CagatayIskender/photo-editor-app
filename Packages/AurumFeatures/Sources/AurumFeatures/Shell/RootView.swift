@@ -63,8 +63,8 @@ struct MainTabsView: View {
                 } onCancel: {
                     app.closeFlow()
                 }
-            case .flow(.aiStudio):
-                AIStudioView(app: app)
+            case .flow(.autoStudio):
+                AutoStudioView(app: app)
             case .flow(.depthMotion):
                 DepthMotionView(app: app)
             case .flow(.collage):

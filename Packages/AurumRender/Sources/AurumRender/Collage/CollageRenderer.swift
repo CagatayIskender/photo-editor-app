@@ -108,7 +108,7 @@ public enum CarouselRenderer {
 
 extension RenderEngine {
     /// Encodes any rendered image, with an optional watermark, using the
-    /// engine's shared context. Used by collages, carousels and AI results.
+    /// engine's shared context. Used by collages, carousels and Auto Studio results.
     public func encode(_ image: CIImage, format: ExportFormat = .jpeg, watermark: String? = nil, quality: Double = 0.92) throws -> Data {
         var output = image.transformed(by: CGAffineTransform(translationX: -image.extent.minX, y: -image.extent.minY))
         if let mark = OverlayRasterizer.render([], canvasSize: output.extent.size, watermark: watermark) {

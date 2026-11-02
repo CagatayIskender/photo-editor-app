@@ -45,20 +45,20 @@ public enum DepthEstimator {
         ground.color0 = CIColor(red: 0.35, green: 0.35, blue: 0.35)
         ground.color1 = CIColor(red: 0, green: 0, blue: 0)
         var depth = (ground.outputImage ?? CIImage(color: .black)).cropped(to: extent)
-        if let person = try? OnDeviceAI.personMask(for: image, accurate: false) {
+        if let person = try? OnDeviceImaging.personMask(for: image, accurate: false) {
             let maxed = CIFilter.maximumCompositing()
             maxed.inputImage = person
             maxed.backgroundImage = depth
             depth = maxed.outputImage ?? depth
         }
         // Soft edges keep the layers from tearing at the outline.
-        return DepthMap(image: OnDeviceAI.blur(depth, radius: Double(shortSide) * 0.01), isEstimated: true)
+        return DepthMap(image: OnDeviceImaging.blur(depth, radius: Double(shortSide) * 0.01), isEstimated: true)
     }
 
     /// Scales disparity to 0...1 and to the photo's extent. Nil when the map
     /// doesn't match the photo's aspect (for example a cropped edit) or is flat.
     static func normalize(_ disparity: CIImage, to extent: CGRect, context: CIContext) -> CIImage? {
-        let d = OnDeviceAI.gray(disparity)
+        let d = OnDeviceImaging.gray(disparity)
         let e = d.extent
         guard e.width > 0, e.height > 0, extent.height > 0, !e.isInfinite else { return nil }
         let ratioA = e.width / e.height, ratioB = extent.width / extent.height
@@ -149,9 +149,9 @@ public struct DepthMotionRenderer: @unchecked Sendable {
         let grow = CIFilter.morphologyMaximum()
         grow.inputImage = near.clampedToExtent()
         grow.radius = Float(shortSide * 0.025)
-        let grown = OnDeviceAI.blur((grow.outputImage ?? near).cropped(to: rect), radius: shortSide * 0.01)
-        let fill = OnDeviceAI.blur(base, radius: shortSide * 0.05)
-        self.farLayer = OnDeviceAI.blend(fill, over: base, mask: grown).cropped(to: rect)
+        let grown = OnDeviceImaging.blur((grow.outputImage ?? near).cropped(to: rect), radius: shortSide * 0.01)
+        let fill = OnDeviceImaging.blur(base, radius: shortSide * 0.05)
+        self.farLayer = OnDeviceImaging.blend(fill, over: base, mask: grown).cropped(to: rect)
     }
 
     /// One frame of the move, the size of the photo.
@@ -162,8 +162,8 @@ public struct DepthMotionRenderer: @unchecked Sendable {
         let maskMoved = layer(nearMask, depth: Self.nearDepth, sample: sample, focus: sample.focusDepth)
         // A touch of blur on whichever layer is away from the focus.
         let farBlur = max(0, Self.farDepth - sample.focusDepth - 0.3) * Double(min(rect.width, rect.height)) * 0.006
-        let farFinal = farBlur > 0.5 ? OnDeviceAI.blur(far, radius: farBlur) : far
-        return OnDeviceAI.blend(nearMoved, over: farFinal, mask: maskMoved).cropped(to: rect)
+        let farFinal = farBlur > 0.5 ? OnDeviceImaging.blur(far, radius: farBlur) : far
+        return OnDeviceImaging.blend(nearMoved, over: farFinal, mask: maskMoved).cropped(to: rect)
     }
 
     /// The move at time `t` of a loop lasting `duration`.
@@ -248,7 +248,7 @@ public enum DepthMotionExporter {
             guard let buffer else { throw ExportError.noPixelBuffer }
 
             let t = Double(index) / Double(frameRate)
-            var frame = OnDeviceAI.aspectFill(renderer.frame(motion: motion, at: t, duration: length), to: outRect)
+            var frame = OnDeviceImaging.aspectFill(renderer.frame(motion: motion, at: t, duration: length), to: outRect)
             if let overlay { frame = overlay.composited(over: frame) }
             context.render(frame, to: buffer, bounds: outRect, colorSpace: colorSpace)
             adaptor.append(buffer, withPresentationTime: CMTime(value: CMTimeValue(index), timescale: frameRate))

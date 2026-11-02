@@ -172,11 +172,11 @@ private fun CreateRow(model: AppViewModel) {
     }
 }
 
-/** AI Studio, 3D Motion, Collage and Carousel; on Android these open a coming-soon page. */
+/** Auto Studio, 3D Motion, Collage and Carousel; on Android these open a coming-soon page. */
 @Composable
 fun AtelierRow(model: AppViewModel) {
     val entries = listOf(
-        Triple(ComingFeature.aiStudio, "Enhance, relight, restyle", AurumIcons.sparkle),
+        Triple(ComingFeature.autoStudio, "Enhance, retouch, remove", AurumIcons.sparkle),
         Triple(ComingFeature.motion, "Depth for a still", AurumIcons.layers),
         Triple(ComingFeature.collage, "Photos, composed", AurumIcons.photo),
         Triple(ComingFeature.carousel, "One photo, many panels", AurumIcons.more),

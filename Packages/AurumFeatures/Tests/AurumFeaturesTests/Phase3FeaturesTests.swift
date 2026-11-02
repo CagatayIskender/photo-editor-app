@@ -2,165 +2,132 @@ import XCTest
 import CoreImage
 @testable import AurumFeatures
 import AurumCore
+import AurumRender
 import AurumServices
 
-/// A scripted AI server.
-final class FakeAIBackend: AIBackend, @unchecked Sendable {
-    var availability: AIProviderAvailability = .available
-    var submitStatus: AIJobStatus
-    var resultData = Data()
-    private(set) var submitted: [AIJobRequest] = []
-
-    init(submitStatus: AIJobStatus) {
-        self.submitStatus = submitStatus
-    }
-
-    func submit(_ request: AIJobRequest) async throws -> AIJobStatus {
-        submitted.append(request)
-        return submitStatus
-    }
-
-    func status(of jobID: UUID) async throws -> AIJobStatus { submitStatus }
-    func cancel(jobID: UUID) async throws {}
-    func result(_ reference: String) async throws -> Data { resultData }
-
-    static func jpeg() -> Data {
-        let image = CIImage(color: CIColor(red: 0.6, green: 0.5, blue: 0.4)).cropped(to: CGRect(x: 0, y: 0, width: 16, height: 16))
-        return CIContext().jpegRepresentation(of: image, colorSpace: CGColorSpace(name: CGColorSpace.sRGB)!, options: [:]) ?? Data()
-    }
-}
-
 @MainActor
-final class AIStudioViewModelTests: XCTestCase {
-    let photo = PickedMedia(id: "sample-0", kind: .photo, pixelSize: PixelSize(width: 1600, height: 2000))
-
-    func makeModel(backend: AIBackend? = nil, entitlement: Entitlement = .member, serverEnabled: Bool = true) throws -> AIStudioViewModel {
-        var deps = AppDependencies.sample(catalog: try StudioViewModelTests.catalog(), entitlement: entitlement)
-        if let backend { deps.ai = backend }
-        return AIStudioViewModel(deps: deps, entitlement: { entitlement }, serverEnabled: serverEnabled)
+final class AutoStudioViewModelTests: XCTestCase {
+    func makeModel(entitlement: Entitlement = .free) throws -> AutoStudioViewModel {
+        let deps = AppDependencies.sample(catalog: try StudioViewModelTests.catalog(), entitlement: entitlement)
+        return AutoStudioViewModel(deps: deps, entitlement: { entitlement })
     }
 
-    func testOnDeviceFeaturesAreAlwaysAvailableAndServerOnesWaitForAServer() {
-        XCTAssertEqual(AIStudioViewModel.mode(for: .enhance, serverAvailable: false), .onDevice)
-        XCTAssertEqual(AIStudioViewModel.mode(for: .relight, serverAvailable: false), .onDevice)
-        XCTAssertEqual(AIStudioViewModel.mode(for: .replaceBackground, serverAvailable: false), .onDevice)
-        XCTAssertEqual(AIStudioViewModel.mode(for: .portrait, serverAvailable: false), .comingSoon)
-        XCTAssertEqual(AIStudioViewModel.mode(for: .removeObject, serverAvailable: true), .server)
+    /// A small warm photo with a gentle gradient, so the auto tools have something to measure.
+    func samplePhoto() -> CIImage {
+        let g = CIFilter(name: "CILinearGradient", parameters: [
+            "inputPoint0": CIVector(x: 0, y: 0),
+            "inputPoint1": CIVector(x: 0, y: 96),
+            "inputColor0": CIColor(red: 0.5, green: 0.35, blue: 0.2),
+            "inputColor1": CIColor(red: 0.8, green: 0.6, blue: 0.4)
+        ])
+        return (g?.outputImage ?? CIImage(color: .gray)).cropped(to: CGRect(x: 0, y: 0, width: 128, height: 96))
     }
 
-    func testDefaultProviderIsUnavailableSoServerFeaturesAreComingSoon() throws {
+    func testMembershipIsAskedOnlyForMembersToolsAndLooks() {
+        XCTAssertTrue(AutoStudioViewModel.requiresMembership(feature: .retouch, lookID: nil, entitlement: .free))
+        XCTAssertFalse(AutoStudioViewModel.requiresMembership(feature: .retouch, lookID: nil, entitlement: .member))
+        XCTAssertFalse(AutoStudioViewModel.requiresMembership(feature: .enhance, lookID: nil, entitlement: .free))
+        XCTAssertFalse(AutoStudioViewModel.requiresMembership(feature: .removeObject, lookID: nil, entitlement: .free))
+        XCTAssertFalse(AutoStudioViewModel.requiresMembership(feature: .portraitLooks, lookID: "portrait.soft-studio", entitlement: .free))
+        XCTAssertTrue(AutoStudioViewModel.requiresMembership(feature: .portraitLooks, lookID: "portrait.silver", entitlement: .free))
+    }
+
+    func testSuggestionsSwitchOnTheMatchingEnhanceParts() {
+        let straighten = AutoStudioViewModel.enhanceOptions(for: .straighten)
+        XCTAssertEqual(straighten?.straighten, true)
+        XCTAssertEqual(straighten?.autoTone, false)
+        XCTAssertEqual(AutoStudioViewModel.enhanceOptions(for: .fixRedEye)?.redEye, true)
+        XCTAssertEqual(AutoStudioViewModel.enhanceOptions(for: .enhance), .all)
+        XCTAssertNil(AutoStudioViewModel.enhanceOptions(for: .blurBackground))
+        let straightenTitle = AutoStudioViewModel.title(for: AutoSuggestion(kind: .straighten, score: 1, degrees: -2.34))
+        XCTAssertTrue(straightenTitle.contains("2") && straightenTitle.contains("3") && !straightenTitle.contains("-"))
+    }
+
+    func testRunIssueExplainsWhatIsMissing() throws {
         let model = try makeModel()
-        XCTAssertFalse(model.isServerAvailable)
-        XCTAssertEqual(model.mode(for: .avatar), .comingSoon)
-    }
-
-    func testRemoteSwitchOffKeepsServerFeaturesComingSoon() throws {
-        let model = try makeModel(backend: FakeAIBackend(submitStatus: .queued), serverEnabled: false)
-        XCTAssertEqual(model.mode(for: .portrait), .comingSoon)
-    }
-
-    func testMembersGetMonthlyCreditsOnce() throws {
-        let model = try makeModel()
-        let date = Date(timeIntervalSince1970: 1_793_000_000)
-        model.grantMonthlyCreditsIfMember(date: date)
-        model.grantMonthlyCreditsIfMember(date: date)
-        XCTAssertEqual(model.ledger.balance, CreditLedger.monthlyMemberGrant)
-    }
-
-    func testFreeUsersGetNoGrant() throws {
-        let model = try makeModel(entitlement: .free)
-        model.grantMonthlyCreditsIfMember()
-        XCTAssertEqual(model.ledger.balance, 0)
-    }
-
-    func testUploadSizeStaysWithinTheFeatureLimit() {
-        let size = AIStudioViewModel.uploadSize(PixelSize(width: 4000, height: 3000), maxPixels: 4_000_000)
-        XCTAssertLessThanOrEqual(size.width * size.height, 4_000_000)
-        XCTAssertEqual(Double(size.width) / Double(size.height), 4.0 / 3.0, accuracy: 0.01)
-        XCTAssertEqual(AIStudioViewModel.uploadSize(PixelSize(width: 100, height: 100), maxPixels: 4_000_000), PixelSize(width: 100, height: 100))
-    }
-
-    func testBlockedPromptIsExplainedAndNeverSent() async throws {
-        let backend = FakeAIBackend(submitStatus: .queued)
-        let model = try makeModel(backend: backend)
-        model.grantMonthlyCreditsIfMember()
-        model.select(.replaceBackground)
-        await model.setInputs([photo])
-        model.prompt = "a garden full of bombs"
-        XCTAssertNotNil(model.promptIssue)
-        await model.generate()
-        XCTAssertTrue(backend.submitted.isEmpty)
-        XCTAssertEqual(model.ledger.balance, CreditLedger.monthlyMemberGrant)
-    }
-
-    func testSucceededJobChargesOnceAndShowsTheResult() async throws {
-        let backend = FakeAIBackend(submitStatus: .succeeded(resultRefs: ["/v1/jobs/x/results/0"]))
-        backend.resultData = FakeAIBackend.jpeg()
-        let model = try makeModel(backend: backend)
-        model.grantMonthlyCreditsIfMember()
+        XCTAssertNotNil(model.runIssue)
+        model.setSourceImage(samplePhoto())
         model.select(.enhance)
-        await model.setInputs([photo])
-        XCTAssertNil(model.generateIssue)
-        await model.generate()
-        XCTAssertEqual(backend.submitted.count, 1)
-        XCTAssertEqual(model.ledger.balance, CreditLedger.monthlyMemberGrant - AIFeature.enhance.creditCost)
+        XCTAssertNil(model.runIssue)
+        model.select(.removeObject)
+        XCTAssertNotNil(model.runIssue)
+        model.maskEditor.extend(to: AurumCore.NormalizedPoint(x: 0.5, y: 0.5))
+        model.maskEditor.endStroke()
+        XCTAssertNil(model.runIssue)
+        model.select(.replaceBackground)
+        model.background = .photo
+        XCTAssertNotNil(model.runIssue, "a photo background needs a photo")
+    }
+
+    func testEnhanceRunsOnDeviceAndShowsAFreeResult() async throws {
+        let model = try makeModel()
+        model.setSourceImage(samplePhoto())
+        model.select(.enhance)
+        await model.run()
         XCTAssertEqual(model.phase, .result)
         XCTAssertNotNil(model.resultPreview)
-        XCTAssertEqual(model.history.records.first?.status, .succeeded(resultRefs: ["/v1/jobs/x/results/0"]))
+        XCTAssertEqual(model.resultTier, .free)
+        XCTAssertFalse(model.resultRequiresMembership)
     }
 
-    func testFailedJobIsRefunded() async throws {
-        let backend = FakeAIBackend(submitStatus: .failed(reason: "busy"))
-        let model = try makeModel(backend: backend)
-        model.grantMonthlyCreditsIfMember()
-        model.select(.enhance)
-        await model.setInputs([photo])
-        await model.generate()
-        XCTAssertEqual(model.ledger.balance, CreditLedger.monthlyMemberGrant)
-        if case .failed = model.phase {} else { XCTFail("expected a failure message") }
+    func testRemoveObjectFillsTheBrushedArea() async throws {
+        let model = try makeModel()
+        model.setSourceImage(samplePhoto())
+        model.select(.removeObject)
+        model.maskEditor.extend(to: AurumCore.NormalizedPoint(x: 0.4, y: 0.5))
+        model.maskEditor.extend(to: AurumCore.NormalizedPoint(x: 0.6, y: 0.5))
+        model.maskEditor.endStroke()
+        await model.run()
+        XCTAssertEqual(model.phase, .result)
     }
 
-    func testNotEnoughCreditsIsExplainedBeforeRunning() async throws {
-        let backend = FakeAIBackend(submitStatus: .queued)
-        let model = try makeModel(backend: backend, entitlement: .free)
-        model.select(.portrait)
-        await model.setInputs([photo])
-        XCTAssertNotNil(model.generateIssue)
-        await model.generate()
-        XCTAssertTrue(backend.submitted.isEmpty)
+    func testRetouchWithoutAFaceExplains() async throws {
+        let model = try makeModel()
+        model.setSourceImage(samplePhoto())
+        model.select(.retouch)
+        await model.run()
+        if case .failed = model.phase {} else { XCTFail("expected a gentle failure message") }
     }
 
-    func testValidationMessages() {
-        XCTAssertNil(AIStudioViewModel.message(for: []))
-        XCTAssertNotNil(AIStudioViewModel.message(for: [.maskRequired]))
-        XCTAssertNotNil(AIStudioViewModel.message(for: [.wrongInputCount(expected: 2, actual: 1)]))
+    func testKeepingAMembersLookAsksForMembershipFirst() async throws {
+        let model = try makeModel(entitlement: .free)
+        let app = AppModel(deps: model.deps)
+        model.setSourceImage(samplePhoto())
+        model.select(.portraitLooks)
+        model.portraitLookID = "portrait.silver"
+        await model.run()
+        XCTAssertEqual(model.phase, .result)
+        XCTAssertTrue(model.resultRequiresMembership)
+        await model.openResultInStudio(app: app)
+        XCTAssertTrue(model.isPaywallPresented)
+        XCTAssertNil(app.studio)
     }
 }
 
-final class AIMaskEditorTests: XCTestCase {
+final class BrushMaskEditorTests: XCTestCase {
     func testStrokesAreClampedRecordedAndUndone() {
-        var editor = AIMaskEditor()
-        editor.extend(to: NormalizedPoint(x: -0.2, y: 0.5))
-        editor.extend(to: NormalizedPoint(x: 0.5, y: 1.4))
+        var editor = BrushMaskEditor()
+        editor.extend(to: AurumCore.NormalizedPoint(x: -0.2, y: 0.5))
+        editor.extend(to: AurumCore.NormalizedPoint(x: 0.5, y: 1.4))
         editor.endStroke()
         XCTAssertTrue(editor.hasPaint)
         XCTAssertTrue(editor.mask.isInBounds)
-        XCTAssertEqual(editor.mask.strokes.first?.points.first, NormalizedPoint(x: 0, y: 0.5))
+        XCTAssertEqual(editor.mask.strokes.first?.points.first, AurumCore.NormalizedPoint(x: 0, y: 0.5))
         editor.undo()
         XCTAssertFalse(editor.hasPaint)
     }
 
     func testEraserOnlyMaskIsEmpty() {
-        var editor = AIMaskEditor()
+        var editor = BrushMaskEditor()
         editor.isEraser = true
-        editor.extend(to: NormalizedPoint(x: 0.5, y: 0.5))
+        editor.extend(to: AurumCore.NormalizedPoint(x: 0.5, y: 0.5))
         editor.endStroke()
         XCTAssertFalse(editor.hasPaint)
         XCTAssertTrue(editor.canUndo)
     }
 
     func testEndingWithoutPointsAddsNothing() {
-        var editor = AIMaskEditor()
+        var editor = BrushMaskEditor()
         editor.endStroke()
         XCTAssertFalse(editor.canUndo)
     }

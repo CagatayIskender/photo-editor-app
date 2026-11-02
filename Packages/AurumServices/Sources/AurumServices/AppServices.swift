@@ -62,14 +62,12 @@ public struct RemoteConfigValues: Codable, Equatable, Sendable {
     public var paywallHeadline: String
     public var paywallBenefits: [String]
     public var highlightedPlan: String
-    public var aiStudioEnabled: Bool
     public var salonHeroCollection: String
 
     public static let defaults = RemoteConfigValues(
         paywallHeadline: "The whole atelier, unlocked.",
         paywallBenefits: ["Every look, effect and sticker", "Full-resolution export, no watermark", "New collections every week"],
         highlightedPlan: "yearly",
-        aiStudioEnabled: false,
         salonHeroCollection: "seasons"
     )
 }

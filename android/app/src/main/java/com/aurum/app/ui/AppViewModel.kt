@@ -26,7 +26,7 @@ enum class Tab { salon, create, vault }
 /** Features that exist on iOS and are not on Android yet. */
 enum class ComingFeature(val titleKey: String) {
     video("Video"), templates("Templates"), camera("Camera"),
-    aiStudio("AI Studio"), motion("3D Motion"), collage("Collage"), carousel("Carousel"),
+    autoStudio("Auto Studio"), motion("3D Motion"), collage("Collage"), carousel("Carousel"),
 }
 
 sealed interface Screen {

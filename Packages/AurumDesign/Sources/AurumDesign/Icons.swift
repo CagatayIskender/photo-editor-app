@@ -5,14 +5,13 @@ import SwiftUI
 /// and consistent.
 public enum AurumIcon: String, CaseIterable, Sendable {
     case salon, vault, plus, close, back, undo, redo, search, settings
-    case looks, effects, threeD, ai, retouch, adjust, text, stickers, music, layers, crop
+    case looks, effects, threeD, wand, retouch, adjust, text, stickers, music, layers, crop
     case crown, compare, sparkle, check, camera, rotate, flip, share, download
 
     /// Accessibility name used when the icon stands alone.
     public var accessibilityName: String {
         switch self {
         case .threeD: return "3D"
-        case .ai: return "AI"
         default: return rawValue.prefix(1).uppercased() + rawValue.dropFirst()
         }
     }
@@ -62,10 +61,11 @@ public enum AurumIcon: String, CaseIterable, Sendable {
         case .threeD:
             path.move(to: p(12, 3)); path.addLine(to: p(20, 7.5)); path.addLine(to: p(20, 16.5)); path.addLine(to: p(12, 21)); path.addLine(to: p(4, 16.5)); path.addLine(to: p(4, 7.5)); path.closeSubpath()
             path.move(to: p(12, 12)); path.addLine(to: p(20, 7.5)); path.move(to: p(12, 12)); path.addLine(to: p(12, 21)); path.move(to: p(12, 12)); path.addLine(to: p(4, 7.5))
-        case .ai:
-            path.addPath(circle(12, 12, 8))
-            path.move(to: p(8, 15)); path.addLine(to: p(10.5, 9)); path.addLine(to: p(13, 15)); path.move(to: p(9, 13)); path.addLine(to: p(12, 13))
-            path.move(to: p(16, 9)); path.addLine(to: p(16, 15))
+        case .wand:
+            path.move(to: p(4, 20)); path.addLine(to: p(14, 10))
+            path.move(to: p(17, 3)); path.addLine(to: p(18, 6)); path.addLine(to: p(21, 7)); path.addLine(to: p(18, 8))
+            path.addLine(to: p(17, 11)); path.addLine(to: p(16, 8)); path.addLine(to: p(13, 7)); path.addLine(to: p(16, 6)); path.closeSubpath()
+            path.move(to: p(6, 5)); path.addLine(to: p(6, 8)); path.move(to: p(4.5, 6.5)); path.addLine(to: p(7.5, 6.5))
         case .retouch:
             path.move(to: p(5, 19)); path.addLine(to: p(14, 10)); path.addLine(to: p(17, 7)); path.addLine(to: p(19, 9)); path.addLine(to: p(16, 12)); path.addLine(to: p(14, 10))
         case .adjust:

@@ -147,3 +147,10 @@ public struct Streak: Codable, Equatable, Sendable {
         return DayStamp(date: date, calendar: calendar).dayNumber - last.dayNumber == 1
     }
 }
+
+extension Date {
+    /// The date truncated to whole seconds, so it survives JSON exactly.
+    var wholeSeconds: Date {
+        Date(timeIntervalSince1970: timeIntervalSince1970.rounded(.down))
+    }
+}

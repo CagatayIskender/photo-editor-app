@@ -47,7 +47,7 @@ fun CreateScreen(model: AppViewModel) {
             }
         }
         Column(verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
-            SectionTitle(tr("AI Studio"), Modifier.padding(horizontal = Spacing.m))
+            SectionTitle(tr("Auto Studio"), Modifier.padding(horizontal = Spacing.m))
             AtelierRow(model)
         }
     }

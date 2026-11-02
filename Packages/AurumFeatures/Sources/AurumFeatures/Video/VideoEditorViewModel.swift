@@ -41,7 +41,7 @@ public enum VideoTool: String, CaseIterable, Identifiable {
     }
 }
 
-/// The transitions offered in the editor. AI transitions arrive in Phase 3.
+/// The transitions offered in the editor.
 public enum TransitionChoice: String, CaseIterable, Identifiable {
     case cut, dissolve, dipToBlack, slide, zoom
 
@@ -52,7 +52,7 @@ public enum TransitionChoice: String, CaseIterable, Identifiable {
     public init(_ transition: AurumCore.Transition) {
         switch transition {
         case .cut: self = .cut
-        case .dissolve, .ai: self = .dissolve
+        case .dissolve: self = .dissolve
         case .dipToBlack: self = .dipToBlack
         case .slide: self = .slide
         case .zoom: self = .zoom

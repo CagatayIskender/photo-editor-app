@@ -165,7 +165,7 @@ enum TransitionRenderer {
         switch transition {
         case .cut:
             return b
-        case .dissolve, .ai:
+        case .dissolve:
             return dissolve(a, b, p)
         case .dipToBlack:
             let black = CIImage(color: .black).cropped(to: canvas)

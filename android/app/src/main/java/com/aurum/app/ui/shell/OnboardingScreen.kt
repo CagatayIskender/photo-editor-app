@@ -114,7 +114,7 @@ fun OnboardingScreen(model: AppViewModel) {
                 else -> Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(Spacing.s, Alignment.Bottom)) {
                     Text(tr("Your photos stay yours"), style = AurumType.title, color = p.textPrimary)
                     Text(
-                        tr("AURUM edits on your phone. Photos are never uploaded unless you use an AI tool, and it always asks first. You choose which photos AURUM can see."),
+                        tr("AURUM edits on your phone. Your photos are never uploaded. You choose which photos AURUM can see."),
                         style = AurumType.body, color = p.textSecondary,
                     )
                     Spacer(Modifier.height(Spacing.l))

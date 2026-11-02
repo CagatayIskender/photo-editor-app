@@ -4,32 +4,31 @@ import AurumDesign
 import AurumRender
 import AurumServices
 
-/// One AI feature: pick a photo, set its options, see the cost, run it, and
-/// open the result in the Studio.
-struct AIFeatureView: View {
-    @ObservedObject var model: AIStudioViewModel
+/// One Auto Studio tool: the photo, the tool's settings, a free preview, and
+/// opening the result in the Studio.
+struct AutoFeatureView: View {
+    @ObservedObject var model: AutoStudioViewModel
     @ObservedObject var app: AppModel
-    let feature: AIFeature
+    let feature: AutoFeature
     @State private var isPicking = false
-
-    private var mode: AIFeatureMode { model.mode(for: feature) }
+    @State private var isPickingBackground = false
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.m) {
-                Text(AIStudioViewModel.subtitle(for: feature))
+                Text(AutoStudioViewModel.subtitle(for: feature))
                     .aurumText(.body, color: AurumColor.textSecondary)
                 stage
                     .frame(maxWidth: .infinity)
                     .frame(height: 380)
                 photoButton
-                if mode == .comingSoon {
+                if feature.tier == .member {
                     AtelierNote(
-                        title: String(localized: "Coming soon"),
-                        message: String(localized: "This tool runs on AURUM's servers, which open soon. Nothing is uploaded and no credits are used until then.")
+                        title: String(localized: "Members' tool"),
+                        message: String(localized: "Preview it as often as you like. Membership is needed only to keep the result.")
                     )
                 }
-                if !model.inputs.isEmpty, model.phase != .result {
+                if model.photo != nil, model.phase != .result {
                     options
                 }
                 status
@@ -38,15 +37,28 @@ struct AIFeatureView: View {
             .padding(Spacing.m)
         }
         .background(AurumColor.background.ignoresSafeArea())
-        .navigationTitle(AIStudioViewModel.title(for: feature))
+        .navigationTitle(AutoStudioViewModel.title(for: feature))
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(AurumColor.background, for: .navigationBar)
         .sheet(isPresented: $isPicking) {
-            MediaPickerView(app: app, required: feature.inputCount, title: feature.inputCount == 1 ? String(localized: "Choose a photo") : String(localized: "Choose \(feature.inputCount) photos")) { picked in
+            MediaPickerView(app: app, required: 1, title: String(localized: "Choose a photo")) { picked in
                 isPicking = false
-                Task { await model.setInputs(picked) }
+                Task { await model.setPhoto(picked) }
             } onCancel: {
                 isPicking = false
+            }
+        }
+        .sheet(isPresented: $isPickingBackground) {
+            MediaPickerView(app: app, required: 1, title: String(localized: "Choose a background")) { picked in
+                isPickingBackground = false
+                Task { await model.setBackgroundPhoto(picked) }
+            } onCancel: {
+                isPickingBackground = false
+            }
+        }
+        .sheet(isPresented: $model.isPaywallPresented) {
+            PaywallView(app: app, trigger: "autoStudio") {
+                model.isPaywallPresented = false
             }
         }
     }
@@ -60,7 +72,7 @@ struct AIFeatureView: View {
                 .accessibilityLabel(String(localized: "Result"))
                 .accessibilityAddTraits(.isImage)
         } else if let source = model.sourcePreview {
-            if feature.requiresMask && mode != .comingSoon {
+            if feature.requiresMask {
                 MaskCanvas(image: source, editor: $model.maskEditor)
             } else {
                 AtelierImage(image: source)
@@ -72,19 +84,20 @@ struct AIFeatureView: View {
                 AtelierImage(image: nil, placeholder: String(localized: "Choose a photo to begin"))
             }
             .buttonStyle(.plain)
-            .accessibilityIdentifier("ai.choosePhoto")
+            .accessibilityIdentifier("auto.feature.choosePhoto")
         }
     }
 
     private var photoButton: some View {
         HStack {
-            Button(model.inputs.isEmpty ? String(localized: "Choose a photo") : String(localized: "Change photo")) { isPicking = true }
+            Button(model.photo == nil ? String(localized: "Choose a photo") : String(localized: "Change photo")) { isPicking = true }
                 .buttonStyle(TextActionButtonStyle())
                 .disabled(model.isBusy)
             Spacer()
-            Text(AIStudioViewModel.costText(feature))
-                .aurumText(.label, color: AurumColor.accent)
-                .accessibilityLabel(String(localized: "Cost, \(AIStudioViewModel.costText(feature))"))
+            if model.isAnalysing {
+                ProgressView().tint(AurumColor.accent)
+                    .accessibilityLabel(String(localized: "Looking at your photo…"))
+            }
         }
     }
 
@@ -93,48 +106,28 @@ struct AIFeatureView: View {
     @ViewBuilder
     private var options: some View {
         VStack(alignment: .leading, spacing: Spacing.m) {
-            if feature.requiresStyle {
-                section(String(localized: "Style")) {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: Spacing.xs) {
-                            ForEach(model.styles) { style in
-                                Chip(Localized.dynamic(style.name), isSelected: model.styleID == style.id, leadingIcon: style.tier == .member ? .crown : nil) {
-                                    model.styleID = style.id
-                                }
-                            }
-                        }
-                    }
+            switch feature {
+            case .enhance:
+                enhanceOptions
+            case .portraitBlur:
+                section(String(localized: "Blur")) {
+                    AurumSlider(value: $model.blurAmount, in: 0.1...1, label: String(localized: "Blur amount"))
                 }
-            }
-            if feature.acceptsPrompt && mode == .server {
-                section(feature.requiresPrompt ? String(localized: "Describe the scene") : String(localized: "Description (optional)")) {
-                    TextField(String(localized: "For example, a quiet terrace at golden hour"), text: $model.prompt, axis: .vertical)
-                        .lineLimit(1...3)
-                        .font(AurumTextStyle.body.font)
-                        .foregroundColor(AurumColor.textPrimary)
-                        .padding(Spacing.s)
-                        .background(RoundedRectangle(cornerRadius: Radius.chip).fill(AurumColor.surface))
-                    if let issue = model.promptIssue {
-                        Text(issue).aurumText(.caption, color: AurumColor.textSecondary)
-                    }
-                }
-            }
-            if feature == .replaceBackground {
+            case .replaceBackground:
                 section(String(localized: "Background")) {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: Spacing.s) {
-                            ForEach(AIBackgroundChoice.allCases) { choice in
+                            ForEach(AutoBackgroundChoice.allCases) { choice in
                                 backgroundSwatch(choice)
                             }
                         }
                         .padding(.vertical, 2)
                     }
                 }
-            }
-            if feature == .relight {
+            case .relight:
                 section(String(localized: "Light from")) {
                     HStack(spacing: Spacing.xs) {
-                        ForEach(OnDeviceAI.LightDirection.allCases, id: \.self) { direction in
+                        ForEach(OnDeviceImaging.LightDirection.allCases, id: \.self) { direction in
                             Chip(Self.title(for: direction), isSelected: model.lightDirection == direction) {
                                 model.lightDirection = direction
                             }
@@ -142,8 +135,11 @@ struct AIFeatureView: View {
                     }
                     AurumSlider(value: $model.lightIntensity, in: 0...1, label: String(localized: "Light intensity"))
                 }
-            }
-            if feature.requiresMask && mode != .comingSoon {
+            case .retouch:
+                section(String(localized: "Strength")) {
+                    AurumSlider(value: $model.retouchStrength, in: 0...1, label: String(localized: "Retouch strength"))
+                }
+            case .removeObject:
                 section(String(localized: "Brush")) {
                     HStack(spacing: Spacing.xs) {
                         Chip(String(localized: "Paint"), isSelected: !model.maskEditor.isEraser) { model.maskEditor.isEraser = false }
@@ -155,9 +151,47 @@ struct AIFeatureView: View {
                             .disabled(!model.maskEditor.canUndo)
                     }
                     AurumSlider(value: $model.maskEditor.radius, in: 0.01...0.12, detentStep: 0.01, label: String(localized: "Brush size"))
+                    Text("Works best on small things against plain or repeating backgrounds, such as sky, sand, walls or grass.")
+                        .aurumText(.caption, color: AurumColor.textTertiary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            case .portraitLooks:
+                section(String(localized: "Look")) {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: Spacing.xs) {
+                            ForEach(PortraitLook.library) { look in
+                                Chip(Localized.dynamic(look.name), isSelected: model.portraitLookID == look.id, leadingIcon: look.tier == .member ? .crown : nil) {
+                                    model.portraitLookID = look.id
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    private var enhanceOptions: some View {
+        section(String(localized: "Include")) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: Spacing.xs) {
+                    Chip(String(localized: "Auto tone"), isSelected: model.enhanceOptions.autoTone) { model.enhanceOptions.autoTone.toggle() }
+                    Chip(String(localized: "White balance"), isSelected: model.enhanceOptions.whiteBalance) { model.enhanceOptions.whiteBalance.toggle() }
+                    Chip(straightenTitle, isSelected: model.enhanceOptions.straighten) { model.enhanceOptions.straighten.toggle() }
+                    Chip(String(localized: "Red eye"), isSelected: model.enhanceOptions.redEye) { model.enhanceOptions.redEye.toggle() }
+                    Chip(String(localized: "Clarity"), isSelected: model.enhanceOptions.clarity) { model.enhanceOptions.clarity.toggle() }
+                }
+            }
+        }
+    }
+
+    /// "Straighten 2.3°" when a tilted horizon was found, otherwise "Straighten".
+    private var straightenTitle: String {
+        if let degrees = model.analysis?.horizonDegrees, Straighten.isWorthCorrecting(degrees: degrees) {
+            return AutoStudioViewModel.title(for: AutoSuggestion(kind: .straighten, score: 0, degrees: degrees))
+        }
+        return String(localized: "Straighten")
     }
 
     private func section<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
@@ -167,22 +201,39 @@ struct AIFeatureView: View {
         }
     }
 
-    private func backgroundSwatch(_ choice: AIBackgroundChoice) -> some View {
+    private func backgroundSwatch(_ choice: AutoBackgroundChoice) -> some View {
         let isSelected = model.background == choice
-        return Button { model.background = choice; Haptics.detent() } label: {
+        return Button {
+            if choice == .photo && !model.hasBackgroundPhoto {
+                isPickingBackground = true
+            } else {
+                model.background = choice
+            }
+            Haptics.detent()
+        } label: {
             VStack(spacing: 6) {
-                LinearGradient(colors: choice.swatch.map(Color.init(hex:)), startPoint: .top, endPoint: .bottom)
-                    .frame(width: 56, height: 56)
-                    .clipShape(RoundedRectangle(cornerRadius: Radius.chip))
-                    .overlay(RoundedRectangle(cornerRadius: Radius.chip).stroke(isSelected ? AurumColor.accent : AurumColor.hairline, lineWidth: isSelected ? 2 : 1))
+                ZStack {
+                    LinearGradient(colors: choice.swatch.map(Color.init(hex:)), startPoint: .top, endPoint: .bottom)
+                    if choice == .photo {
+                        IconView(.camera, size: 20).foregroundColor(AurumColor.textSecondary)
+                    }
+                }
+                .frame(width: 56, height: 56)
+                .clipShape(RoundedRectangle(cornerRadius: Radius.chip))
+                .overlay(RoundedRectangle(cornerRadius: Radius.chip).stroke(isSelected ? AurumColor.accent : AurumColor.hairline, lineWidth: isSelected ? 2 : 1))
                 Text(choice.title).aurumText(.caption, color: isSelected ? AurumColor.textPrimary : AurumColor.textTertiary)
             }
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
+        .contextMenu {
+            if choice == .photo && model.hasBackgroundPhoto {
+                Button(String(localized: "Choose another photo")) { isPickingBackground = true }
+            }
+        }
     }
 
-    static func title(for direction: OnDeviceAI.LightDirection) -> String {
+    static func title(for direction: OnDeviceImaging.LightDirection) -> String {
         switch direction {
         case .front: return String(localized: "Front")
         case .left: return String(localized: "Left")
@@ -202,13 +253,9 @@ struct AIFeatureView: View {
                 Text(model.phase == .saving ? String(localized: "Saving to Photos…") : String(localized: "Opening your photo…"))
                     .aurumText(.caption, color: AurumColor.textSecondary)
             }
-        case .working(let progress):
+        case .working:
             HStack(spacing: Spacing.s) {
-                if let progress {
-                    ProgressView(value: progress).tint(AurumColor.accent)
-                } else {
-                    ProgressView().tint(AurumColor.accent)
-                }
+                ProgressView().tint(AurumColor.accent)
                 Text("Working…").aurumText(.caption, color: AurumColor.textSecondary)
             }
         case .failed(let message):
@@ -224,56 +271,30 @@ struct AIFeatureView: View {
             VStack(spacing: Spacing.s) {
                 Button("Open in Studio") { Task { await model.openResultInStudio(app: app) } }
                     .buttonStyle(GoldButtonStyle())
-                    .accessibilityIdentifier("ai.openInStudio")
+                    .accessibilityIdentifier("auto.openInStudio")
                 Button("Discard") { model.discardResult() }
                     .buttonStyle(TextActionButtonStyle())
             }
-        } else if case .working = model.phase, mode == .server || (mode == .onDevice && model.isServerAvailable) {
-            Button("Cancel") { model.cancelJob() }
-                .buttonStyle(TextActionButtonStyle())
-        } else if !model.inputs.isEmpty {
+        } else if model.photo != nil {
             VStack(alignment: .leading, spacing: Spacing.s) {
-                if mode == .onDevice {
-                    Button("Preview on device") { Task { await model.runOnDevice() } }
-                        .buttonStyle(GoldButtonStyle())
-                        .disabled(model.isBusy)
-                        .accessibilityIdentifier("ai.runOnDevice")
-                    Text("Free. Your photo stays on your iPhone.").aurumText(.caption, color: AurumColor.textTertiary)
-                }
-                if mode == .server || (mode == .onDevice && model.isServerAvailable) {
-                    Button(String(localized: "Generate · \(AIStudioViewModel.costText(feature))")) { Task { await model.generate() } }
-                        .buttonStyle(mode == .server ? AnyButtonStyle(GoldButtonStyle()) : AnyButtonStyle(GlassButtonStyle()))
-                        .disabled(model.isBusy || model.generateIssue != nil)
-                        .accessibilityIdentifier("ai.generate")
-                    if let issue = model.generateIssue {
-                        Text(issue).aurumText(.caption, color: AurumColor.textSecondary)
-                    } else {
-                        Text("Your photo is sent to AURUM's servers for this job only. Credits come back if it doesn't finish.")
-                            .aurumText(.caption, color: AurumColor.textTertiary)
-                    }
+                Button("Preview") { Task { await model.run() } }
+                    .buttonStyle(GoldButtonStyle())
+                    .disabled(model.isBusy || model.runIssue != nil)
+                    .accessibilityIdentifier("auto.preview")
+                if let issue = model.runIssue {
+                    Text(issue).aurumText(.caption, color: AurumColor.textSecondary)
+                } else {
+                    Text("Free to preview. Your photo stays on your iPhone.").aurumText(.caption, color: AurumColor.textTertiary)
                 }
             }
         }
     }
 }
 
-/// Type-erases a button style so one button can switch styles.
-struct AnyButtonStyle: ButtonStyle {
-    private let make: (Configuration) -> AnyView
-
-    init<S: ButtonStyle>(_ style: S) {
-        make = { AnyView(style.makeBody(configuration: $0)) }
-    }
-
-    func makeBody(configuration: Configuration) -> some View {
-        make(configuration)
-    }
-}
-
 /// The photo with brush strokes painted over it. Drag to paint (or erase).
 struct MaskCanvas: View {
     let image: CGImage
-    @Binding var editor: AIMaskEditor
+    @Binding var editor: BrushMaskEditor
 
     var body: some View {
         GeometryReader { geo in
@@ -287,7 +308,7 @@ struct MaskCanvas: View {
                     let side = min(frame.width, frame.height)
                     var strokes = editor.mask.strokes
                     if !editor.current.isEmpty {
-                        strokes.append(AIMask.Stroke(points: editor.current, radius: editor.radius, isEraser: editor.isEraser))
+                        strokes.append(BrushMask.Stroke(points: editor.current, radius: editor.radius, isEraser: editor.isEraser))
                     }
                     for stroke in strokes {
                         var path = Path()
@@ -308,7 +329,7 @@ struct MaskCanvas: View {
                 DragGesture(minimumDistance: 0)
                     .onChanged { value in
                         guard frame.width > 0, frame.height > 0 else { return }
-                        editor.extend(to: NormalizedPoint(
+                        editor.extend(to: AurumCore.NormalizedPoint(
                             x: Double((value.location.x - frame.minX) / frame.width),
                             y: Double((value.location.y - frame.minY) / frame.height)
                         ))

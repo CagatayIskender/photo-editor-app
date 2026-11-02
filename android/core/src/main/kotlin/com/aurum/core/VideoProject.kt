@@ -101,7 +101,6 @@ sealed interface Transition {
     data class DipToBlack(override val duration: Seconds) : Transition
     data class Slide(override val duration: Seconds) : Transition
     data class Zoom(override val duration: Seconds) : Transition
-    data class Ai(val jobID: String?, override val duration: Seconds) : Transition
 }
 
 object TransitionSerializer : KSerializer<Transition> {
@@ -115,11 +114,9 @@ object TransitionSerializer : KSerializer<Transition> {
             is Transition.DipToBlack -> "dipToBlack"
             is Transition.Slide -> "slide"
             is Transition.Zoom -> "zoom"
-            is Transition.Ai -> "ai"
         }
         fields["type"] = JsonPrimitive(tag)
         if (value != Transition.Cut) fields["duration"] = JsonPrimitive(value.duration)
-        if (value is Transition.Ai && value.jobID != null) fields["jobID"] = JsonPrimitive(value.jobID)
         encoder.asJson().encodeJsonElement(JsonObject(fields))
     }
 
@@ -132,7 +129,8 @@ object TransitionSerializer : KSerializer<Transition> {
             "dipToBlack" -> Transition.DipToBlack(d)
             "slide" -> Transition.Slide(d)
             "zoom" -> Transition.Zoom(d)
-            "ai" -> Transition.Ai(obj.string("jobID"), d)
+            // Older projects may hold a generated transition; it plays as a dissolve.
+            "ai" -> Transition.Dissolve(d)
             else -> throw SerializationException("Unknown transition ${obj["type"]}")
         }
     }

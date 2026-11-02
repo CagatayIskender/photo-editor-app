@@ -55,6 +55,17 @@ public struct FaceRetouch: Codable, Equatable, Sendable {
 
     public var isNeutral: Bool { self == FaceRetouch() }
 
+    /// Every control multiplied by `amount` (0...1), for a strength slider
+    /// over a preset such as `natural`.
+    public func scaled(by amount: Double) -> FaceRetouch {
+        let k = (0.0...1.0).clamp(amount)
+        var r = self
+        for control in RetouchControl.allCases {
+            r[control] = self[control] * k
+        }
+        return r
+    }
+
     public subscript(control: RetouchControl) -> Double {
         get {
             switch control {
