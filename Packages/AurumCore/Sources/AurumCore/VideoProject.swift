@@ -252,8 +252,11 @@ public struct VideoProject: Codable, Equatable, Identifiable, Sendable {
         self.intro = intro
         self.outro = outro
         self.templateID = templateID
-        self.createdAt = createdAt
-        self.modifiedAt = createdAt
+        // Whole seconds: the ISO 8601 encoder drops fractions, and a saved
+        // project must compare equal to the one in memory.
+        let created = Date(timeIntervalSince1970: createdAt.timeIntervalSince1970.rounded(.down))
+        self.createdAt = created
+        self.modifiedAt = created
     }
 
     // MARK: Timing

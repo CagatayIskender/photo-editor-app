@@ -295,3 +295,39 @@ final class VideoExportGateTests: XCTestCase {
         XCTAssertEqual(member.maxFrameRate, 60)
     }
 }
+
+final class BeatDetectorTests: XCTestCase {
+    /// A click track: short decaying noise bursts on every beat.
+    func clicks(bpm: Double, offset: Double, seconds: Double, sampleRate: Double = 8000) -> [Float] {
+        var samples = [Float](repeating: 0, count: Int(seconds * sampleRate))
+        var rng: UInt64 = 12345
+        var t = offset
+        while t < seconds {
+            let start = Int(t * sampleRate)
+            for i in 0..<Int(0.03 * sampleRate) where start + i < samples.count {
+                rng = rng &* 6364136223846793005 &+ 1442695040888963407
+                let noise = Float(Int64(bitPattern: rng >> 11) % 2000) / 1000 - 1
+                samples[start + i] = noise * Float(exp(-Double(i) / (0.008 * sampleRate)))
+            }
+            t += 60 / bpm
+        }
+        return samples
+    }
+
+    func testFindsTempoAndPhaseOfAClickTrack() throws {
+        for (bpm, offset) in [(120.0, 0.2), (96.0, 0.05), (140.0, 0.3)] {
+            let grid = try XCTUnwrap(BeatDetector.detect(samples: clicks(bpm: bpm, offset: offset, seconds: 12), sampleRate: 8000))
+            XCTAssertEqual(grid.bpm, bpm, accuracy: bpm * 0.02, "bpm \(bpm)")
+            // The detected offset must land on a beat (within 20 ms).
+            let phaseError = abs(grid.quantize(offset) - offset)
+            XCTAssertLessThan(phaseError, 0.02, "bpm \(bpm)")
+            let beatError = (grid.offset - offset).truncatingRemainder(dividingBy: 60 / bpm)
+            XCTAssertLessThan(min(abs(beatError), 60 / bpm - abs(beatError)), 0.02, "bpm \(bpm)")
+        }
+    }
+
+    func testSilenceAndShortAudioGiveNoGrid() {
+        XCTAssertNil(BeatDetector.detect(samples: [Float](repeating: 0, count: 80000), sampleRate: 8000))
+        XCTAssertNil(BeatDetector.detect(samples: [0.1, 0.2], sampleRate: 8000))
+    }
+}
