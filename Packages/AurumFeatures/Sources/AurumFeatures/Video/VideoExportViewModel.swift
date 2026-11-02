@@ -149,6 +149,7 @@ public final class VideoExportViewModel: ObservableObject {
                 phase = .shareReady(url)
             }
             deps.analytics.track(.exportCompleted(format: "mp4", watermark: watermark != nil, seconds: Date().timeIntervalSince(started)))
+            deps.drops.recordCreation()
         } catch PhotoLibraryError.notAuthorized {
             phase = .failed(String(localized: "AURUM needs permission to add videos. You can allow it in Settings."))
         } catch {

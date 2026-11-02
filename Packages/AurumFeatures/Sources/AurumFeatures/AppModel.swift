@@ -20,8 +20,14 @@ public struct AppDependencies {
     public var preferences: Preferences
     /// Templates, intro and outro styles and the music catalogue.
     public var content: ContentLibrary
+    /// Server AI for the AI Studio. Unavailable until a base URL is configured.
+    public var ai: AIBackend
+    /// The AI credit ledger and job history.
+    public var credits: CreditStore
+    /// Seasonal drops and the creation streak.
+    public var drops: DropsStore
 
-    public init(catalog: LookCatalog, brand: Brand, engine: RenderEngine, photos: PhotoLibraryService, drafts: DraftStore, presets: PresetStore, purchases: PurchaseService, analytics: Analytics, remoteConfig: RemoteConfig, preferences: Preferences, content: ContentLibrary = ContentLibrary.load(from: .main)) {
+    public init(catalog: LookCatalog, brand: Brand, engine: RenderEngine, photos: PhotoLibraryService, drafts: DraftStore, presets: PresetStore, purchases: PurchaseService, analytics: Analytics, remoteConfig: RemoteConfig, preferences: Preferences, content: ContentLibrary = ContentLibrary.load(from: .main), ai: AIBackend? = nil, credits: CreditStore? = nil, drops: DropsStore? = nil) {
         self.catalog = catalog
         self.brand = brand
         self.engine = engine
@@ -33,6 +39,9 @@ public struct AppDependencies {
         self.remoteConfig = remoteConfig
         self.preferences = preferences
         self.content = content
+        self.ai = ai ?? RemoteAIProvider(baseURL: nil, inputLoader: RemoteAIProvider.libraryLoader(photos))
+        self.credits = credits ?? CreditStore(directory: CreditStore.defaultDirectory())
+        self.drops = drops ?? DropsStore(bundle: .main)
     }
 
     /// Mock services with generated sample photos, for previews and tests.
@@ -49,7 +58,9 @@ public struct AppDependencies {
             analytics: RecordingAnalytics(),
             remoteConfig: BundledRemoteConfig(),
             preferences: Preferences(defaults: UserDefaults(suiteName: "aurum.sample.\(UUID().uuidString)") ?? .standard),
-            content: ContentLibrary.load(from: .main)
+            content: ContentLibrary.load(from: .main),
+            credits: CreditStore(directory: directory.appendingPathComponent("AI")),
+            drops: DropsStore(bundle: .main, defaults: UserDefaults(suiteName: "aurum.sample.drops.\(UUID().uuidString)") ?? .standard)
         )
     }
 }
@@ -66,6 +77,10 @@ public enum CreateFlow: Identifiable {
     case templates
     case camera
     case mediaPicker
+    case aiStudio
+    case depthMotion
+    case collage
+    case carousel
 
     public var id: String {
         switch self {
@@ -73,6 +88,10 @@ public enum CreateFlow: Identifiable {
         case .templates: return "templates"
         case .camera: return "camera"
         case .mediaPicker: return "mediaPicker"
+        case .aiStudio: return "aiStudio"
+        case .depthMotion: return "depthMotion"
+        case .collage: return "collage"
+        case .carousel: return "carousel"
         }
     }
 }
@@ -146,10 +165,16 @@ public final class AppModel: ObservableObject {
     /// Starts editing a photo from the library. The Studio opens at once and
     /// shows the photo as soon as the proxy loads, with a suggested look applied.
     public func openPhoto(_ item: LibraryPhoto) {
-        isPickerPresented = false
         let document = EditDocument(source: SourceAsset(localIdentifier: item.id, pixelSize: item.pixelSize))
         let model = makeStudio(document: document, isNew: true)
-        studio = model
+        if isPickerPresented {
+            // Presenting the Studio while the picker sheet is still closing can make
+            // SwiftUI drop the new cover, so it opens once the sheet has gone.
+            pendingStudio = model
+            isPickerPresented = false
+        } else {
+            studio = model
+        }
         deps.analytics.track(.photoImported(source: "library"))
         let lookID = queuedLookID
         let preset = queuedPreset
@@ -159,6 +184,17 @@ public final class AppModel: ObservableObject {
     }
 
     /// Reopens a saved draft exactly as it was left.
+    /// The Studio waiting for the picker sheet to finish closing.
+    private var pendingStudio: StudioViewModel?
+
+    /// Called by the picker sheet once it is fully dismissed.
+    public func pickerDidDismiss() {
+        if let model = pendingStudio {
+            pendingStudio = nil
+            studio = model
+        }
+    }
+
     public func openDraft(id: UUID) async {
         do {
             let document = try await deps.drafts.load(id: id)
@@ -183,6 +219,31 @@ public final class AppModel: ObservableObject {
         studio = model
         deps.analytics.track(.photoImported(source: "camera"))
         Task { await model.load(startingLook: lookID, preset: nil) }
+    }
+
+    /// Opens an image dropped onto the app. Like a camera capture, it is
+    /// added to Photos first, so the Studio edits a photo in the library.
+    public func importDroppedImage(_ data: Data, fileExtension: String) async {
+        guard studio == nil else { return }
+        do {
+            try await deps.photos.save(data, fileExtension: fileExtension)
+        } catch {
+            notice = String(localized: "AURUM needs permission to add photos. You can allow it in Settings.")
+            return
+        }
+        if deps.photos.access() == .notDetermined {
+            _ = await deps.photos.requestAccess()
+        }
+        guard let item = await deps.photos.recentPhotos(limit: 1).first else {
+            notice = String(localized: "Saved to Photos")
+            return
+        }
+        flow = nil
+        let document = EditDocument(source: SourceAsset(localIdentifier: item.id, pixelSize: item.pixelSize))
+        let model = makeStudio(document: document, isNew: true)
+        studio = model
+        deps.analytics.track(.photoImported(source: "drop"))
+        Task { await model.load(startingLook: nil, preset: nil) }
     }
 
     func makeStudio(document: EditDocument, isNew: Bool) -> StudioViewModel {
@@ -240,6 +301,37 @@ public final class AppModel: ObservableObject {
 
     public func closeFlow() {
         flow = nil
+    }
+
+    // MARK: AI Studio, 3D Motion, collage and carousel
+
+    public func openAIStudio() {
+        flow = .aiStudio
+        deps.analytics.track(.toolOpened(tool: "aiStudio"))
+    }
+
+    public func openDepthMotion() {
+        flow = .depthMotion
+        deps.analytics.track(.toolOpened(tool: "depthMotion"))
+    }
+
+    public func openCollage() {
+        flow = .collage
+        deps.analytics.track(.toolOpened(tool: "collage"))
+    }
+
+    public func openCarousel() {
+        flow = .carousel
+        deps.analytics.track(.toolOpened(tool: "carousel"))
+    }
+
+    /// Opens a photo AURUM just made (an AI result) in the Studio, replacing the current flow.
+    public func openGeneratedPhoto(_ item: LibraryPhoto, source: String) {
+        flow = nil
+        let document = EditDocument(source: SourceAsset(localIdentifier: item.id, pixelSize: item.pixelSize))
+        studio = makeStudio(document: document, isNew: false)
+        deps.analytics.track(.photoImported(source: source))
+        if let model = studio { Task { await model.load(startingLook: nil, preset: nil) } }
     }
 
     // MARK: Vault

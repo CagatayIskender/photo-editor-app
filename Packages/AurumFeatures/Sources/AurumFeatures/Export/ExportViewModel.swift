@@ -108,6 +108,7 @@ public final class ExportViewModel: ObservableObject {
                 phase = .shareReady(url)
             }
             deps.analytics.track(.exportCompleted(format: format.rawValue, watermark: options.watermark != nil, seconds: Date().timeIntervalSince(started)))
+            deps.drops.recordCreation()
         } catch PhotoLibraryError.notAuthorized {
             phase = .failed(String(localized: "AURUM needs permission to add photos. You can allow it in Settings."))
         } catch {

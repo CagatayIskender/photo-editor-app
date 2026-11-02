@@ -13,6 +13,7 @@ public enum PremiumItem: Equatable, Hashable, Sendable {
     case retouch
     case effect(kind: String)
     case template(id: String, name: String)
+    case collageLayout(id: String, name: String)
 
     public var displayName: String {
         switch self {
@@ -21,6 +22,7 @@ public enum PremiumItem: Equatable, Hashable, Sendable {
         case .retouch: return "Retouch"
         case .effect(let kind): return AnimatedEffect.Kind(rawValue: kind)?.displayName ?? "Effect"
         case .template(_, let name): return name
+        case .collageLayout(_, let name): return name
         }
     }
 }
@@ -134,6 +136,25 @@ extension ExportGate {
             return VideoExportDecision(premiumItems: [], watermark: false, maxPixelSize: memberVideoMaxPixelSize, maxFrameRate: 60)
         case .free:
             return VideoExportDecision(premiumItems: premiumItems(in: project, catalog: catalog, templates: templates), watermark: true, maxPixelSize: freeVideoMaxPixelSize, maxFrameRate: 30)
+        }
+    }
+}
+
+extension ExportGate {
+    /// Premium items in a collage: currently only a members' layout.
+    public static func premiumItems(in collage: CollageProject) -> [PremiumItem] {
+        collage.layout.tier == .member ? [.collageLayout(id: collage.layout.id, name: collage.layout.name)] : []
+    }
+
+    public static func collageDecision(for collage: CollageProject, entitlement: Entitlement) -> ExportDecision {
+        switch entitlement {
+        case .member:
+            return .allowed(watermark: false, maxPixelSize: nil)
+        case .free:
+            let items = premiumItems(in: collage)
+            return items.isEmpty
+                ? .allowed(watermark: true, maxPixelSize: freeMaxPixelSize)
+                : .requiresMembership(items)
         }
     }
 }

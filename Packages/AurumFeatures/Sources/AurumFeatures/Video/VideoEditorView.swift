@@ -9,25 +9,23 @@ import AurumServices
 /// The video editor: the player on top, a timeline of clips sized by their
 /// length with trim handles and the playhead, then a tool sheet and the
 /// tool rail.
+///
+/// On regular width (iPad) the player and a wider, more detailed timeline
+/// fill the main column and the tool's controls sit in a trailing inspector.
 struct VideoEditorView: View {
     @ObservedObject var model: VideoEditorViewModel
     @ObservedObject var app: AppModel
     let onClose: () -> Void
     @State private var isConfirmingClose = false
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     var body: some View {
-        VStack(spacing: 0) {
-            topBar
-            VideoPlayerArea(model: model)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            transport
-            VideoTimeline(model: model, photos: app.deps.photos)
-                .frame(height: 112)
-            if let tool = model.activeTool {
-                ToolSheet { VideoToolSheet(tool: tool, model: model) }
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+        Group {
+            if horizontalSizeClass == .regular {
+                regularLayout
+            } else {
+                compactLayout
             }
-            toolRail
         }
         .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.activeTool)
         .background(AurumColor.background.ignoresSafeArea())
@@ -43,6 +41,45 @@ struct VideoEditorView: View {
         }
     }
 
+    private var compactLayout: some View {
+        VStack(spacing: 0) {
+            topBar
+            VideoPlayerArea(model: model)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            transport
+            VideoTimeline(model: model, photos: app.deps.photos)
+                .frame(height: 112)
+            if let tool = model.activeTool {
+                ToolSheet { VideoToolSheet(tool: tool, model: model) }
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+            toolRail
+        }
+    }
+
+    private var regularLayout: some View {
+        VStack(spacing: 0) {
+            topBar
+            HStack(spacing: 0) {
+                VStack(spacing: 0) {
+                    VideoPlayerArea(model: model)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    transport
+                    VideoTimeline(model: model, photos: app.deps.photos, pointsPerSecond: VideoTimeline.regularPointsPerSecond, showsFilmstrip: true)
+                        .frame(height: 112)
+                    toolRail
+                }
+                if let tool = model.activeTool, !tool.isAction {
+                    InspectorColumn(title: tool.title) {
+                        VideoToolSheet(tool: tool, model: model)
+                            .padding(.top, Spacing.xs)
+                    }
+                    .transition(.move(edge: .trailing).combined(with: .opacity))
+                }
+            }
+        }
+    }
+
     // MARK: Top bar
 
     private var topBar: some View {
@@ -51,11 +88,14 @@ struct VideoEditorView: View {
                 .accessibilityIdentifier("video.close")
             Spacer()
             IconButton(.undo, label: String(localized: "Undo"), isEnabled: model.canUndo) { model.undo() }
+                .keyboardShortcut("z", modifiers: .command)
             IconButton(.redo, label: String(localized: "Redo"), isEnabled: model.canRedo) { model.redo() }
+                .keyboardShortcut("z", modifiers: [.command, .shift])
             Spacer()
             Button("Export") { model.presentExport() }
                 .buttonStyle(GoldButtonStyle(compact: true))
                 .disabled(model.project.clips.isEmpty)
+                .keyboardShortcut("e", modifiers: .command)
                 .accessibilityIdentifier("video.export")
         }
         .padding(.horizontal, Spacing.s)
@@ -74,6 +114,7 @@ struct VideoEditorView: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .hoverEffect(.highlight)
             .accessibilityLabel(model.isPlaying ? String(localized: "Pause") : String(localized: "Play"))
             .accessibilityIdentifier("video.play")
             Text(verbatim: "\(Self.timecode(model.playhead)) / \(Self.timecode(model.duration))")
@@ -203,15 +244,19 @@ struct PlayerSurface: UIViewRepresentable {
 struct VideoTimeline: View {
     @ObservedObject var model: VideoEditorViewModel
     let photos: PhotoLibraryService
+    /// Timeline scale. iPad uses `regularPointsPerSecond` for a wider, finer timeline.
+    var pointsPerSecond: CGFloat = 48
+    /// Repeats each clip's frame along its length, like a filmstrip (iPad).
+    var showsFilmstrip = false
     @State private var trimBase: (start: Seconds, end: Seconds)?
 
-    static let pointsPerSecond: CGFloat = 48
+    static let regularPointsPerSecond: CGFloat = 72
     static let clipHeight: CGFloat = 56
     static let space = "videoTimeline"
 
     var body: some View {
         let project = model.project
-        let pps = Self.pointsPerSecond
+        let pps = pointsPerSecond
         let total = CGFloat(max(project.duration, 0.5)) * pps
         let seconds = max(1, Int(project.duration.rounded(.up)))
         ScrollViewReader { proxy in
@@ -262,7 +307,7 @@ struct VideoTimeline: View {
                             .fixedSize()
                     }
                 }
-                .frame(width: Self.pointsPerSecond, height: 22, alignment: .topLeading)
+                .frame(width: pointsPerSecond, height: 22, alignment: .topLeading)
                 .id(second)
             }
         }
@@ -271,7 +316,7 @@ struct VideoTimeline: View {
         .contentShape(Rectangle())
         .gesture(
             DragGesture(minimumDistance: 0, coordinateSpace: .named(Self.space))
-                .onChanged { g in model.seek(to: Double(g.location.x / Self.pointsPerSecond)) }
+                .onChanged { g in model.seek(to: Double(g.location.x / pointsPerSecond)) }
                 .onEnded { _ in model.selectClipAtPlayhead() }
         )
         .accessibilityElement()
@@ -290,7 +335,7 @@ struct VideoTimeline: View {
 
     @ViewBuilder
     private func bookends(_ project: VideoProject) -> some View {
-        let pps = Self.pointsPerSecond
+        let pps = pointsPerSecond
         if let intro = project.intro {
             bookendBlock(String(localized: "Intro"))
                 .frame(width: max(CGFloat(intro.duration) * pps - 2, 8), height: Self.clipHeight)
@@ -312,11 +357,11 @@ struct VideoTimeline: View {
     }
 
     private func clips(_ project: VideoProject) -> some View {
-        let pps = Self.pointsPerSecond
+        let pps = pointsPerSecond
         let starts = project.clipStartTimes
         return ForEach(Array(project.clips.enumerated()), id: \.element.id) { index, clip in
             let isSelected = model.selectedClipID == clip.id
-            TimelineClipCell(clip: clip, photos: photos, isSelected: isSelected)
+            TimelineClipCell(clip: clip, photos: photos, isSelected: isSelected, showsFilmstrip: showsFilmstrip)
                 .frame(width: max(CGFloat(clip.duration) * pps - 2, 8), height: Self.clipHeight)
                 .overlay(alignment: .leading) { if isSelected { trimHandle(clip, leading: true) } }
                 .overlay(alignment: .trailing) { if isSelected { trimHandle(clip, leading: false) } }
@@ -357,7 +402,7 @@ struct VideoTimeline: View {
                             model.beginInteraction()
                         }
                         guard let base = trimBase else { return }
-                        let delta = Double(g.translation.width / Self.pointsPerSecond) * clip.speed
+                        let delta = Double(g.translation.width / pointsPerSecond) * clip.speed
                         var start = base.start
                         var end = base.end
                         switch (leading, clip.isReversed) {
@@ -380,7 +425,7 @@ struct VideoTimeline: View {
     // MARK: Layers
 
     private func layerLane(_ project: VideoProject) -> some View {
-        let pps = Self.pointsPerSecond
+        let pps = pointsPerSecond
         return ZStack(alignment: .topLeading) {
             ForEach(project.layers) { layer in
                 let isSelected = model.selectedLayerID == layer.id
@@ -413,6 +458,7 @@ struct TimelineClipCell: View {
     let clip: Clip
     let photos: PhotoLibraryService
     let isSelected: Bool
+    var showsFilmstrip = false
     @State private var image: UIImage?
 
     var body: some View {
@@ -420,7 +466,11 @@ struct TimelineClipCell: View {
             AurumColor.surfaceRaised
                 .overlay {
                     if let image {
-                        Image(uiImage: image).resizable().scaledToFill()
+                        if showsFilmstrip {
+                            Filmstrip(image: image)
+                        } else {
+                            Image(uiImage: image).resizable().scaledToFill()
+                        }
                     }
                 }
                 .clipped()
@@ -462,5 +512,29 @@ struct TimelineClipCell: View {
             guard LibraryMediaSource.fileURL(from: clip.source.localIdentifier) == nil else { return }
             image = await photos.thumbnail(for: clip.source.localIdentifier, side: 80)
         }
+    }
+}
+
+/// A clip's frame repeated in square tiles along its length.
+struct Filmstrip: View {
+    let image: UIImage
+
+    var body: some View {
+        GeometryReader { geo in
+            let side = max(geo.size.height, 1)
+            let count = max(1, Int((geo.size.width / side).rounded(.up)))
+            HStack(spacing: 0) {
+                ForEach(0..<count, id: \.self) { _ in
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: side, height: side)
+                        .clipped()
+                }
+            }
+            .frame(width: geo.size.width, height: geo.size.height, alignment: .leading)
+            .clipped()
+        }
+        .accessibilityHidden(true)
     }
 }

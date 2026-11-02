@@ -1,4 +1,5 @@
 import SwiftUI
+import UniformTypeIdentifiers
 import AurumCore
 import AurumDesign
 
@@ -31,21 +32,19 @@ public struct RootView: View {
 
 struct MainTabsView: View {
     @ObservedObject var app: AppModel
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @State private var isDropTargeted = false
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            Group {
-                switch app.selectedTab {
-                case .salon: SalonView(app: app)
-                case .vault: VaultView(app: app)
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 72) }
-
-            AurumTabBar(selected: $app.selectedTab, onCreate: { app.startCreating() })
+        layout
+        .onDrop(of: ImageDrop.types, isTargeted: $isDropTargeted) { providers in
+            ImageDrop.handle(providers, app: app)
         }
-        .sheet(isPresented: $app.isPickerPresented) {
+        .overlay {
+            if isDropTargeted { DropTargetHighlight().transition(.opacity) }
+        }
+        .animation(Motion.respectingReduceMotion(Motion.velvet), value: isDropTargeted)
+        .sheet(isPresented: $app.isPickerPresented, onDismiss: { app.pickerDidDismiss() }) {
             PickerView(app: app)
         }
         .fullScreenCover(item: Binding(get: { app.cover }, set: { if $0 == nil { app.coverDismissed() } })) { cover in
@@ -64,6 +63,14 @@ struct MainTabsView: View {
                 } onCancel: {
                     app.closeFlow()
                 }
+            case .flow(.aiStudio):
+                AIStudioView(app: app)
+            case .flow(.depthMotion):
+                DepthMotionView(app: app)
+            case .flow(.collage):
+                CollageView(app: app)
+            case .flow(.carousel):
+                CarouselView(app: app)
             }
         }
         .overlay(alignment: .top) {
@@ -72,6 +79,34 @@ struct MainTabsView: View {
                     .padding(.top, Spacing.xs)
             }
         }
+    }
+
+    /// The phone's bottom tab bar on compact width; a leading sidebar on iPad.
+    @ViewBuilder
+    private var layout: some View {
+        if horizontalSizeClass == .regular {
+            HStack(spacing: 0) {
+                AurumSidebar(app: app)
+                tabContent
+            }
+        } else {
+            ZStack(alignment: .bottom) {
+                tabContent
+                    .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 72) }
+
+                AurumTabBar(selected: $app.selectedTab, onCreate: { app.startCreating() })
+            }
+        }
+    }
+
+    private var tabContent: some View {
+        Group {
+            switch app.selectedTab {
+            case .salon: SalonView(app: app)
+            case .vault: VaultView(app: app)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

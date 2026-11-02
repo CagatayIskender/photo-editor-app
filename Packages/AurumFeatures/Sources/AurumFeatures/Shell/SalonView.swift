@@ -8,13 +8,22 @@ import AurumServices
 /// that look queued, so the photo opens already wearing it.
 struct SalonView: View {
     @ObservedObject var app: AppModel
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
+    private var isRegular: Bool { horizontalSizeClass == .regular }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.xl) {
                 header
                 hero
-                createRow
+                if isRegular {
+                    regularCreateGrid
+                } else {
+                    createRow
+                    AtelierCreateRow(app: app)
+                }
+                DropsSection(app: app)
                 if !app.drafts.isEmpty { continueRow }
                 ForEach(orderedCollections) { collection in
                     collectionRow(collection)
@@ -94,6 +103,44 @@ struct SalonView: View {
         }
     }
 
+    /// On iPad every create flow sits in one grid that fills the width.
+    private var regularCreateGrid: some View {
+        VStack(alignment: .leading, spacing: Spacing.s) {
+            Text("Create").aurumText(.headline)
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 168), spacing: Spacing.s)], spacing: Spacing.s) {
+                CreateTile(icon: .layers, title: String(localized: "Video"), subtitle: String(localized: "Clips and photos")) {
+                    app.startVideo()
+                }
+                .accessibilityIdentifier("salon.video")
+                CreateTile(icon: .sparkle, title: String(localized: "Templates"), subtitle: String(localized: "Cut to the beat")) {
+                    app.openTemplates()
+                }
+                .accessibilityIdentifier("salon.templates")
+                CreateTile(icon: .camera, title: String(localized: "Camera"), subtitle: String(localized: "Shoot in a look")) {
+                    app.openCamera()
+                }
+                .accessibilityIdentifier("salon.camera")
+                CreateTile(icon: .ai, title: String(localized: "AI Studio"), subtitle: String(localized: "Enhance, relight, restyle")) {
+                    app.openAIStudio()
+                }
+                .accessibilityIdentifier("salon.aiStudio")
+                CreateTile(icon: .threeD, title: String(localized: "3D Motion"), subtitle: String(localized: "Depth for a still")) {
+                    app.openDepthMotion()
+                }
+                .accessibilityIdentifier("salon.depthMotion")
+                CreateTile(icon: .compare, title: String(localized: "Collage"), subtitle: String(localized: "Photos, composed")) {
+                    app.openCollage()
+                }
+                .accessibilityIdentifier("salon.collage")
+                CreateTile(icon: .crop, title: String(localized: "Carousel"), subtitle: String(localized: "One photo, many panels")) {
+                    app.openCarousel()
+                }
+                .accessibilityIdentifier("salon.carousel")
+            }
+        }
+        .padding(.horizontal, Spacing.m)
+    }
+
     private var continueRow: some View {
         VStack(alignment: .leading, spacing: Spacing.s) {
             Text("Continue").aurumText(.headline).padding(.horizontal, Spacing.m)
@@ -120,20 +167,36 @@ struct SalonView: View {
             .padding(.horizontal, Spacing.m)
             .accessibilityElement(children: .combine)
             .accessibilityAddTraits(.isHeader)
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: Spacing.s) {
+            if isRegular {
+                // On iPad the looks wrap into a grid instead of a long sideways row.
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 76), spacing: Spacing.s)], alignment: .leading, spacing: Spacing.m) {
                     ForEach(app.catalog.looks(in: collection.id)) { look in
-                        Button { app.startCreating(withLook: look.id) } label: {
-                            LookThumbnail(name: look.name, image: nil, swatch: look.swatch.map(Color.init(hex:)), isSelected: false, isPremium: look.tier == .member)
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityHint("Pick a photo to edit with this look")
+                        lookButton(look)
                     }
                 }
                 .padding(.horizontal, Spacing.m)
                 .padding(.vertical, 3)
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: Spacing.s) {
+                        ForEach(app.catalog.looks(in: collection.id)) { look in
+                            lookButton(look)
+                        }
+                    }
+                    .padding(.horizontal, Spacing.m)
+                    .padding(.vertical, 3)
+                }
             }
         }
+    }
+
+    private func lookButton(_ look: LookRecipe) -> some View {
+        Button { app.startCreating(withLook: look.id) } label: {
+            LookThumbnail(name: look.name, image: nil, swatch: look.swatch.map(Color.init(hex:)), isSelected: false, isPremium: look.tier == .member)
+        }
+        .buttonStyle(.plain)
+        .hoverEffect(.lift)
+        .accessibilityHint("Pick a photo to edit with this look")
     }
 }
 
@@ -189,6 +252,8 @@ struct CreateTile: View {
             .contentShape(RoundedRectangle(cornerRadius: Radius.thumbnail))
         }
         .buttonStyle(CreateTileButtonStyle())
+        .contentShape(.hoverEffect, RoundedRectangle(cornerRadius: Radius.thumbnail))
+        .hoverEffect(.lift)
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(.isButton)
     }

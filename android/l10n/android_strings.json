@@ -1,0 +1,55 @@
+{
+  "//": "Android-only wording, merged over App/Localizable.xcstrings by tools/sync_android_assets.py. Keys are the English text used in tr(\"...\").",
+  "Couldn't reach Google Play. Check your connection and try again.": {
+    "en": "Couldn't reach Google Play. Check your connection and try again.",
+    "tr": "Google Play'e ulaşılamadı. Bağlantını kontrol edip tekrar dene."
+  },
+  "No membership was found for this Google account.": {
+    "en": "No membership was found for this Google account.",
+    "tr": "Bu Google hesabı için üyelik bulunamadı."
+  },
+  "Free for %lld days, then %@ per year. Cancel anytime in Google Play.": {
+    "en": "Free for %lld days, then %@ per year. Cancel anytime in Google Play.",
+    "tr": "%lld gün ücretsiz, sonrasında yılda %@. Google Play'den istediğin zaman iptal edebilirsin."
+  },
+  "Free for %lld days, then %@ per week. Cancel anytime in Google Play.": {
+    "en": "Free for %lld days, then %@ per week. Cancel anytime in Google Play.",
+    "tr": "%lld gün ücretsiz, sonrasında haftada %@. Google Play'den istediğin zaman iptal edebilirsin."
+  },
+  "%@ per year. Renews automatically. Cancel anytime in Google Play.": {
+    "en": "%@ per year. Renews automatically. Cancel anytime in Google Play.",
+    "tr": "Yılda %@. Otomatik olarak yenilenir. Google Play'den istediğin zaman iptal edebilirsin."
+  },
+  "%@ per week. Renews automatically. Cancel anytime in Google Play.": {
+    "en": "%@ per week. Renews automatically. Cancel anytime in Google Play.",
+    "tr": "Haftada %@. Otomatik olarak yenilenir. Google Play'den istediğin zaman iptal edebilirsin."
+  },
+  "Coming to Android": {
+    "en": "Coming to Android",
+    "tr": "Yakında Android'de"
+  },
+  "This part of the atelier is still being made for Android. Photo editing is ready now.": {
+    "en": "This part of the atelier is still being made for Android. Photo editing is ready now.",
+    "tr": "Atölyenin bu bölümü Android için hâlâ hazırlanıyor. Fotoğraf düzenleme şimdiden hazır."
+  },
+  "AURUM can see only the photos you pick. Nothing is uploaded.": {
+    "en": "AURUM can see only the photos you pick. Nothing is uploaded.",
+    "tr": "AURUM yalnızca seçtiğin fotoğrafları görebilir. Hiçbir şey yüklenmez."
+  },
+  "AURUM edits on your phone. Photos are never uploaded unless you use an AI tool, and it always asks first. You choose which photos AURUM can see.": {
+    "en": "AURUM edits on your phone. Photos are never uploaded unless you use an AI tool, and it always asks first. You choose which photos AURUM can see.",
+    "tr": "AURUM düzenlemeleri telefonunda yapar. Bir yapay zekâ aracı kullanmadıkça fotoğrafların asla yüklenmez ve bu araç önce her zaman izin ister. AURUM'un hangi fotoğrafları göreceğini sen seçersin."
+  },
+  "Untitled edit": {
+    "en": "Untitled edit",
+    "tr": "Adsız düzenleme"
+  },
+  "Touch and hold to see the original": {
+    "en": "Touch and hold to see the original",
+    "tr": "Orijinali görmek için dokunup basılı tut"
+  },
+  "Swipe left or right on the photo to change the look": {
+    "en": "Swipe left or right on the photo to change the look",
+    "tr": "Görünümü değiştirmek için fotoğrafta sola veya sağa kaydır"
+  }
+}

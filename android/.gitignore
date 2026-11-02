@@ -1,0 +1,14 @@
+# Build outputs and local tooling. Never commit these.
+.gradle/
+build/
+*/build/
+local.properties
+.idea/
+*.iml
+.kotlin/
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+__pycache__/
