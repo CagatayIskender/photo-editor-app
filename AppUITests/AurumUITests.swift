@@ -30,6 +30,8 @@ final class AurumUITests: XCTestCase {
         let cell = app.buttons["picker.cell.0"]
         XCTAssertTrue(cell.waitForExistence(timeout: 3), "No picker cell. Screen:\n\(app.debugDescription)")
         mark("picker shown")
+        // The promise is measured from choosing a photo to having it saved.
+        let importStart = Date()
         cell.tap()
         let export = app.buttons["studio.export"]
         XCTAssertTrue(export.waitForExistence(timeout: 3), "No Studio export button. Screen:\n\(app.debugDescription)")
@@ -42,6 +44,6 @@ final class AurumUITests: XCTestCase {
         save.tap()
         XCTAssertTrue(app.staticTexts["Saved to Photos"].waitForExistence(timeout: 6), "Not saved. Screen:\n\(app.debugDescription)")
         mark("saved")
-        XCTAssertLessThan(Date().timeIntervalSince(start), 10, "Steps: " + timings.joined(separator: "; "))
+        XCTAssertLessThan(Date().timeIntervalSince(importStart), 10, "Steps: " + timings.joined(separator: "; "))
     }
 }
