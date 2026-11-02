@@ -179,7 +179,9 @@ public struct DepthMotionRenderer: @unchecked Sendable {
         let dx = CGFloat(sample.dx * parallax) * rect.width
         let dy = CGFloat(sample.dy * parallax) * rect.height
         // Near layers grow a little faster with zoom, which reads as depth too.
-        let zoom = CGFloat(1 + (sample.zoom - 1) * (1 + max(0, focus - depth)))
+        let nearness: Double = max(0.0, focus - depth)
+        let zoomAmount: Double = (sample.zoom - 1.0) * (1.0 + nearness)
+        let zoom = CGFloat(1.0 + zoomAmount)
         let t = CGAffineTransform(translationX: -rect.midX, y: -rect.midY)
             .concatenating(CGAffineTransform(scaleX: zoom, y: zoom))
             .concatenating(CGAffineTransform(translationX: rect.midX - dx, y: rect.midY + dy))
