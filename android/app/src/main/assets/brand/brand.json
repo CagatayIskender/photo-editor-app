@@ -1,0 +1,33 @@
+{
+  "appName": "AURUM",
+  "membershipName": "AURUM Membership",
+  "watermarkText": "AURUM",
+  "urlScheme": "aurum",
+  "products": {
+    "weekly": "aurum.membership.weekly",
+    "yearly": "aurum.membership.yearly",
+    "credits20": "aurum.credits.20",
+    "credits100": "aurum.credits.100"
+  },
+  "colors": {
+    "onyx": "#0B0B0C",
+    "graphite": "#161618",
+    "graphiteRaised": "#222226",
+    "hairline": "#2E2E33",
+    "ivory": "#F4EFE6",
+    "ivoryDim": "#B9B2A6",
+    "stone": "#8E887E",
+    "champagne": "#C9A86A",
+    "ivoryThemeBackground": "#F4EFE6",
+    "ivoryThemeText": "#1A1918",
+    "ivoryThemeAccent": "#7A5C22"
+  },
+  "fonts": {
+    "display": "PlayfairDisplay-Medium",
+    "displayItalic": "PlayfairDisplay-Italic",
+    "text": "Inter-Regular",
+    "textMedium": "Inter-Medium",
+    "textSemibold": "Inter-SemiBold"
+  },
+  "freeExportMaxPixelSize": 2048
+}

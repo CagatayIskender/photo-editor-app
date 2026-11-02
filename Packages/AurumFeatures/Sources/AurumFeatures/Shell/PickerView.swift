@@ -11,7 +11,15 @@ struct PickerView: View {
     @State private var access: LibraryAccess = .notDetermined
     @State private var isLoading = true
 
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 3)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
+    /// Fixed columns on a phone; on iPad as many as the width allows.
+    private var columns: [GridItem] {
+        if horizontalSizeClass == .regular {
+            return [GridItem(.adaptive(minimum: 128), spacing: 2)]
+        }
+        return Array(repeating: GridItem(.flexible(), spacing: 2), count: 3)
+    }
 
     var body: some View {
         NavigationStack {
@@ -78,9 +86,9 @@ struct PickerView: View {
 
     private func cellLabel(_ item: LibraryPhoto, index: Int) -> String {
         if let date = item.creationDate {
-            return "Photo, \(date.formatted(date: .abbreviated, time: .shortened))"
+            return String(localized: "Photo, \(date.formatted(date: .abbreviated, time: .shortened))")
         }
-        return "Photo \(index + 1)"
+        return String(localized: "Photo \(index + 1)")
     }
 
     private func load() async {

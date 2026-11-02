@@ -12,6 +12,8 @@ import AurumCore
 public actor RenderEngine {
     let context: CIContext
     public private(set) var graph: FilterGraph
+    /// Detected faces per asset, so retouching detects each photo once.
+    public let faceCache = FaceCache()
 
     private let thumbnailCache = NSCache<NSString, CGImage>()
 
@@ -51,9 +53,32 @@ public actor RenderEngine {
 
     /// Renders the document over a proxy. Callers coalesce requests (see
     /// `PreviewScheduler`) so only the latest document is ever rendered.
-    public func renderPreview(_ document: EditDocument, proxy: CIImage, compareOriginal: Bool = false) -> CGImage? {
-        let output = compareOriginal ? graph.apply(Self.cropOnly(document), to: proxy) : graph.apply(document, to: proxy)
+    /// Faces are detected on the proxy; their coordinates are normalised, so
+    /// they match the full-size source at export.
+    public func renderPreview(_ document: EditDocument, proxy: CIImage, compareOriginal: Bool = false) async -> CGImage? {
+        let doc = compareOriginal ? Self.cropOnly(document) : document
+        let active = await faceAwareGraph(for: doc, image: proxy)
+        let output = active.apply(doc, to: proxy)
         return context.createCGImage(output, from: output.extent)
+    }
+
+    /// The current graph, with the photo's faces filled in when the document
+    /// has a retouch to apply. Detection runs once per asset (`faceCache`).
+    func faceAwareGraph(for document: EditDocument, image: CIImage) async -> FilterGraph {
+        guard Self.needsFaces(document) else { return graph }
+        let faces = await faceCache.faces(for: document.source.localIdentifier, image: image)
+        // Read the graph after the await, in case the catalogue changed meanwhile.
+        var withFaces = graph
+        withFaces.faces = faces
+        return withFaces
+    }
+
+    /// True when the document has an enabled, non-neutral retouch operation.
+    static func needsFaces(_ document: EditDocument) -> Bool {
+        document.operations.contains { op in
+            guard op.isEnabled, case .retouch(let settings) = op.kind else { return false }
+            return !settings.isNeutral
+        }
     }
 
     /// The original photo with the crop applied, for hold-to-compare.
@@ -123,8 +148,9 @@ public actor RenderEngine {
     }
 
     /// Renders the full edit, overlays and watermark, and encodes it.
-    public func export(_ document: EditDocument, source: CIImage, options: ExportOptions) throws -> Data {
-        var image = graph.apply(document, to: source)
+    public func export(_ document: EditDocument, source: CIImage, options: ExportOptions) async throws -> Data {
+        let active = await faceAwareGraph(for: document, image: source)
+        var image = active.apply(document, to: source)
         if let max = options.maxPixelSize {
             image = Self.proxy(of: image, maxPixelSize: CGFloat(max))
             image = image.transformed(by: CGAffineTransform(translationX: -image.extent.minX, y: -image.extent.minY))

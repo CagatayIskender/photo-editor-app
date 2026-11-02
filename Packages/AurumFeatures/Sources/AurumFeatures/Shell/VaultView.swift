@@ -12,6 +12,13 @@ struct VaultView: View {
     enum VaultSection: String, CaseIterable {
         case drafts = "Drafts"
         case presets = "Presets"
+
+        var title: String {
+            switch self {
+            case .drafts: return String(localized: "Drafts")
+            case .presets: return String(localized: "Presets")
+            }
+        }
     }
 
     private let columns = [GridItem(.adaptive(minimum: 104), spacing: Spacing.s)]
@@ -31,7 +38,7 @@ struct VaultView: View {
             }
             HStack(spacing: Spacing.xs) {
                 ForEach(VaultSection.allCases, id: \.self) { s in
-                    Chip(s.rawValue, isSelected: section == s) { section = s }
+                    Chip(s.title, isSelected: section == s) { section = s }
                 }
             }
             ScrollView {
@@ -53,7 +60,7 @@ struct VaultView: View {
     @ViewBuilder
     private var drafts: some View {
         if app.drafts.isEmpty {
-            EmptyVaultMessage(title: "No drafts yet", message: "Edits you leave unfinished are kept here.")
+            EmptyVaultMessage(title: String(localized: "No drafts yet"), message: String(localized: "Edits you leave unfinished are kept here."))
         } else {
             LazyVGrid(columns: columns, alignment: .leading, spacing: Spacing.m) {
                 ForEach(app.drafts) { draft in
@@ -75,7 +82,7 @@ struct VaultView: View {
     @ViewBuilder
     private var presets: some View {
         if app.presets.isEmpty {
-            EmptyVaultMessage(title: "No presets yet", message: "Save an edit as a preset in the Studio to reuse it on any photo.")
+            EmptyVaultMessage(title: String(localized: "No presets yet"), message: String(localized: "Save an edit as a preset in the Studio to reuse it on any photo."))
         } else {
             VStack(spacing: 0) {
                 ForEach(app.presets) { preset in
@@ -100,7 +107,7 @@ struct PresetRow: View {
             if case .look(let l) = op.kind { return app.catalog.look(id: l.lookID)?.name }
             return nil
         }
-        return names.isEmpty ? "Adjustments only" : names.joined(separator: " + ")
+        return names.isEmpty ? String(localized: "Adjustments only") : names.joined(separator: " + ")
     }
 
     var body: some View {

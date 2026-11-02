@@ -4,22 +4,26 @@ import AurumCore
 import AurumRender
 import AurumServices
 
-/// The tools on the Studio's rail, in rail order. Phase 1 ships the first
-/// five; the rest appear with a "Soon" state so the rail layout is final.
+/// The tools on the Studio's rail, in rail order.
 public enum StudioTool: String, CaseIterable, Identifiable {
-    case looks, adjust, crop, text, stickers
+    case looks, adjust, retouch, crop, text, stickers
 
     public var id: String { rawValue }
 
     public var title: String {
         switch self {
-        case .looks: return "Looks"
-        case .adjust: return "Adjust"
-        case .crop: return "Crop"
-        case .text: return "Text"
-        case .stickers: return "Stickers"
+        case .looks: return String(localized: "Looks")
+        case .adjust: return String(localized: "Adjust")
+        case .retouch: return String(localized: "Retouch")
+        case .crop: return String(localized: "Crop")
+        case .text: return String(localized: "Text")
+        case .stickers: return String(localized: "Stickers")
         }
     }
+
+    /// Member tools carry a crown on the rail. They can be used freely;
+    /// membership is asked for only at export.
+    public var isPremium: Bool { self == .retouch }
 }
 
 /// All editing state for one photo. Every change goes through `EditHistory`,
@@ -91,7 +95,11 @@ public final class StudioViewModel: ObservableObject, Identifiable {
     /// Separated from `load` so tests can supply an image directly.
     func loaded(proxy: CIImage, startingLook: String?, preset: Preset?) async {
         scheduler.setProxy(proxy)
-        thumbnailProxy = RenderEngine.proxy(of: proxy, maxPixelSize: Self.thumbnailPixelSize)
+        let thumb = RenderEngine.proxy(of: proxy, maxPixelSize: Self.thumbnailPixelSize)
+        // Look thumbnails are only requested once `thumbnailProxy` is set, so it is
+        // published after the suggestion: otherwise a strip of thumbnail renders
+        // queues ahead of the stats in the engine and Export stays disabled.
+        defer { thumbnailProxy = thumb }
         if isNew {
             var doc = document
             if let preset {
@@ -99,7 +107,7 @@ public final class StudioViewModel: ObservableObject, Identifiable {
             } else if let startingLook, catalog.look(id: startingLook) != nil {
                 doc.applyLook(startingLook)
             } else {
-                let stats = await deps.engine.stats(of: thumbnailProxy ?? proxy)
+                let stats = await deps.engine.stats(of: thumb)
                 if let look = LookSuggestion.suggest(for: stats, vibes: deps.preferences.vibes, catalog: catalog) {
                     doc.applyLook(look.id)
                 }
@@ -252,6 +260,38 @@ public final class StudioViewModel: ObservableObject, Identifiable {
         edit { $0.adjustments = AdjustmentSet() }
     }
 
+    // MARK: Retouch
+
+    /// Face retouching, applied to every face ("All faces").
+    public var retouch: RetouchSettings { document.retouch }
+
+    public func retouchValue(_ control: RetouchControl) -> Double {
+        document.retouch.global[control]
+    }
+
+    public func setRetouch(_ control: RetouchControl, _ value: Double) {
+        edit { doc in
+            var settings = doc.retouch
+            settings.global[control] = value
+            doc.retouch = settings
+        }
+    }
+
+    /// Replaces the whole retouch, as one undo step.
+    public func setRetouch(_ settings: RetouchSettings) {
+        edit { $0.retouch = settings }
+    }
+
+    /// The one-tap subtle retouch.
+    public func applyNaturalRetouch() {
+        setRetouch(RetouchSettings(global: .natural))
+        deps.analytics.track(.toolOpened(tool: "retouch.natural"))
+    }
+
+    public func resetRetouch() {
+        setRetouch(RetouchSettings())
+    }
+
     // MARK: Crop
 
     public func setAspect(_ aspect: AspectPreset) {
@@ -290,7 +330,7 @@ public final class StudioViewModel: ObservableObject, Identifiable {
     }
 
     @discardableResult
-    public func addText(_ text: String = "Your words") -> UUID {
+    public func addText(_ text: String = String(localized: "Your words")) -> UUID {
         let overlay = Overlay(content: .text(TextOverlay(text: text)))
         edit { $0.addOverlay(overlay) }
         selectedOverlayID = overlay.id

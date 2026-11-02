@@ -37,9 +37,9 @@ public final class PaywallViewModel: ObservableObject {
         do {
             plans = try await purchases.plans()
             selectedPlanID = plans.first { $0.period.rawValue == config.highlightedPlan }?.id ?? plans.first?.id
-            state = plans.isEmpty ? .failed("Membership isn't available right now.") : .ready
+            state = plans.isEmpty ? .failed(String(localized: "Membership isn't available right now.")) : .ready
         } catch {
-            state = .failed("Couldn't reach the App Store. Check your connection and try again.")
+            state = .failed(String(localized: "Couldn't reach the App Store. Check your connection and try again."))
         }
     }
 
@@ -50,16 +50,20 @@ public final class PaywallViewModel: ObservableObject {
     /// Exactly what tapping the button will do, shown under it.
     public var termsLine: String {
         guard let plan = selectedPlan else { return "" }
-        let period = plan.period == .yearly ? "year" : "week"
+        let isYearly = plan.period == .yearly
         if let days = plan.trialDays, days > 0 {
-            return "Free for \(days) days, then \(plan.displayPrice) per \(period). Cancel anytime in Settings."
+            return isYearly
+                ? String(localized: "Free for \(days) days, then \(plan.displayPrice) per year. Cancel anytime in Settings.")
+                : String(localized: "Free for \(days) days, then \(plan.displayPrice) per week. Cancel anytime in Settings.")
         }
-        return "\(plan.displayPrice) per \(period). Renews automatically. Cancel anytime in Settings."
+        return isYearly
+            ? String(localized: "\(plan.displayPrice) per year. Renews automatically. Cancel anytime in Settings.")
+            : String(localized: "\(plan.displayPrice) per week. Renews automatically. Cancel anytime in Settings.")
     }
 
     public var buttonTitle: String {
-        if let days = selectedPlan?.trialDays, days > 0 { return "Start \(days)-day free trial" }
-        return "Join"
+        if let days = selectedPlan?.trialDays, days > 0 { return String(localized: "Start \(days)-day free trial") }
+        return String(localized: "Join")
     }
 
     public func purchase() async {
@@ -76,7 +80,7 @@ public final class PaywallViewModel: ObservableObject {
                 state = .ready
             }
         } catch {
-            state = .failed("The purchase didn't go through. You haven't been charged.")
+            state = .failed(String(localized: "The purchase didn't go through. You haven't been charged."))
         }
     }
 
@@ -84,9 +88,9 @@ public final class PaywallViewModel: ObservableObject {
         state = .purchasing
         do {
             try await purchases.restore()
-            state = purchases.entitlement == .member ? .purchased : .failed("No membership was found for this Apple ID.")
+            state = purchases.entitlement == .member ? .purchased : .failed(String(localized: "No membership was found for this Apple ID."))
         } catch {
-            state = .failed("Couldn't restore purchases. Please try again.")
+            state = .failed(String(localized: "Couldn't restore purchases. Please try again."))
         }
     }
 }

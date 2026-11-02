@@ -1,9 +1,17 @@
 # Fonts
 
-Drop the licensed font files here (all SIL Open Font License):
+All fonts are under the SIL Open Font License 1.1 (see `licenses/`). The files
+are the unmodified static instances served by Google Fonts, so their names
+(including the reserved names "Playfair Display" and "Italiana") are used as the
+licence allows.
 
-- PlayfairDisplay-Medium.ttf, PlayfairDisplay-Italic.ttf
-- Inter-Regular.ttf, Inter-Medium.ttf, Inter-SemiBold.ttf
-- Overlay fonts: CormorantGaramond-MediumItalic.ttf, Italiana-Regular.ttf, BodoniModa-Medium.ttf
+| File | Used for |
+|---|---|
+| PlayfairDisplay-Medium.ttf, PlayfairDisplay-Italic.ttf | Display and editorial headings, text overlays |
+| Inter-Regular/Medium/SemiBold.ttf | UI text |
+| CormorantGaramond-MediumItalic.ttf | Text overlays |
+| Italiana-Regular.ttf | Text overlays |
+| BodoniModa-Medium.ttf | Text overlays |
 
-Until they are added the app falls back to the system serif and sans fonts.
+To add a font: drop the .ttf here, add it to `UIAppFonts` in `project.yml`, and
+add an `OverlayFont` entry in `AurumCore/OverlayAssets.swift` using its PostScript name.

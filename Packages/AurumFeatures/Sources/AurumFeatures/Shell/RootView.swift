@@ -1,4 +1,5 @@
 import SwiftUI
+import UniformTypeIdentifiers
 import AurumCore
 import AurumDesign
 
@@ -31,25 +32,46 @@ public struct RootView: View {
 
 struct MainTabsView: View {
     @ObservedObject var app: AppModel
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @State private var isDropTargeted = false
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            Group {
-                switch app.selectedTab {
-                case .salon: SalonView(app: app)
-                case .vault: VaultView(app: app)
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 72) }
-
-            AurumTabBar(selected: $app.selectedTab, onCreate: { app.startCreating() })
+        layout
+        .onDrop(of: ImageDrop.types, isTargeted: $isDropTargeted) { providers in
+            ImageDrop.handle(providers, app: app)
         }
-        .sheet(isPresented: $app.isPickerPresented) {
+        .overlay {
+            if isDropTargeted { DropTargetHighlight().transition(.opacity) }
+        }
+        .animation(Motion.respectingReduceMotion(Motion.velvet), value: isDropTargeted)
+        .sheet(isPresented: $app.isPickerPresented, onDismiss: { app.pickerDidDismiss() }) {
             PickerView(app: app)
         }
-        .fullScreenCover(item: $app.studio) { model in
-            StudioView(model: model, onClose: { app.closeStudio() }, app: app)
+        .fullScreenCover(item: Binding(get: { app.cover }, set: { if $0 == nil { app.coverDismissed() } })) { cover in
+            switch cover {
+            case .studio(let model):
+                StudioView(model: model, onClose: { app.closeStudio() }, app: app)
+            case .flow(.video(let model)):
+                VideoEditorView(model: model, app: app, onClose: { app.closeVideoEditor() })
+            case .flow(.templates):
+                TemplatesView(app: app)
+            case .flow(.camera):
+                CameraView(app: app)
+            case .flow(.mediaPicker):
+                MediaPickerView(app: app, required: nil, title: String(localized: "Choose photos and clips")) { picked in
+                    app.openVideo(MediaPickerView.project(from: picked), source: "picker")
+                } onCancel: {
+                    app.closeFlow()
+                }
+            case .flow(.aiStudio):
+                AIStudioView(app: app)
+            case .flow(.depthMotion):
+                DepthMotionView(app: app)
+            case .flow(.collage):
+                CollageView(app: app)
+            case .flow(.carousel):
+                CarouselView(app: app)
+            }
         }
         .overlay(alignment: .top) {
             if let notice = app.notice {
@@ -57,6 +79,34 @@ struct MainTabsView: View {
                     .padding(.top, Spacing.xs)
             }
         }
+    }
+
+    /// The phone's bottom tab bar on compact width; a leading sidebar on iPad.
+    @ViewBuilder
+    private var layout: some View {
+        if horizontalSizeClass == .regular {
+            HStack(spacing: 0) {
+                AurumSidebar(app: app)
+                tabContent
+            }
+        } else {
+            ZStack(alignment: .bottom) {
+                tabContent
+                    .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 72) }
+
+                AurumTabBar(selected: $app.selectedTab, onCreate: { app.startCreating() })
+            }
+        }
+    }
+
+    private var tabContent: some View {
+        Group {
+            switch app.selectedTab {
+            case .salon: SalonView(app: app)
+            case .vault: VaultView(app: app)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
@@ -67,7 +117,7 @@ struct AurumTabBar: View {
 
     var body: some View {
         HStack {
-            tab(.salon, icon: .salon, title: "Salon")
+            tab(.salon, icon: .salon, id: "salon", title: String(localized: "Salon"))
             Spacer()
             Button(action: onCreate) {
                 IconView(.plus, size: 26, lineWidth: 1.6)
@@ -81,7 +131,7 @@ struct AurumTabBar: View {
             .accessibilityHint("Pick a photo to edit")
             .accessibilityIdentifier("tab.create")
             Spacer()
-            tab(.vault, icon: .vault, title: "Vault")
+            tab(.vault, icon: .vault, id: "vault", title: String(localized: "Vault"))
         }
         .padding(.horizontal, Spacing.xxl)
         .padding(.top, Spacing.xs)
@@ -92,7 +142,7 @@ struct AurumTabBar: View {
         )
     }
 
-    private func tab(_ tab: AppTab, icon: AurumIcon, title: String) -> some View {
+    private func tab(_ tab: AppTab, icon: AurumIcon, id: String, title: String) -> some View {
         let isSelected = selected == tab
         return Button {
             selected = tab
@@ -107,7 +157,7 @@ struct AurumTabBar: View {
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])
-        .accessibilityIdentifier("tab.\(title.lowercased())")
+        .accessibilityIdentifier("tab.\(id)")
     }
 }
 

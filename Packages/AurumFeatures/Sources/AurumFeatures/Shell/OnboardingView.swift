@@ -132,6 +132,14 @@ struct OnboardingView: View {
         .accessibilityLabel("Page \(page + 1) of 3")
     }
 
+    private var primaryTitle: String {
+        switch page {
+        case 0: return String(localized: "Begin")
+        case 1: return vibes.isEmpty ? String(localized: "Skip for now") : String(localized: "Continue")
+        default: return String(localized: "Allow photo access")
+        }
+    }
+
     private var primaryButton: some View {
         Button {
             switch page {
@@ -144,7 +152,7 @@ struct OnboardingView: View {
                 }
             }
         } label: {
-            Text(page == 0 ? "Begin" : page == 1 ? (vibes.isEmpty ? "Skip for now" : "Continue") : "Allow photo access")
+            Text(primaryTitle)
         }
         .buttonStyle(GoldButtonStyle())
         .accessibilityIdentifier("onboarding.primary")

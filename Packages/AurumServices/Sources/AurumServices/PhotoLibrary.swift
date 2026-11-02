@@ -1,3 +1,4 @@
+import AVFoundation
 import CoreImage
 import Photos
 import UIKit
@@ -17,6 +18,21 @@ public struct LibraryPhoto: Identifiable, Hashable, Sendable {
     }
 }
 
+/// A video the user can pick.
+public struct LibraryVideo: Identifiable, Hashable, Sendable {
+    public let id: String
+    public let pixelSize: PixelSize
+    public let duration: Double
+    public let creationDate: Date?
+
+    public init(id: String, pixelSize: PixelSize, duration: Double, creationDate: Date?) {
+        self.id = id
+        self.pixelSize = pixelSize
+        self.duration = duration
+        self.creationDate = creationDate
+    }
+}
+
 public enum LibraryAccess: Sendable {
     case notDetermined, full, limited, denied
 }
@@ -32,6 +48,18 @@ public protocol PhotoLibraryService: Sendable {
     func image(for id: String, maxPixelSize: CGFloat?) async throws -> CIImage
     /// Saves encoded image data as a new photo.
     func save(_ data: Data, fileExtension: String) async throws
+    /// Most recent videos first.
+    func recentVideos(limit: Int) async -> [LibraryVideo]
+    /// The video for a library identifier, downloading from iCloud if needed.
+    func videoAsset(for id: String) async throws -> AVAsset
+    /// Saves a movie file as a new video in the library.
+    func saveVideo(at url: URL) async throws
+}
+
+extension PhotoLibraryService {
+    public func recentVideos(limit: Int) async -> [LibraryVideo] { [] }
+    public func videoAsset(for id: String) async throws -> AVAsset { throw PhotoLibraryError.notFound }
+    public func saveVideo(at url: URL) async throws { throw PhotoLibraryError.notFound }
 }
 
 public enum PhotoLibraryError: Error {
@@ -120,6 +148,39 @@ public final class LivePhotoLibrary: PhotoLibraryService, @unchecked Sendable {
         guard longest > maxPixelSize else { return upright }
         let scale = maxPixelSize / longest
         return upright.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
+    }
+
+    public func recentVideos(limit: Int) async -> [LibraryVideo] {
+        let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        options.fetchLimit = limit
+        let result = PHAsset.fetchAssets(with: .video, options: options)
+        var items: [LibraryVideo] = []
+        result.enumerateObjects { asset, _, _ in
+            items.append(LibraryVideo(id: asset.localIdentifier, pixelSize: PixelSize(width: asset.pixelWidth, height: asset.pixelHeight), duration: asset.duration, creationDate: asset.creationDate))
+        }
+        return items
+    }
+
+    public func videoAsset(for id: String) async throws -> AVAsset {
+        guard let asset = asset(id) else { throw PhotoLibraryError.notFound }
+        let options = PHVideoRequestOptions()
+        options.isNetworkAccessAllowed = true
+        options.deliveryMode = .highQualityFormat
+        options.version = .current
+        return try await withCheckedThrowingContinuation { continuation in
+            PHImageManager.default().requestAVAsset(forVideo: asset, options: options) { avAsset, _, _ in
+                if let avAsset { continuation.resume(returning: avAsset) } else { continuation.resume(throwing: PhotoLibraryError.loadFailed) }
+            }
+        }
+    }
+
+    public func saveVideo(at url: URL) async throws {
+        let status = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
+        guard status == .authorized || status == .limited else { throw PhotoLibraryError.notAuthorized }
+        try await PHPhotoLibrary.shared().performChanges {
+            PHAssetCreationRequest.forAsset().addResource(with: .video, fileURL: url, options: nil)
+        }
     }
 
     public func save(_ data: Data, fileExtension: String) async throws {

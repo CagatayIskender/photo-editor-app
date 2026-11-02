@@ -22,15 +22,15 @@ struct PaywallView: View {
             HStack {
                 CrownBadge(size: 28)
                 Spacer()
-                IconButton(.close, label: "Close", action: onClose)
+                IconButton(.close, label: String(localized: "Close"), action: onClose)
                     .accessibilityIdentifier("paywall.close")
             }
-            Text(model.config.paywallHeadline).aurumText(.display)
+            Text(Localized.dynamic(model.config.paywallHeadline)).aurumText(.display)
             VStack(alignment: .leading, spacing: Spacing.s) {
                 ForEach(model.config.paywallBenefits, id: \.self) { benefit in
                     HStack(alignment: .firstTextBaseline, spacing: Spacing.s) {
                         IconView(.check, size: 16).foregroundColor(AurumColor.accent)
-                        Text(benefit).aurumText(.body)
+                        Text(Localized.dynamic(benefit)).aurumText(.body)
                     }
                 }
             }
@@ -39,6 +39,7 @@ struct PaywallView: View {
             purchaseArea
         }
         .padding(Spacing.l)
+        .formSheetWidth()
         .background(AurumColor.background.ignoresSafeArea())
         .preferredColorScheme(.dark)
         .task { await model.load() }
@@ -70,14 +71,14 @@ struct PaywallView: View {
         return Button { model.selectedPlanID = plan.id } label: {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(plan.period == .yearly ? "Yearly" : "Weekly").aurumText(.headline)
+                    Text(plan.period == .yearly ? String(localized: "Yearly") : String(localized: "Weekly")).aurumText(.headline)
                     if let days = plan.trialDays, days > 0 {
                         Text("\(days)-day free trial").aurumText(.caption, color: AurumColor.accent)
                     }
                 }
                 Spacer()
                 VStack(alignment: .trailing, spacing: 2) {
-                    Text(plan.displayPrice + (plan.period == .yearly ? " / year" : " / week")).aurumText(.headline)
+                    Text(plan.period == .yearly ? String(localized: "\(plan.displayPrice) / year") : String(localized: "\(plan.displayPrice) / week")).aurumText(.headline)
                     if plan.period == .yearly, let perWeek = plan.pricePerWeek {
                         Text("\(perWeek) a week").aurumText(.caption, color: AurumColor.textTertiary)
                     }

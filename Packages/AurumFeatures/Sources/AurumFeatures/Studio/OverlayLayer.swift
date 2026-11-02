@@ -73,10 +73,11 @@ struct OverlayItemView: View {
 
     private var accessibilityName: String {
         switch overlay.content {
-        case .text(let text): return "Text: \(text.text)"
+        case .text(let text): return String(localized: "Text: \(text.text)")
         case .sticker(let sticker):
-            let name = StickerDefinition.starterSet.first { $0.id == sticker.stickerID }?.name ?? "Sticker"
-            return "Sticker: \(name)"
+            let name = StickerDefinition.starterSet.first { $0.id == sticker.stickerID }?.name
+            let localizedName = name.map(Localized.dynamic) ?? String(localized: "Sticker")
+            return String(localized: "Sticker: \(localizedName)")
         }
     }
 

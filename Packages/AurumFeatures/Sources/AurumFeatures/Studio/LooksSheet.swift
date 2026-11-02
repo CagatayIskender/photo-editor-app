@@ -38,7 +38,7 @@ struct LooksSheet: View {
             TextField("Name", text: $presetName)
             Button("Cancel", role: .cancel) {}
             Button("Save") {
-                Task { savedPreset = await model.saveAsPreset(named: presetName.isEmpty ? "My preset" : presetName) }
+                Task { savedPreset = await model.saveAsPreset(named: presetName.isEmpty ? String(localized: "My preset") : presetName) }
             }
         } message: {
             Text("Saves this edit's looks and adjustments so you can use them on any photo.")
@@ -58,7 +58,7 @@ struct LooksSheet: View {
                     .frame(width: Size.touch, height: 36)
             }
             .buttonStyle(.plain)
-            .accessibilityLabel(isSearching ? "Close search" : "Search looks")
+            .accessibilityLabel(isSearching ? String(localized: "Close search") : String(localized: "Search looks"))
 
             if isSearching {
                 TextField("Warm, film, noir…", text: $model.lookQuery)
@@ -74,7 +74,7 @@ struct LooksSheet: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: Spacing.xs) {
                         if !model.favouriteLookIDs.isEmpty {
-                            Chip("Saved", isSelected: model.selectedCollectionID == StudioViewModel.favouritesID) {
+                            Chip(String(localized: "Saved"), isSelected: model.selectedCollectionID == StudioViewModel.favouritesID) {
                                 model.selectedCollectionID = StudioViewModel.favouritesID
                             }
                         }
@@ -110,10 +110,10 @@ struct LooksSheet: View {
                         .onAppear { model.requestThumbnail(for: look.id) }
                         .contextMenu {
                             Button { model.toggleFavourite(look.id) } label: {
-                                Label(model.favouriteLookIDs.contains(look.id) ? "Remove from Saved" : "Save look", systemImage: "bookmark")
+                                Label(model.favouriteLookIDs.contains(look.id) ? String(localized: "Remove from Saved") : String(localized: "Save look"), systemImage: "bookmark")
                             }
                         }
-                        .accessibilityAction(named: model.favouriteLookIDs.contains(look.id) ? "Remove from Saved" : "Save look") {
+                        .accessibilityAction(named: model.favouriteLookIDs.contains(look.id) ? String(localized: "Remove from Saved") : String(localized: "Save look")) {
                             model.toggleFavourite(look.id)
                         }
                     }
@@ -136,10 +136,10 @@ struct LooksSheet: View {
             AurumSlider(
                 value: model.binding({ model.activeLook?.intensity ?? 0 }, { model.setLookIntensity($0) }),
                 in: 0...1,
-                label: "Intensity",
+                label: String(localized: "Intensity"),
                 onEditingChanged: model.sliderEditing
             )
-            Button(showsRefine ? "Done" : "Refine") { showsRefine.toggle() }
+            Button(showsRefine ? String(localized: "Done") : String(localized: "Refine")) { showsRefine.toggle() }
                 .buttonStyle(TextActionButtonStyle())
             Menu {
                 Button("Save as preset") {
@@ -159,10 +159,10 @@ struct LooksSheet: View {
 
     private func refine(_ look: LookApplication) -> some View {
         VStack(spacing: Spacing.xs) {
-            refineSlider("Grain", \.grain, base: model.activeLookRecipe?.params.grain ?? 0, look: look)
-            refineSlider("Fade", \.fade, base: model.activeLookRecipe?.params.fade ?? 0, look: look)
-            refineSlider("Vignette", \.vignette, base: model.activeLookRecipe?.params.vignette ?? 0, look: look)
-            refineSlider("Light leak", \.lightLeak, base: model.activeLookRecipe?.params.lightLeak ?? 0, look: look)
+            refineSlider(String(localized: "Grain"), \.grain, base: model.activeLookRecipe?.params.grain ?? 0, look: look)
+            refineSlider(String(localized: "Fade"), \.fade, base: model.activeLookRecipe?.params.fade ?? 0, look: look)
+            refineSlider(String(localized: "Vignette"), \.vignette, base: model.activeLookRecipe?.params.vignette ?? 0, look: look)
+            refineSlider(String(localized: "Light leak"), \.lightLeak, base: model.activeLookRecipe?.params.lightLeak ?? 0, look: look)
         }
         .padding(.horizontal, Spacing.m)
     }

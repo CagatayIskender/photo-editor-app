@@ -46,7 +46,7 @@ struct TextSheet: View {
             .padding(.horizontal, Spacing.s)
             .padding(.vertical, Spacing.xs)
             .background(RoundedRectangle(cornerRadius: Radius.chip).fill(AurumColor.surfaceRaised))
-            IconButton(.close, label: "Delete text") { model.removeSelectedOverlay() }
+            IconButton(.close, label: String(localized: "Delete text")) { model.removeSelectedOverlay() }
         }
         .padding(.horizontal, Spacing.m)
 
@@ -94,12 +94,12 @@ struct TextSheet: View {
 
     static func name(of style: TextStyle) -> String {
         switch style {
-        case .plain: return "Plain"
-        case .outline: return "Outline"
-        case .shadow: return "Shadow"
-        case .glow: return "Glow"
-        case .gradient: return "Gilded"
-        case .box: return "Label"
+        case .plain: return String(localized: "Plain")
+        case .outline: return String(localized: "Outline")
+        case .shadow: return String(localized: "Shadow")
+        case .glow: return String(localized: "Glow")
+        case .gradient: return String(localized: "Gilded")
+        case .box: return String(localized: "Label")
         }
     }
 }

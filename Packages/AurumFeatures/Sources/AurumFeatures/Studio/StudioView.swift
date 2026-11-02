@@ -9,12 +9,33 @@ import AurumRender
 /// - press and hold shows the original;
 /// - swipe left or right moves to the next or previous look;
 /// - tap an overlay to select it, then drag, pinch and rotate it.
+///
+/// On regular width (iPad) the tool rail runs down the leading edge, the
+/// photo takes the centre and the active tool's controls sit in a trailing
+/// inspector. A hardware keyboard adds ⌘Z, ⇧⌘Z, ⌘E and the arrow keys.
 struct StudioView: View {
     @ObservedObject var model: StudioViewModel
     let onClose: () -> Void
     @ObservedObject var app: AppModel
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     var body: some View {
+        Group {
+            if horizontalSizeClass == .regular {
+                regularLayout
+            } else {
+                compactLayout
+            }
+        }
+        .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.activeTool)
+        .background(AurumColor.background.ignoresSafeArea())
+        .preferredColorScheme(.dark)
+        .sheet(isPresented: $model.isExportPresented) {
+            ExportSheet(model: model.makeExportModel(), app: app)
+        }
+    }
+
+    private var compactLayout: some View {
         VStack(spacing: 0) {
             topBar
             StudioCanvas(model: model, scheduler: model.scheduler)
@@ -25,11 +46,41 @@ struct StudioView: View {
             }
             toolRail
         }
-        .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.activeTool)
-        .background(AurumColor.background.ignoresSafeArea())
-        .preferredColorScheme(.dark)
-        .sheet(isPresented: $model.isExportPresented) {
-            ExportSheet(model: model.makeExportModel(), app: app)
+    }
+
+    private var regularLayout: some View {
+        VStack(spacing: 0) {
+            topBar
+            HStack(spacing: 0) {
+                verticalToolRail
+                ColumnHairline()
+                StudioCanvas(model: model, scheduler: model.scheduler)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                if let tool = model.activeTool {
+                    InspectorColumn(title: tool.title) {
+                        toolContent(tool)
+                    }
+                    .transition(.move(edge: .trailing).combined(with: .opacity))
+                }
+            }
+        }
+        .background { lookKeyCommands }
+    }
+
+    /// Arrow keys move through the looks, as a swipe on the photo does. Left
+    /// out while editing text, so the arrows still move the text cursor.
+    @ViewBuilder
+    private var lookKeyCommands: some View {
+        if model.activeTool != .text {
+            ZStack {
+                Button("Previous look") { model.cycleLook(by: -1) }
+                    .keyboardShortcut(.leftArrow, modifiers: [])
+                Button("Next look") { model.cycleLook(by: 1) }
+                    .keyboardShortcut(.rightArrow, modifiers: [])
+            }
+            .frame(width: 0, height: 0)
+            .opacity(0)
+            .accessibilityHidden(true)
         }
     }
 
@@ -37,7 +88,7 @@ struct StudioView: View {
 
     private var topBar: some View {
         HStack(spacing: Spacing.xs) {
-            IconButton(.close, label: "Close") {
+            IconButton(.close, label: String(localized: "Close")) {
                 Task {
                     await model.saveDraft()
                     onClose()
@@ -45,14 +96,17 @@ struct StudioView: View {
             }
             .accessibilityIdentifier("studio.close")
             Spacer()
-            IconButton(.undo, label: "Undo", isEnabled: model.canUndo) { model.undo() }
-            IconButton(.redo, label: "Redo", isEnabled: model.canRedo) { model.redo() }
+            IconButton(.undo, label: String(localized: "Undo"), isEnabled: model.canUndo) { model.undo() }
+                .keyboardShortcut("z", modifiers: .command)
+            IconButton(.redo, label: String(localized: "Redo"), isEnabled: model.canRedo) { model.redo() }
+                .keyboardShortcut("z", modifiers: [.command, .shift])
             Spacer()
             Button("Export") {
                 model.isExportPresented = true
             }
             .buttonStyle(GoldButtonStyle(compact: true))
             .disabled(model.isLoading)
+            .keyboardShortcut("e", modifiers: .command)
             .accessibilityIdentifier("studio.export")
         }
         .padding(.horizontal, Spacing.s)
@@ -61,38 +115,77 @@ struct StudioView: View {
 
     // MARK: Tools
 
-    @ViewBuilder
     private func toolSheet(_ tool: StudioTool) -> some View {
         ToolSheet {
-            switch tool {
-            case .looks: LooksSheet(model: model)
-            case .adjust: AdjustSheet(model: model)
-            case .crop: CropSheet(model: model)
-            case .text: TextSheet(model: model)
-            case .stickers: StickersSheet(model: model, entitlement: app.entitlement)
-            }
+            toolContent(tool)
         }
     }
 
-    private var toolRail: some View {
-        HStack(spacing: 0) {
-            ForEach(StudioTool.allCases) { tool in
-                ToolRailItem(icon: Self.icon(for: tool), title: tool.title, isActive: model.activeTool == tool) {
-                    model.toolOpened(tool)
-                    Haptics.detent()
+    @ViewBuilder
+    private func toolContent(_ tool: StudioTool) -> some View {
+        switch tool {
+        case .looks: LooksSheet(model: model)
+        case .adjust: AdjustSheet(model: model)
+        case .retouch: RetouchSheet(model: model)
+        case .crop: CropSheet(model: model)
+        case .text: TextSheet(model: model)
+        case .stickers: StickersSheet(model: model, entitlement: app.entitlement)
+        }
+    }
+
+    /// The tool rail down the leading edge, on iPad.
+    private var verticalToolRail: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(spacing: Spacing.xs) {
+                ForEach(StudioTool.allCases) { tool in
+                    railItem(tool)
                 }
-                .frame(maxWidth: .infinity)
-                .accessibilityIdentifier("tool.\(tool.rawValue)")
+            }
+            .padding(.vertical, Spacing.s)
+            .padding(.horizontal, Spacing.xxs)
+        }
+        .frame(width: 76)
+        .background(AurumColor.background)
+    }
+
+    private var toolRail: some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 0) {
+                ForEach(StudioTool.allCases) { tool in
+                    railItem(tool).frame(maxWidth: .infinity)
+                }
+            }
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 0) {
+                    ForEach(StudioTool.allCases) { tool in
+                        railItem(tool)
+                    }
+                }
+                .padding(.horizontal, Spacing.xs)
             }
         }
         .frame(height: 68)
         .background(AurumColor.background)
     }
 
+    private func railItem(_ tool: StudioTool) -> some View {
+        ToolRailItem(icon: Self.icon(for: tool), title: tool.title, isActive: model.activeTool == tool) {
+            model.toolOpened(tool)
+            Haptics.detent()
+        }
+        .overlay(alignment: .topTrailing) {
+            if tool.isPremium {
+                CrownBadge(size: 14).offset(x: -10, y: 2).allowsHitTesting(false)
+            }
+        }
+        .accessibilityIdentifier("tool.\(tool.rawValue)")
+    }
+
     static func icon(for tool: StudioTool) -> AurumIcon {
         switch tool {
         case .looks: return .looks
         case .adjust: return .adjust
+        case .retouch: return .retouch
         case .crop: return .crop
         case .text: return .text
         case .stickers: return .stickers
@@ -161,9 +254,9 @@ struct StudioCanvas: View {
 
     private var imageLabel: String {
         if let look = model.activeLookRecipe {
-            return "Your photo, with the \(look.name) look"
+            return String(localized: "Your photo, with the \(look.name) look")
         }
-        return "Your photo"
+        return String(localized: "Your photo")
     }
 
     /// The largest rect with the image's aspect ratio that fits in `container`.

@@ -11,7 +11,7 @@ struct AdjustSheet: View {
     var body: some View {
         VStack(spacing: Spacing.s) {
             HStack {
-                Text(control.displayName).aurumText(.headline)
+                Text(control.localizedName).aurumText(.headline)
                 Spacer()
                 Text(Self.format(model.adjustment(control), control: control))
                     .aurumText(.caption, color: AurumColor.textSecondary)
@@ -26,7 +26,7 @@ struct AdjustSheet: View {
                 value: model.binding({ model.adjustment(control) }, { model.setAdjustment(control, $0) }),
                 in: control.range,
                 detentStep: control.isBipolar ? 0.1 : 0.1,
-                label: control.displayName,
+                label: control.localizedName,
                 onEditingChanged: model.sliderEditing
             )
             .padding(.horizontal, Spacing.m)
@@ -34,14 +34,14 @@ struct AdjustSheet: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Spacing.xs) {
                     ForEach(AdjustmentSet.sliderControls, id: \.self) { c in
-                        Chip(c.displayName, isSelected: c == control) { control = c }
+                        Chip(c.localizedName, isSelected: c == control) { control = c }
                             .overlay(alignment: .topTrailing) {
                                 if model.adjustment(c) != 0 {
                                     Circle().fill(AurumColor.accent).frame(width: 5, height: 5).offset(x: -4, y: 4)
                                         .accessibilityHidden(true)
                                 }
                             }
-                            .accessibilityValue(model.adjustment(c) != 0 ? "Changed" : "")
+                            .accessibilityValue(model.adjustment(c) != 0 ? String(localized: "Changed") : "")
                     }
                 }
                 .padding(.horizontal, Spacing.m)

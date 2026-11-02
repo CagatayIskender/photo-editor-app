@@ -27,7 +27,11 @@ targets:
     platform: iOS
     sources:
       - path: App
+        excludes:
+          - "**/*.md"
       - path: Looks/catalog.json
+        buildPhase: resources
+      - path: Content
         buildPhase: resources
       - path: Brand/brand.json
         buildPhase: resources
@@ -41,27 +45,38 @@ targets:
       path: App/Info.plist
       properties:
         CFBundleDisplayName: AURUM
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en, tr]
         UILaunchScreen:
           UIColorName: LaunchBackground
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIRequiresFullScreen: false
         UIUserInterfaceStyle: Dark
-        NSPhotoLibraryUsageDescription: "AURUM opens your photos so you can edit them. Edits stay on your iPhone."
+        NSPhotoLibraryUsageDescription: "AURUM opens your photos so you can edit them. Edits stay on your device."
         NSPhotoLibraryAddUsageDescription: "AURUM saves your finished photos to your library."
+        NSCameraUsageDescription: "AURUM uses the camera so you can shoot photos and videos with a look applied live."
+        NSMicrophoneUsageDescription: "AURUM records sound with your videos."
         UIAppFonts:
-          - Fonts/PlayfairDisplay-Medium.ttf
-          - Fonts/PlayfairDisplay-Italic.ttf
-          - Fonts/Inter-Regular.ttf
-          - Fonts/Inter-Medium.ttf
-          - Fonts/Inter-SemiBold.ttf
-          - Fonts/CormorantGaramond-MediumItalic.ttf
-          - Fonts/Italiana-Regular.ttf
-          - Fonts/BodoniModa-Medium.ttf
+          - PlayfairDisplay-Medium.ttf
+          - PlayfairDisplay-Italic.ttf
+          - Inter-Regular.ttf
+          - Inter-Medium.ttf
+          - Inter-SemiBold.ttf
+          - CormorantGaramond-MediumItalic.ttf
+          - Italiana-Regular.ttf
+          - BodoniModa-Medium.ttf
         CFBundleURLTypes:
           - CFBundleURLSchemes: [aurum]
         LSApplicationQueriesSchemes: [instagram-stories]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: app.aurum.ios
+        TARGETED_DEVICE_FAMILY: "1,2"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
   AurumUITests:
     type: bundle.ui-testing

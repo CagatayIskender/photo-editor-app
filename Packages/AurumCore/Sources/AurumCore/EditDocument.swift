@@ -31,6 +31,8 @@ public struct EditOperation: Codable, Equatable, Identifiable, Sendable {
     public enum Kind: Equatable, Sendable {
         case look(LookApplication)
         case adjust(AdjustmentSet)
+        /// Face-aware retouching. Always first in the stack, so looks grade retouched skin.
+        case retouch(RetouchSettings)
     }
 
     public var id: UUID
@@ -45,14 +47,15 @@ public struct EditOperation: Codable, Equatable, Identifiable, Sendable {
 }
 
 extension EditOperation.Kind: Codable {
-    enum CodingKeys: String, CodingKey { case type, look, adjust }
-    enum Tag: String, Codable { case look, adjust }
+    enum CodingKeys: String, CodingKey { case type, look, adjust, retouch }
+    enum Tag: String, Codable { case look, adjust, retouch }
 
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         switch try c.decode(Tag.self, forKey: .type) {
         case .look: self = .look(try c.decode(LookApplication.self, forKey: .look))
         case .adjust: self = .adjust(try c.decode(AdjustmentSet.self, forKey: .adjust))
+        case .retouch: self = .retouch(try c.decode(RetouchSettings.self, forKey: .retouch))
         }
     }
 
@@ -65,6 +68,9 @@ extension EditOperation.Kind: Codable {
         case .adjust(let a):
             try c.encode(Tag.adjust, forKey: .type)
             try c.encode(a, forKey: .adjust)
+        case .retouch(let r):
+            try c.encode(Tag.retouch, forKey: .type)
+            try c.encode(r, forKey: .retouch)
         }
     }
 }
@@ -250,6 +256,27 @@ public struct EditDocument: Codable, Equatable, Identifiable, Sendable {
         }
     }
 
+    // MARK: Retouch
+
+    var retouchIndex: Int? {
+        operations.firstIndex { if case .retouch = $0.kind { return true } else { return false } }
+    }
+
+    /// The single retouch operation, kept at the bottom of the stack; neutral if none exists.
+    public var retouch: RetouchSettings {
+        get {
+            guard let i = retouchIndex, case .retouch(let r) = operations[i].kind else { return RetouchSettings() }
+            return r
+        }
+        set {
+            if let i = retouchIndex {
+                operations[i].kind = .retouch(newValue)
+            } else if !newValue.isNeutral {
+                operations.insert(EditOperation(kind: .retouch(newValue)), at: 0)
+            }
+        }
+    }
+
     // MARK: Overlays
 
     public mutating func addOverlay(_ overlay: Overlay) {
@@ -272,6 +299,7 @@ public struct EditDocument: Codable, Equatable, Identifiable, Sendable {
             switch op.kind {
             case .look(let l): return l.intensity == 0
             case .adjust(let a): return a.isNeutral
+            case .retouch(let r): return r.isNeutral
             }
         } && crop.isIdentity && overlays.isEmpty
     }
