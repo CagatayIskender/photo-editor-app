@@ -11,7 +11,15 @@ struct TemplatesView: View {
     @State private var hasAppeared = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    private let columns = [GridItem(.flexible(), spacing: Spacing.s), GridItem(.flexible(), spacing: Spacing.s)]
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
+    /// Fixed columns on a phone; on iPad as many as the width allows.
+    private var columns: [GridItem] {
+        if horizontalSizeClass == .regular {
+            return [GridItem(.adaptive(minimum: 220), spacing: Spacing.s)]
+        }
+        return [GridItem(.flexible(), spacing: Spacing.s), GridItem(.flexible(), spacing: Spacing.s)]
+    }
 
     init(app: AppModel) {
         self.app = app

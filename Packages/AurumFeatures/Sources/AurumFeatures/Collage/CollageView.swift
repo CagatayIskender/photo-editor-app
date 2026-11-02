@@ -9,6 +9,9 @@ struct CollageView: View {
     @ObservedObject var app: AppModel
     @StateObject private var model: CollageViewModel
     @State private var picker: PickerRequest?
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
+    private var isRegular: Bool { horizontalSizeClass == .regular }
 
     /// What the media picker is filling.
     enum PickerRequest: Identifiable {
@@ -40,11 +43,27 @@ struct CollageView: View {
                 .disabled(!model.canExport)
                 .accessibilityIdentifier("collage.export")
             }
-            CollageCanvas(model: model, onEmptyCell: { picker = .fill })
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(Spacing.m)
-            statusLine
-            controls
+            if isRegular {
+                // iPad: the collage in the centre, its controls in a trailing inspector.
+                HStack(spacing: 0) {
+                    VStack(spacing: 0) {
+                        CollageCanvas(model: model, onEmptyCell: { picker = .fill })
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .padding(Spacing.l)
+                        statusLine
+                    }
+                    InspectorColumn(title: String(localized: "Layout")) {
+                        controlsContent
+                            .padding(.horizontal, Spacing.m)
+                    }
+                }
+            } else {
+                CollageCanvas(model: model, onEmptyCell: { picker = .fill })
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(Spacing.m)
+                statusLine
+                controls
+            }
         }
         .background(AurumColor.background.ignoresSafeArea())
         .preferredColorScheme(.dark)
@@ -108,20 +127,47 @@ struct CollageView: View {
     }
 
     private var controls: some View {
-        VStack(alignment: .leading, spacing: Spacing.s) {
+        controlsContent
+            .padding(Spacing.m)
+            .background(
+                AurumColor.surface
+                    .overlay(alignment: .top) { Rectangle().fill(AurumColor.goldHairline).frame(height: 0.5) }
+                    .ignoresSafeArea(edges: .bottom)
+            )
+    }
+
+    /// A sideways strip of layouts on a phone; a grid that fills the inspector on iPad.
+    @ViewBuilder
+    private var layoutPicker: some View {
+        if isRegular {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 92), spacing: Spacing.xs)], alignment: .leading, spacing: Spacing.xs) {
+                layoutButtons
+            }
+        } else {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Spacing.s) {
-                    ForEach(model.layouts) { layout in
-                        Button { model.setLayout(layout); Haptics.detent() } label: {
-                            CollageLayoutThumbnail(layout: layout, isSelected: model.project.layout.id == layout.id)
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(String(localized: "\(Localized.dynamic(layout.name)) layout, \(layout.photoCount) photos"))
-                        .accessibilityAddTraits(model.project.layout.id == layout.id ? .isSelected : [])
-                    }
+                    layoutButtons
                 }
                 .padding(.vertical, 2)
             }
+        }
+    }
+
+    private var layoutButtons: some View {
+        ForEach(model.layouts) { layout in
+            Button { model.setLayout(layout); Haptics.detent() } label: {
+                CollageLayoutThumbnail(layout: layout, isSelected: model.project.layout.id == layout.id)
+            }
+            .buttonStyle(.plain)
+            .hoverEffect(.highlight)
+            .accessibilityLabel(String(localized: "\(Localized.dynamic(layout.name)) layout, \(layout.photoCount) photos"))
+            .accessibilityAddTraits(model.project.layout.id == layout.id ? .isSelected : [])
+        }
+    }
+
+    private var controlsContent: some View {
+        VStack(alignment: .leading, spacing: Spacing.s) {
+            layoutPicker
             HStack(spacing: Spacing.m) {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("Spacing").aurumText(.label, color: AurumColor.textTertiary)
@@ -146,17 +192,14 @@ struct CollageView: View {
                     .accessibilityAddTraits(isSelected ? .isSelected : [])
                 }
                 Spacer()
-                if model.emptyCellCount > 0 {
+                if model.emptyCellCount > 0 && !isRegular {
                     Button("Add photos") { picker = .fill }.buttonStyle(TextActionButtonStyle())
                 }
             }
+            if model.emptyCellCount > 0 && isRegular {
+                Button("Add photos") { picker = .fill }.buttonStyle(TextActionButtonStyle())
+            }
         }
-        .padding(Spacing.m)
-        .background(
-            AurumColor.surface
-                .overlay(alignment: .top) { Rectangle().fill(AurumColor.goldHairline).frame(height: 0.5) }
-                .ignoresSafeArea(edges: .bottom)
-        )
     }
 }
 

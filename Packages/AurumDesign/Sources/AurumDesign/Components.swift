@@ -17,6 +17,8 @@ public struct GoldButtonStyle: ButtonStyle {
             .frame(maxWidth: compact ? nil : .infinity)
             .frame(height: compact ? 36 : Size.primaryButtonHeight)
             .background(Capsule().fill(AurumColor.accent))
+            .contentShape(.hoverEffect, Capsule())
+            .hoverEffect(.lift)
             .opacity(configuration.isPressed ? 0.82 : 1)
             .scaleEffect(configuration.isPressed ? 0.98 : 1)
             .animation(Motion.respectingReduceMotion(Motion.velvet), value: configuration.isPressed)
@@ -71,6 +73,7 @@ public struct IconButton: View {
                 .frame(width: Size.touch, height: Size.touch)
                 .contentShape(Rectangle())
         }
+        .hoverEffect(.highlight)
         .disabled(!isEnabled)
         .accessibilityLabel(label)
     }
@@ -123,8 +126,10 @@ public struct Chip: View {
                 RoundedRectangle(cornerRadius: Radius.chip)
                     .stroke(isSelected ? Color.clear : AurumColor.hairline, lineWidth: 1)
             )
+            .contentShape(.hoverEffect, RoundedRectangle(cornerRadius: Radius.chip))
         }
         .buttonStyle(.plain)
+        .hoverEffect(.highlight)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
@@ -295,6 +300,7 @@ public struct ToolRailItem: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .hoverEffect(.highlight)
         .disabled(!isAvailable)
         .accessibilityLabel(isAvailable ? title : "\(title), coming soon")
         .accessibilityAddTraits(isActive ? .isSelected : [])

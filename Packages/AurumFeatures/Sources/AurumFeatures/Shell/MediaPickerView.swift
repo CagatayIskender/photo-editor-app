@@ -58,7 +58,15 @@ struct MediaPickerView: View {
     @State private var isLoading = true
     @State private var filter: Filter = .all
 
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 3)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
+    /// Fixed columns on a phone; on iPad as many as the width allows.
+    private var columns: [GridItem] {
+        if horizontalSizeClass == .regular {
+            return [GridItem(.adaptive(minimum: 128), spacing: 2)]
+        }
+        return Array(repeating: GridItem(.flexible(), spacing: 2), count: 3)
+    }
 
     init(app: AppModel, required: Int?, title: String, embedded: Bool = false, onDone: @escaping ([PickedMedia]) -> Void, onCancel: @escaping () -> Void = {}) {
         self.app = app

@@ -25,6 +25,7 @@ struct VideoExportSheet: View {
             content
         }
         .padding(Spacing.m)
+        .formSheetWidth()
         .background(AurumColor.surface.ignoresSafeArea())
         .presentationDetents([.medium])
         .preferredColorScheme(.dark)
