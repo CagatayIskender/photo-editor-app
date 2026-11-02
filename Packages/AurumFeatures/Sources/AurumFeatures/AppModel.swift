@@ -221,6 +221,31 @@ public final class AppModel: ObservableObject {
         Task { await model.load(startingLook: lookID, preset: nil) }
     }
 
+    /// Opens an image dropped onto the app. Like a camera capture, it is
+    /// added to Photos first, so the Studio edits a photo in the library.
+    public func importDroppedImage(_ data: Data, fileExtension: String) async {
+        guard studio == nil else { return }
+        do {
+            try await deps.photos.save(data, fileExtension: fileExtension)
+        } catch {
+            notice = String(localized: "AURUM needs permission to add photos. You can allow it in Settings.")
+            return
+        }
+        if deps.photos.access() == .notDetermined {
+            _ = await deps.photos.requestAccess()
+        }
+        guard let item = await deps.photos.recentPhotos(limit: 1).first else {
+            notice = String(localized: "Saved to Photos")
+            return
+        }
+        flow = nil
+        let document = EditDocument(source: SourceAsset(localIdentifier: item.id, pixelSize: item.pixelSize))
+        let model = makeStudio(document: document, isNew: true)
+        studio = model
+        deps.analytics.track(.photoImported(source: "drop"))
+        Task { await model.load(startingLook: nil, preset: nil) }
+    }
+
     func makeStudio(document: EditDocument, isNew: Bool) -> StudioViewModel {
         StudioViewModel(document: document, isNew: isNew, deps: deps, entitlement: { [weak self] in self?.entitlement ?? .free })
     }

@@ -1,4 +1,4 @@
-"NSPhotoLibraryUsageDescription" = "AURUM fotoğraflarını düzenleyebilmen için onları açar. Düzenlemeler iPhone'unda kalır.";
+"NSPhotoLibraryUsageDescription" = "AURUM fotoğraflarını düzenleyebilmen için onları açar. Düzenlemeler cihazında kalır.";
 "NSPhotoLibraryAddUsageDescription" = "AURUM bitmiş fotoğraflarını arşivine kaydeder.";
 "NSCameraUsageDescription" = "AURUM kamerasıyla, seçtiğin görünüm uygulanmış halde fotoğraf ve video çekersin.";
 "NSMicrophoneUsageDescription" = "AURUM video çekerken sesi kaydeder.";

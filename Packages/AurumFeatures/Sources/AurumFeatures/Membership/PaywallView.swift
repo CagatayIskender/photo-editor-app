@@ -39,6 +39,7 @@ struct PaywallView: View {
             purchaseArea
         }
         .padding(Spacing.l)
+        .formSheetWidth()
         .background(AurumColor.background.ignoresSafeArea())
         .preferredColorScheme(.dark)
         .task { await model.load() }

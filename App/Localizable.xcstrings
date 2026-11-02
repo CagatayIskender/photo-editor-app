@@ -4910,6 +4910,56 @@
           }
         }
       }
+    },
+    "Previous look" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Önceki görünüm"
+          }
+        }
+      }
+    },
+    "Next look" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sonraki görünüm"
+          }
+        }
+      }
+    },
+    "Drop to edit in the Studio" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stüdyo'da düzenlemek için bırak"
+          }
+        }
+      }
+    },
+    "This image couldn't be opened." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu görsel açılamadı."
+          }
+        }
+      }
+    },
+    "Layout" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzen"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
