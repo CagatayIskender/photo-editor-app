@@ -18,8 +18,6 @@ struct StudioView: View {
     let onClose: () -> Void
     @ObservedObject var app: AppModel
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    /// False while the Studio cover is still sliding in.
-    @State private var isSettled = false
 
     var body: some View {
         Group {
@@ -32,9 +30,6 @@ struct StudioView: View {
         .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.activeTool)
         .background(AurumColor.background.ignoresSafeArea())
         .preferredColorScheme(.dark)
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + Self.settleDelay) { isSettled = true }
-        }
         .sheet(isPresented: $model.isExportPresented) {
             ExportSheet(model: model.makeExportModel(), app: app)
         }
@@ -91,20 +86,6 @@ struct StudioView: View {
 
     // MARK: Top bar
 
-    /// How long the cover's presentation takes to finish.
-    static let settleDelay: TimeInterval = 0.5
-
-    /// Opens the export sheet. A sheet presented while the Studio's own cover
-    /// is still animating in can make UIKit drop the cover, so a very quick
-    /// tap waits for the presentation to finish.
-    private func presentExport() {
-        if isSettled {
-            model.isExportPresented = true
-        } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + Self.settleDelay) { model.isExportPresented = true }
-        }
-    }
-
     private var topBar: some View {
         HStack(spacing: Spacing.xs) {
             IconButton(.close, label: String(localized: "Close")) {
@@ -121,7 +102,7 @@ struct StudioView: View {
                 .keyboardShortcut("z", modifiers: [.command, .shift])
             Spacer()
             Button("Export") {
-                presentExport()
+                model.isExportPresented = true
             }
             .buttonStyle(GoldButtonStyle(compact: true))
             .disabled(model.isLoading)
