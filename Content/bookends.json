@@ -1,0 +1,65 @@
+[
+ {
+  "id": "curtain",
+  "name": "Curtain",
+  "kind": "intro",
+  "duration": 1.5,
+  "tier": "free"
+ },
+ {
+  "id": "title-card",
+  "name": "Title Card",
+  "kind": "intro",
+  "duration": 2.0,
+  "tier": "free"
+ },
+ {
+  "id": "spotlight",
+  "name": "Spotlight",
+  "kind": "intro",
+  "duration": 1.5,
+  "tier": "member"
+ },
+ {
+  "id": "tape-start",
+  "name": "Tape Start",
+  "kind": "intro",
+  "duration": 1.2,
+  "tier": "free"
+ },
+ {
+  "id": "film-leader",
+  "name": "Film Leader",
+  "kind": "intro",
+  "duration": 2.0,
+  "tier": "member"
+ },
+ {
+  "id": "monogram",
+  "name": "Monogram",
+  "kind": "outro",
+  "duration": 1.5,
+  "tier": "free"
+ },
+ {
+  "id": "the-end",
+  "name": "Fin",
+  "kind": "outro",
+  "duration": 2.0,
+  "tier": "free"
+ },
+ {
+  "id": "postmark",
+  "name": "Postmark",
+  "kind": "outro",
+  "duration": 1.5,
+  "tier": "free"
+ },
+ {
+  "id": "fireworks",
+  "name": "Fireworks",
+  "kind": "outro",
+  "duration": 2.0,
+  "tier": "member"
+ }
+]
