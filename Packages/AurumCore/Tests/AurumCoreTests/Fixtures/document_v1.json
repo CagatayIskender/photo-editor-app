@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "6B2C3B0E-7A3E-4F57-9B3A-2E8C1A2F9D10",
+  "source": { "localIdentifier": "ABC-123/L0/001", "pixelSize": { "width": 4032, "height": 3024 } },
+  "operations": [
+    { "id": "0F9D0B4E-1C2A-4C35-8A4B-3B7E9E1D2C01", "isEnabled": true,
+      "kind": { "type": "look", "look": { "lookID": "film-analog.linen", "intensity": 0.8, "refine": { "grain": 0.4 } } } },
+    { "id": "0F9D0B4E-1C2A-4C35-8A4B-3B7E9E1D2C02", "isEnabled": true,
+      "kind": { "type": "adjust", "adjust": { "exposure": 0.2, "warmth": -0.1 } } }
+  ],
+  "crop": { "rect": { "x": 0.1, "y": 0, "width": 0.8, "height": 1 }, "aspect": "portrait", "quarterTurns": 0,
+            "straightenDegrees": 1.5, "flipHorizontal": false, "flipVertical": false },
+  "overlays": [
+    { "id": "0F9D0B4E-1C2A-4C35-8A4B-3B7E9E1D2C03",
+      "content": { "type": "text", "text": { "text": "Côte d'Azur", "fontID": "playfair.italic", "size": 64,
+                   "colorHex": "#F4EFE6", "style": "shadow", "alignment": "center" } },
+      "center": { "x": 0.5, "y": 0.8 }, "scale": 1, "rotationDegrees": 0, "opacity": 1, "blendMode": "normal", "isHidden": false }
+  ],
+  "createdAt": "2026-11-02T09:00:00Z",
+  "modifiedAt": "2026-11-02T09:05:00Z"
+}
