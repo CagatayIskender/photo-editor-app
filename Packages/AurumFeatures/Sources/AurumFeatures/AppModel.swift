@@ -165,10 +165,16 @@ public final class AppModel: ObservableObject {
     /// Starts editing a photo from the library. The Studio opens at once and
     /// shows the photo as soon as the proxy loads, with a suggested look applied.
     public func openPhoto(_ item: LibraryPhoto) {
-        isPickerPresented = false
         let document = EditDocument(source: SourceAsset(localIdentifier: item.id, pixelSize: item.pixelSize))
         let model = makeStudio(document: document, isNew: true)
-        studio = model
+        if isPickerPresented {
+            // Presenting the Studio while the picker sheet is still closing can make
+            // SwiftUI drop the new cover, so it opens once the sheet has gone.
+            pendingStudio = model
+            isPickerPresented = false
+        } else {
+            studio = model
+        }
         deps.analytics.track(.photoImported(source: "library"))
         let lookID = queuedLookID
         let preset = queuedPreset
@@ -178,6 +184,17 @@ public final class AppModel: ObservableObject {
     }
 
     /// Reopens a saved draft exactly as it was left.
+    /// The Studio waiting for the picker sheet to finish closing.
+    private var pendingStudio: StudioViewModel?
+
+    /// Called by the picker sheet once it is fully dismissed.
+    public func pickerDidDismiss() {
+        if let model = pendingStudio {
+            pendingStudio = nil
+            studio = model
+        }
+    }
+
     public func openDraft(id: UUID) async {
         do {
             let document = try await deps.drafts.load(id: id)

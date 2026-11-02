@@ -45,7 +45,7 @@ struct MainTabsView: View {
 
             AurumTabBar(selected: $app.selectedTab, onCreate: { app.startCreating() })
         }
-        .sheet(isPresented: $app.isPickerPresented) {
+        .sheet(isPresented: $app.isPickerPresented, onDismiss: { app.pickerDidDismiss() }) {
             PickerView(app: app)
         }
         .fullScreenCover(item: Binding(get: { app.cover }, set: { if $0 == nil { app.coverDismissed() } })) { cover in
