@@ -48,8 +48,23 @@ struct MainTabsView: View {
         .sheet(isPresented: $app.isPickerPresented) {
             PickerView(app: app)
         }
-        .fullScreenCover(item: $app.studio) { model in
-            StudioView(model: model, onClose: { app.closeStudio() }, app: app)
+        .fullScreenCover(item: Binding(get: { app.cover }, set: { if $0 == nil { app.coverDismissed() } })) { cover in
+            switch cover {
+            case .studio(let model):
+                StudioView(model: model, onClose: { app.closeStudio() }, app: app)
+            case .flow(.video(let model)):
+                VideoEditorView(model: model, app: app, onClose: { app.closeVideoEditor() })
+            case .flow(.templates):
+                TemplatesView(app: app)
+            case .flow(.camera):
+                CameraView(app: app)
+            case .flow(.mediaPicker):
+                MediaPickerView(app: app, required: nil, title: String(localized: "Choose photos and clips")) { picked in
+                    app.openVideo(MediaPickerView.project(from: picked), source: "picker")
+                } onCancel: {
+                    app.closeFlow()
+                }
+            }
         }
         .overlay(alignment: .top) {
             if let notice = app.notice {

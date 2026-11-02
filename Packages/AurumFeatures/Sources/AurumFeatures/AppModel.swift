@@ -18,8 +18,10 @@ public struct AppDependencies {
     public var analytics: Analytics
     public var remoteConfig: RemoteConfig
     public var preferences: Preferences
+    /// Templates, intro and outro styles and the music catalogue.
+    public var content: ContentLibrary
 
-    public init(catalog: LookCatalog, brand: Brand, engine: RenderEngine, photos: PhotoLibraryService, drafts: DraftStore, presets: PresetStore, purchases: PurchaseService, analytics: Analytics, remoteConfig: RemoteConfig, preferences: Preferences) {
+    public init(catalog: LookCatalog, brand: Brand, engine: RenderEngine, photos: PhotoLibraryService, drafts: DraftStore, presets: PresetStore, purchases: PurchaseService, analytics: Analytics, remoteConfig: RemoteConfig, preferences: Preferences, content: ContentLibrary = ContentLibrary.load(from: .main)) {
         self.catalog = catalog
         self.brand = brand
         self.engine = engine
@@ -30,6 +32,7 @@ public struct AppDependencies {
         self.analytics = analytics
         self.remoteConfig = remoteConfig
         self.preferences = preferences
+        self.content = content
     }
 
     /// Mock services with generated sample photos, for previews and tests.
@@ -45,7 +48,8 @@ public struct AppDependencies {
             purchases: MockPurchaseService(entitlement: entitlement),
             analytics: RecordingAnalytics(),
             remoteConfig: BundledRemoteConfig(),
-            preferences: Preferences(defaults: UserDefaults(suiteName: "aurum.sample.\(UUID().uuidString)") ?? .standard)
+            preferences: Preferences(defaults: UserDefaults(suiteName: "aurum.sample.\(UUID().uuidString)") ?? .standard),
+            content: ContentLibrary.load(from: .main)
         )
     }
 }
@@ -53,6 +57,39 @@ public struct AppDependencies {
 /// The top-level tabs. The centre "+" is an action, not a tab.
 public enum AppTab: Hashable {
     case salon, vault
+}
+
+/// Full-screen flows other than the Studio: the video editor, templates,
+/// the camera and the media picker that starts a video.
+public enum CreateFlow: Identifiable {
+    case video(VideoEditorViewModel)
+    case templates
+    case camera
+    case mediaPicker
+
+    public var id: String {
+        switch self {
+        case .video(let model): return "video-\(model.id.uuidString)"
+        case .templates: return "templates"
+        case .camera: return "camera"
+        case .mediaPicker: return "mediaPicker"
+        }
+    }
+}
+
+/// What covers the tabs. One full-screen cover shows whichever is set, so
+/// moving from the camera to the Studio (or from Templates to the video
+/// editor) replaces one cover with the next instead of stacking them.
+public enum AppCover: Identifiable {
+    case studio(StudioViewModel)
+    case flow(CreateFlow)
+
+    public var id: String {
+        switch self {
+        case .studio(let model): return "studio-\(model.id.uuidString)"
+        case .flow(let flow): return flow.id
+        }
+    }
 }
 
 /// App-wide state: membership, onboarding, navigation into the Studio and
@@ -67,6 +104,8 @@ public final class AppModel: ObservableObject {
     @Published public var selectedTab: AppTab = .salon
     @Published public var isPickerPresented = false
     @Published public var studio: StudioViewModel?
+    /// The video editor, templates, camera or media picker, when open.
+    @Published public var flow: CreateFlow?
     @Published public private(set) var drafts: [DraftSummary] = []
     @Published public private(set) var presets: [Preset] = []
     /// A look chosen in the Salon before a photo was picked.
@@ -136,6 +175,16 @@ public final class AppModel: ObservableObject {
         Task { await refreshVault() }
     }
 
+    /// Opens a photo just taken with the camera, wearing the look it was shot with.
+    public func openCapturedPhoto(_ item: LibraryPhoto, lookID: String?) {
+        flow = nil
+        let document = EditDocument(source: SourceAsset(localIdentifier: item.id, pixelSize: item.pixelSize))
+        let model = makeStudio(document: document, isNew: true)
+        studio = model
+        deps.analytics.track(.photoImported(source: "camera"))
+        Task { await model.load(startingLook: lookID, preset: nil) }
+    }
+
     func makeStudio(document: EditDocument, isNew: Bool) -> StudioViewModel {
         StudioViewModel(document: document, isNew: isNew, deps: deps, entitlement: { [weak self] in self?.entitlement ?? .free })
     }
@@ -144,6 +193,53 @@ public final class AppModel: ObservableObject {
     public func startCreating(withLook lookID: String? = nil) {
         if let lookID { queuedLookID = lookID }
         isPickerPresented = true
+    }
+
+    // MARK: Video, templates and camera
+
+    /// The Studio or a create flow, for the root view's single full-screen cover.
+    public var cover: AppCover? {
+        if let studio { return .studio(studio) }
+        return flow.map { .flow($0) }
+    }
+
+    /// Called when the system dismisses the cover on its own.
+    public func coverDismissed() {
+        if case .video(let model)? = flow { model.close() }
+        studio = nil
+        flow = nil
+    }
+
+    /// Picks photos and clips, then opens them in the video editor.
+    public func startVideo() {
+        flow = .mediaPicker
+        deps.analytics.track(.toolOpened(tool: "video.new"))
+    }
+
+    public func openTemplates() {
+        flow = .templates
+        deps.analytics.track(.toolOpened(tool: "templates"))
+    }
+
+    public func openCamera() {
+        flow = .camera
+        deps.analytics.track(.toolOpened(tool: "camera"))
+    }
+
+    /// Opens the video editor on a project built from picked media, a template or the camera.
+    public func openVideo(_ project: VideoProject, source: String) {
+        let model = VideoEditorViewModel(project: project, deps: deps, entitlement: { [weak self] in self?.entitlement ?? .free })
+        flow = .video(model)
+        deps.analytics.track(.photoImported(source: "video.\(source)"))
+    }
+
+    public func closeVideoEditor() {
+        if case .video(let model)? = flow { model.close() }
+        flow = nil
+    }
+
+    public func closeFlow() {
+        flow = nil
     }
 
     // MARK: Vault

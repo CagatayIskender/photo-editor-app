@@ -14,6 +14,7 @@ struct SalonView: View {
             VStack(alignment: .leading, spacing: Spacing.xl) {
                 header
                 hero
+                createRow
                 if !app.drafts.isEmpty { continueRow }
                 ForEach(orderedCollections) { collection in
                     collectionRow(collection)
@@ -69,6 +70,28 @@ struct SalonView: View {
         )
         .clipShape(RoundedRectangle(cornerRadius: Radius.card))
         .padding(.horizontal, Spacing.m)
+    }
+
+    /// Video, templates and the camera, next to photo editing.
+    private var createRow: some View {
+        VStack(alignment: .leading, spacing: Spacing.s) {
+            Text("Create").aurumText(.headline).padding(.horizontal, Spacing.m)
+            HStack(spacing: Spacing.s) {
+                CreateTile(icon: .layers, title: String(localized: "Video"), subtitle: String(localized: "Clips and photos")) {
+                    app.startVideo()
+                }
+                .accessibilityIdentifier("salon.video")
+                CreateTile(icon: .sparkle, title: String(localized: "Templates"), subtitle: String(localized: "Cut to the beat")) {
+                    app.openTemplates()
+                }
+                .accessibilityIdentifier("salon.templates")
+                CreateTile(icon: .camera, title: String(localized: "Camera"), subtitle: String(localized: "Shoot in a look")) {
+                    app.openCamera()
+                }
+                .accessibilityIdentifier("salon.camera")
+            }
+            .padding(.horizontal, Spacing.m)
+        }
     }
 
     private var continueRow: some View {
@@ -137,5 +160,46 @@ struct DraftTile: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Draft, \(draft.title)")
         .accessibilityAddTraits(.isButton)
+    }
+}
+
+/// A Salon entry into a create flow: icon, name and a short line.
+struct CreateTile: View {
+    let icon: AurumIcon
+    let title: String
+    let subtitle: String
+    let action: () -> Void
+
+    var body: some View {
+        Button {
+            Haptics.detent()
+            action()
+        } label: {
+            VStack(alignment: .leading, spacing: Spacing.xxs) {
+                IconView(icon, size: 22)
+                    .foregroundColor(AurumColor.accent)
+                    .padding(.bottom, Spacing.xs)
+                Text(title).aurumText(.headline)
+                Text(subtitle).aurumText(.caption, color: AurumColor.textTertiary).lineLimit(2)
+            }
+            .padding(Spacing.s)
+            .frame(maxWidth: .infinity, minHeight: 116, alignment: .topLeading)
+            .background(RoundedRectangle(cornerRadius: Radius.thumbnail).fill(AurumColor.surface))
+            .overlay(RoundedRectangle(cornerRadius: Radius.thumbnail).stroke(AurumColor.hairline, lineWidth: 1))
+            .contentShape(RoundedRectangle(cornerRadius: Radius.thumbnail))
+        }
+        .buttonStyle(CreateTileButtonStyle())
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isButton)
+    }
+}
+
+/// A gentle press: the tile settles slightly, without motion when reduced.
+struct CreateTileButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.97 : 1)
+            .opacity(configuration.isPressed ? 0.85 : 1)
+            .animation(Motion.respectingReduceMotion(Motion.velvet), value: configuration.isPressed)
     }
 }

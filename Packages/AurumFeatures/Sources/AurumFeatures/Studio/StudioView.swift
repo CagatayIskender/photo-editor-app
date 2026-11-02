@@ -67,6 +67,7 @@ struct StudioView: View {
             switch tool {
             case .looks: LooksSheet(model: model)
             case .adjust: AdjustSheet(model: model)
+            case .retouch: RetouchSheet(model: model)
             case .crop: CropSheet(model: model)
             case .text: TextSheet(model: model)
             case .stickers: StickersSheet(model: model, entitlement: app.entitlement)
@@ -75,24 +76,43 @@ struct StudioView: View {
     }
 
     private var toolRail: some View {
-        HStack(spacing: 0) {
-            ForEach(StudioTool.allCases) { tool in
-                ToolRailItem(icon: Self.icon(for: tool), title: tool.title, isActive: model.activeTool == tool) {
-                    model.toolOpened(tool)
-                    Haptics.detent()
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 0) {
+                ForEach(StudioTool.allCases) { tool in
+                    railItem(tool).frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity)
-                .accessibilityIdentifier("tool.\(tool.rawValue)")
+            }
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 0) {
+                    ForEach(StudioTool.allCases) { tool in
+                        railItem(tool)
+                    }
+                }
+                .padding(.horizontal, Spacing.xs)
             }
         }
         .frame(height: 68)
         .background(AurumColor.background)
     }
 
+    private func railItem(_ tool: StudioTool) -> some View {
+        ToolRailItem(icon: Self.icon(for: tool), title: tool.title, isActive: model.activeTool == tool) {
+            model.toolOpened(tool)
+            Haptics.detent()
+        }
+        .overlay(alignment: .topTrailing) {
+            if tool.isPremium {
+                CrownBadge(size: 14).offset(x: -10, y: 2).allowsHitTesting(false)
+            }
+        }
+        .accessibilityIdentifier("tool.\(tool.rawValue)")
+    }
+
     static func icon(for tool: StudioTool) -> AurumIcon {
         switch tool {
         case .looks: return .looks
         case .adjust: return .adjust
+        case .retouch: return .retouch
         case .crop: return .crop
         case .text: return .text
         case .stickers: return .stickers

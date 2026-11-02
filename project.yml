@@ -53,6 +53,8 @@ targets:
         UIUserInterfaceStyle: Dark
         NSPhotoLibraryUsageDescription: "AURUM opens your photos so you can edit them. Edits stay on your iPhone."
         NSPhotoLibraryAddUsageDescription: "AURUM saves your finished photos to your library."
+        NSCameraUsageDescription: "AURUM uses the camera so you can shoot photos and videos with a look applied live."
+        NSMicrophoneUsageDescription: "AURUM records sound with your videos."
         UIAppFonts:
           - PlayfairDisplay-Medium.ttf
           - PlayfairDisplay-Italic.ttf

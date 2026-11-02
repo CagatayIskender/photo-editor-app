@@ -4,10 +4,9 @@ import AurumCore
 import AurumRender
 import AurumServices
 
-/// The tools on the Studio's rail, in rail order. Phase 1 ships the first
-/// five; the rest appear with a "Soon" state so the rail layout is final.
+/// The tools on the Studio's rail, in rail order.
 public enum StudioTool: String, CaseIterable, Identifiable {
-    case looks, adjust, crop, text, stickers
+    case looks, adjust, retouch, crop, text, stickers
 
     public var id: String { rawValue }
 
@@ -15,11 +14,16 @@ public enum StudioTool: String, CaseIterable, Identifiable {
         switch self {
         case .looks: return String(localized: "Looks")
         case .adjust: return String(localized: "Adjust")
+        case .retouch: return String(localized: "Retouch")
         case .crop: return String(localized: "Crop")
         case .text: return String(localized: "Text")
         case .stickers: return String(localized: "Stickers")
         }
     }
+
+    /// Member tools carry a crown on the rail. They can be used freely;
+    /// membership is asked for only at export.
+    public var isPremium: Bool { self == .retouch }
 }
 
 /// All editing state for one photo. Every change goes through `EditHistory`,
@@ -250,6 +254,38 @@ public final class StudioViewModel: ObservableObject, Identifiable {
 
     public func resetAdjustments() {
         edit { $0.adjustments = AdjustmentSet() }
+    }
+
+    // MARK: Retouch
+
+    /// Face retouching, applied to every face ("All faces").
+    public var retouch: RetouchSettings { document.retouch }
+
+    public func retouchValue(_ control: RetouchControl) -> Double {
+        document.retouch.global[control]
+    }
+
+    public func setRetouch(_ control: RetouchControl, _ value: Double) {
+        edit { doc in
+            var settings = doc.retouch
+            settings.global[control] = value
+            doc.retouch = settings
+        }
+    }
+
+    /// Replaces the whole retouch, as one undo step.
+    public func setRetouch(_ settings: RetouchSettings) {
+        edit { $0.retouch = settings }
+    }
+
+    /// The one-tap subtle retouch.
+    public func applyNaturalRetouch() {
+        setRetouch(RetouchSettings(global: .natural))
+        deps.analytics.track(.toolOpened(tool: "retouch.natural"))
+    }
+
+    public func resetRetouch() {
+        setRetouch(RetouchSettings())
     }
 
     // MARK: Crop
