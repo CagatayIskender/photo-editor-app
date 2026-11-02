@@ -20,8 +20,14 @@ public struct AppDependencies {
     public var preferences: Preferences
     /// Templates, intro and outro styles and the music catalogue.
     public var content: ContentLibrary
+    /// Server AI for the AI Studio. Unavailable until a base URL is configured.
+    public var ai: AIBackend
+    /// The AI credit ledger and job history.
+    public var credits: CreditStore
+    /// Seasonal drops and the creation streak.
+    public var drops: DropsStore
 
-    public init(catalog: LookCatalog, brand: Brand, engine: RenderEngine, photos: PhotoLibraryService, drafts: DraftStore, presets: PresetStore, purchases: PurchaseService, analytics: Analytics, remoteConfig: RemoteConfig, preferences: Preferences, content: ContentLibrary = ContentLibrary.load(from: .main)) {
+    public init(catalog: LookCatalog, brand: Brand, engine: RenderEngine, photos: PhotoLibraryService, drafts: DraftStore, presets: PresetStore, purchases: PurchaseService, analytics: Analytics, remoteConfig: RemoteConfig, preferences: Preferences, content: ContentLibrary = ContentLibrary.load(from: .main), ai: AIBackend? = nil, credits: CreditStore? = nil, drops: DropsStore? = nil) {
         self.catalog = catalog
         self.brand = brand
         self.engine = engine
@@ -33,6 +39,9 @@ public struct AppDependencies {
         self.remoteConfig = remoteConfig
         self.preferences = preferences
         self.content = content
+        self.ai = ai ?? RemoteAIProvider(baseURL: nil, inputLoader: RemoteAIProvider.libraryLoader(photos))
+        self.credits = credits ?? CreditStore(directory: CreditStore.defaultDirectory())
+        self.drops = drops ?? DropsStore(bundle: .main)
     }
 
     /// Mock services with generated sample photos, for previews and tests.
@@ -49,7 +58,9 @@ public struct AppDependencies {
             analytics: RecordingAnalytics(),
             remoteConfig: BundledRemoteConfig(),
             preferences: Preferences(defaults: UserDefaults(suiteName: "aurum.sample.\(UUID().uuidString)") ?? .standard),
-            content: ContentLibrary.load(from: .main)
+            content: ContentLibrary.load(from: .main),
+            credits: CreditStore(directory: directory.appendingPathComponent("AI")),
+            drops: DropsStore(bundle: .main, defaults: UserDefaults(suiteName: "aurum.sample.drops.\(UUID().uuidString)") ?? .standard)
         )
     }
 }
@@ -66,6 +77,10 @@ public enum CreateFlow: Identifiable {
     case templates
     case camera
     case mediaPicker
+    case aiStudio
+    case depthMotion
+    case collage
+    case carousel
 
     public var id: String {
         switch self {
@@ -73,6 +88,10 @@ public enum CreateFlow: Identifiable {
         case .templates: return "templates"
         case .camera: return "camera"
         case .mediaPicker: return "mediaPicker"
+        case .aiStudio: return "aiStudio"
+        case .depthMotion: return "depthMotion"
+        case .collage: return "collage"
+        case .carousel: return "carousel"
         }
     }
 }
@@ -240,6 +259,37 @@ public final class AppModel: ObservableObject {
 
     public func closeFlow() {
         flow = nil
+    }
+
+    // MARK: AI Studio, 3D Motion, collage and carousel
+
+    public func openAIStudio() {
+        flow = .aiStudio
+        deps.analytics.track(.toolOpened(tool: "aiStudio"))
+    }
+
+    public func openDepthMotion() {
+        flow = .depthMotion
+        deps.analytics.track(.toolOpened(tool: "depthMotion"))
+    }
+
+    public func openCollage() {
+        flow = .collage
+        deps.analytics.track(.toolOpened(tool: "collage"))
+    }
+
+    public func openCarousel() {
+        flow = .carousel
+        deps.analytics.track(.toolOpened(tool: "carousel"))
+    }
+
+    /// Opens a photo AURUM just made (an AI result) in the Studio, replacing the current flow.
+    public func openGeneratedPhoto(_ item: LibraryPhoto, source: String) {
+        flow = nil
+        let document = EditDocument(source: SourceAsset(localIdentifier: item.id, pixelSize: item.pixelSize))
+        studio = makeStudio(document: document, isNew: false)
+        deps.analytics.track(.photoImported(source: source))
+        if let model = studio { Task { await model.load(startingLook: nil, preset: nil) } }
     }
 
     // MARK: Vault

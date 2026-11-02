@@ -3280,6 +3280,1636 @@
           }
         }
       }
+    },
+    "AI Studio" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yapay Zekâ Stüdyosu"
+          }
+        }
+      }
+    },
+    "Enhance, relight, restyle" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İyileştir, ışıkla, yeniden biçimlendir"
+          }
+        }
+      }
+    },
+    "3D Motion" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3B Hareket"
+          }
+        }
+      }
+    },
+    "Depth for a still" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durağan kareye derinlik"
+          }
+        }
+      }
+    },
+    "Collage" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kolaj"
+          }
+        }
+      }
+    },
+    "Photos, composed" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotoğraflar, bir arada"
+          }
+        }
+      }
+    },
+    "Carousel" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaydırmalı gönderi"
+          }
+        }
+      }
+    },
+    "One photo, many panels" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tek fotoğraf, birçok pano"
+          }
+        }
+      }
+    },
+    "Considered help, when you want it." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İstediğinde, özenli bir yardım."
+          }
+        }
+      }
+    },
+    "Enhance, Background and Relight run on your iPhone for free. Other tools use credits and run on AURUM's servers; the cost is always shown first." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İyileştir, Arka Plan ve Yeniden Işıkla iPhone'unda ücretsiz çalışır. Diğer araçlar kredi kullanır ve AURUM'un sunucularında çalışır; bedeli her zaman önce gösterilir."
+          }
+        }
+      }
+    },
+    "Depth and gentle movement for a still photo" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durağan bir fotoğrafa derinlik ve yumuşak bir hareket"
+          }
+        }
+      }
+    },
+    "On device" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cihazda"
+          }
+        }
+      }
+    },
+    "Recent" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Son işler"
+          }
+        }
+      }
+    },
+    "Jobs you start appear here, with their status and any refunds." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başlattığın işler durumları ve iadeleriyle birlikte burada görünür."
+          }
+        }
+      }
+    },
+    "On device · free preview" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cihazda · ücretsiz önizleme"
+          }
+        }
+      }
+    },
+    "Uses credits" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kredi kullanır"
+          }
+        }
+      }
+    },
+    "Coming soon" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yakında"
+          }
+        }
+      }
+    },
+    "Balance, %@" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bakiye, %@"
+          }
+        }
+      }
+    },
+    "1 credit" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 kredi"
+          }
+        }
+      }
+    },
+    "%lld credits" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kredi"
+          }
+        }
+      }
+    },
+    "Portrait" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Portre"
+          }
+        }
+      }
+    },
+    "Avatar" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avatar"
+          }
+        }
+      }
+    },
+    "Relight" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeniden ışıkla"
+          }
+        }
+      }
+    },
+    "Remove object" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nesne kaldır"
+          }
+        }
+      }
+    },
+    "Background" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arka plan"
+          }
+        }
+      }
+    },
+    "Enhance" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İyileştir"
+          }
+        }
+      }
+    },
+    "AI transition" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yapay zekâ geçişi"
+          }
+        }
+      }
+    },
+    "A styled portrait of the person in your photo" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotoğraftaki kişinin stilize bir portresi"
+          }
+        }
+      }
+    },
+    "A profile picture in a chosen style" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçtiğin tarzda bir profil fotoğrafı"
+          }
+        }
+      }
+    },
+    "Soft, warm light on faces" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yüzlere yumuşak, sıcak bir ışık"
+          }
+        }
+      }
+    },
+    "Brush over what shouldn't be there" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Orada olmaması gerekenin üzerini fırçala"
+          }
+        }
+      }
+    },
+    "Keep the subject, change the scene" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konuyu koru, sahneyi değiştir"
+          }
+        }
+      }
+    },
+    "Clearer detail, cleaner colour" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daha net ayrıntı, daha temiz renk"
+          }
+        }
+      }
+    },
+    "A generated move between two photos" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İki fotoğraf arasında üretilmiş bir geçiş"
+          }
+        }
+      }
+    },
+    "Ivory" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fildişi"
+          }
+        }
+      }
+    },
+    "Onyx" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oniks"
+          }
+        }
+      }
+    },
+    "Champagne" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şampanya"
+          }
+        }
+      }
+    },
+    "Blush" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pudra"
+          }
+        }
+      }
+    },
+    "Soft focus" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yumuşak odak"
+          }
+        }
+      }
+    },
+    "Keep the description under %lld characters." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Açıklamayı %lld karakterin altında tut."
+          }
+        }
+      }
+    },
+    "That description can't be used. Try describing the scene another way." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu açıklama kullanılamıyor. Sahneyi başka bir şekilde anlatmayı dene."
+          }
+        }
+      }
+    },
+    "Describe the scene you'd like." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İstediğin sahneyi anlat."
+          }
+        }
+      }
+    },
+    "Brush over what you'd like removed." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaldırmak istediğin şeyin üzerini fırçala."
+          }
+        }
+      }
+    },
+    "Choose a style." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir tarz seç."
+          }
+        }
+      }
+    },
+    "Choose a photo." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir fotoğraf seç."
+          }
+        }
+      }
+    },
+    "Choose %lld photos." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld fotoğraf seç."
+          }
+        }
+      }
+    },
+    "This photo can't be used." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu fotoğraf kullanılamıyor."
+          }
+        }
+      }
+    },
+    "This needs %lld credits. You have %lld." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bunun için %lld kredi gerekiyor. Sende %lld var."
+          }
+        }
+      }
+    },
+    "No person was found in this photo. Background works best on portraits." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu fotoğrafta kişi bulunamadı. Arka plan en iyi portrelerde çalışır."
+          }
+        }
+      }
+    },
+    "That didn't work on this photo. Please try another." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu fotoğrafta işe yaramadı. Lütfen başka birini dene."
+          }
+        }
+      }
+    },
+    "The result couldn't be downloaded. Your credits are safe; please try again later." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sonuç indirilemedi. Kredilerin güvende; lütfen daha sonra tekrar dene."
+          }
+        }
+      }
+    },
+    "This request wasn't accepted. Your credits have been returned." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu istek kabul edilmedi. Kredilerin iade edildi."
+          }
+        }
+      }
+    },
+    "The job didn't finish. Your credits have been returned." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İş tamamlanmadı. Kredilerin iade edildi."
+          }
+        }
+      }
+    },
+    "Waiting" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekliyor"
+          }
+        }
+      }
+    },
+    "Working" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çalışıyor"
+          }
+        }
+      }
+    },
+    "Ready" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hazır"
+          }
+        }
+      }
+    },
+    "Didn't finish · refunded" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamamlanmadı · iade edildi"
+          }
+        }
+      }
+    },
+    "Not accepted · refunded" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kabul edilmedi · iade edildi"
+          }
+        }
+      }
+    },
+    "This tool runs on AURUM's servers, which open soon. Nothing is uploaded and no credits are used until then." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu araç yakında açılacak olan AURUM sunucularında çalışır. O zamana kadar hiçbir şey yüklenmez ve kredi kullanılmaz."
+          }
+        }
+      }
+    },
+    "Choose %lld photos" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld fotoğraf seç"
+          }
+        }
+      }
+    },
+    "Result" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sonuç"
+          }
+        }
+      }
+    },
+    "Choose a photo to begin" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başlamak için bir fotoğraf seç"
+          }
+        }
+      }
+    },
+    "Change photo" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotoğrafı değiştir"
+          }
+        }
+      }
+    },
+    "Cost, %@" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bedel, %@"
+          }
+        }
+      }
+    },
+    "Style" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tarz"
+          }
+        }
+      }
+    },
+    "Describe the scene" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sahneyi anlat"
+          }
+        }
+      }
+    },
+    "Description (optional)" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Açıklama (isteğe bağlı)"
+          }
+        }
+      }
+    },
+    "For example, a quiet terrace at golden hour" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Örneğin, altın saatte sakin bir teras"
+          }
+        }
+      }
+    },
+    "Light from" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Işığın yönü"
+          }
+        }
+      }
+    },
+    "Light intensity" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Işık yoğunluğu"
+          }
+        }
+      }
+    },
+    "Brush" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fırça"
+          }
+        }
+      }
+    },
+    "Paint" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boya"
+          }
+        }
+      }
+    },
+    "Erase" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sil"
+          }
+        }
+      }
+    },
+    "Undo stroke" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fırça darbesini geri al"
+          }
+        }
+      }
+    },
+    "Clear" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temizle"
+          }
+        }
+      }
+    },
+    "Brush size" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fırça boyutu"
+          }
+        }
+      }
+    },
+    "Front" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Önden"
+          }
+        }
+      }
+    },
+    "Left" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soldan"
+          }
+        }
+      }
+    },
+    "Right" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sağdan"
+          }
+        }
+      }
+    },
+    "Above" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yukarıdan"
+          }
+        }
+      }
+    },
+    "Saving to Photos…" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotoğraflar'a kaydediliyor…"
+          }
+        }
+      }
+    },
+    "Opening your photo…" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotoğrafın açılıyor…"
+          }
+        }
+      }
+    },
+    "Working…" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çalışıyor…"
+          }
+        }
+      }
+    },
+    "Open in Studio" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stüdyo'da aç"
+          }
+        }
+      }
+    },
+    "Preview on device" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cihazda önizle"
+          }
+        }
+      }
+    },
+    "Free. Your photo stays on your iPhone." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ücretsiz. Fotoğrafın iPhone'unda kalır."
+          }
+        }
+      }
+    },
+    "Generate · %@" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oluştur · %@"
+          }
+        }
+      }
+    },
+    "Your photo is sent to AURUM's servers for this job only. Credits come back if it doesn't finish." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotoğrafın yalnızca bu iş için AURUM sunucularına gönderilir. İş tamamlanmazsa kredilerin geri gelir."
+          }
+        }
+      }
+    },
+    "Your photo. Drag to brush over what should be removed." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotoğrafın. Kaldırılacak şeyin üzerini fırçalamak için sürükle."
+          }
+        }
+      }
+    },
+    "Brushed" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fırçalandı"
+          }
+        }
+      }
+    },
+    "Nothing brushed yet" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Henüz fırçalanmadı"
+          }
+        }
+      }
+    },
+    "Studio" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stüdyo"
+          }
+        }
+      }
+    },
+    "Editorial" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editoryal"
+          }
+        }
+      }
+    },
+    "Oil Portrait" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yağlı Boya Portre"
+          }
+        }
+      }
+    },
+    "Silver Screen" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beyaz Perde"
+          }
+        }
+      }
+    },
+    "Clean" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sade"
+          }
+        }
+      }
+    },
+    "Illustrated" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İllüstrasyon"
+          }
+        }
+      }
+    },
+    "Soft Clay" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yumuşak Kil"
+          }
+        }
+      }
+    },
+    "Orbit" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yörünge"
+          }
+        }
+      }
+    },
+    "Dolly" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaydırma"
+          }
+        }
+      }
+    },
+    "Swing" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salınım"
+          }
+        }
+      }
+    },
+    "Float" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Süzülme"
+          }
+        }
+      }
+    },
+    "Finding depth…" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Derinlik bulunuyor…"
+          }
+        }
+      }
+    },
+    "Preview of your photo with the %@ move" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotoğrafının %@ hareketiyle önizlemesi"
+          }
+        }
+      }
+    },
+    "Estimated depth" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tahmini derinlik"
+          }
+        }
+      }
+    },
+    "Depth" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Derinlik"
+          }
+        }
+      }
+    },
+    "Save video" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Videoyu kaydet"
+          }
+        }
+      }
+    },
+    "Rendering your video…" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Videon hazırlanıyor…"
+          }
+        }
+      }
+    },
+    "%@ is a member move. Preview freely; membership is asked for when you save." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ bir üye hareketi. Dilediğince önizle; üyelik yalnızca kaydederken istenir."
+          }
+        }
+      }
+    },
+    "A 4-second loop, with a small mark on free exports." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "4 saniyelik bir döngü; ücretsiz dışa aktarımlarda küçük bir işaretle."
+          }
+        }
+      }
+    },
+    "A 4-second loop at full quality." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tam kalitede 4 saniyelik bir döngü."
+          }
+        }
+      }
+    },
+    "Choose photos" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotoğrafları seç"
+          }
+        }
+      }
+    },
+    "Finishing your collage…" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kolajın tamamlanıyor…"
+          }
+        }
+      }
+    },
+    "Tap another photo to swap, or drag and pinch to frame." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yer değiştirmek için başka bir fotoğrafa dokun ya da çerçevelemek için sürükle ve sıkıştır."
+          }
+        }
+      }
+    },
+    "Replace" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Değiştir"
+          }
+        }
+      }
+    },
+    "A member layout. Membership is asked for when you save." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir üye düzeni. Üyelik yalnızca kaydederken istenir."
+          }
+        }
+      }
+    },
+    "Tap a photo to select it." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçmek için bir fotoğrafa dokun."
+          }
+        }
+      }
+    },
+    "%@ layout, %lld photos" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ düzeni, %lld fotoğraf"
+          }
+        }
+      }
+    },
+    "Spacing" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aralık"
+          }
+        }
+      }
+    },
+    "Corners" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Köşeler"
+          }
+        }
+      }
+    },
+    "Background colour" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arka plan rengi"
+          }
+        }
+      }
+    },
+    "Add photos" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotoğraf ekle"
+          }
+        }
+      }
+    },
+    "Empty cell %lld" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boş hücre %lld"
+          }
+        }
+      }
+    },
+    "Add a photo" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir fotoğraf ekle"
+          }
+        }
+      }
+    },
+    "Select, then select another photo to swap" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seç, ardından yer değiştirmek için başka bir fotoğraf seç"
+          }
+        }
+      }
+    },
+    "Duet" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düet"
+          }
+        }
+      }
+    },
+    "Horizon" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ufuk"
+          }
+        }
+      }
+    },
+    "Triptych" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Triptik"
+          }
+        }
+      }
+    },
+    "Marquee" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afiş"
+          }
+        }
+      }
+    },
+    "Quartet" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dörtlü"
+          }
+        }
+      }
+    },
+    "Gallery" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Galeri"
+          }
+        }
+      }
+    },
+    "Cascade" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çağlayan"
+          }
+        }
+      }
+    },
+    "Mosaic" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mozaik"
+          }
+        }
+      }
+    },
+    "Atelier" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atölye"
+          }
+        }
+      }
+    },
+    "Contact Sheet" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontakt Baskı"
+          }
+        }
+      }
+    },
+    "Vitrine" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vitrin"
+          }
+        }
+      }
+    },
+    "Save all" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tümünü kaydet"
+          }
+        }
+      }
+    },
+    "Choose a wide photo" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geniş bir fotoğraf seç"
+          }
+        }
+      }
+    },
+    "Choose a wide photo to begin" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başlamak için geniş bir fotoğraf seç"
+          }
+        }
+      }
+    },
+    "Panel %lld of %lld" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pano %lld / %lld"
+          }
+        }
+      }
+    },
+    "Saving %lld of %lld…" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaydediliyor: %lld / %lld…"
+          }
+        }
+      }
+    },
+    "%lld panels saved to Photos, in order." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld pano sırasıyla Fotoğraflar'a kaydedildi."
+          }
+        }
+      }
+    },
+    "Post the panels in order and they swipe as one photo. Free exports carry a small mark on the last panel." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Panoları sırayla paylaş, kaydırıldığında tek bir fotoğraf gibi görünsün. Ücretsiz dışa aktarımlarda son panoda küçük bir işaret bulunur."
+          }
+        }
+      }
+    },
+    "Post the panels in order and they swipe as one photo." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Panoları sırayla paylaş, kaydırıldığında tek bir fotoğraf gibi görünsün."
+          }
+        }
+      }
+    },
+    "Panels" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Panolar"
+          }
+        }
+      }
+    },
+    "Drops" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koleksiyon bırakımları"
+          }
+        }
+      }
+    },
+    "NOW SHOWING" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ŞU AN SAHNEDE"
+          }
+        }
+      }
+    },
+    "Until %@" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ tarihine kadar"
+          }
+        }
+      }
+    },
+    "From %@" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ itibarıyla"
+          }
+        }
+      }
+    },
+    "See the templates" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şablonları gör"
+          }
+        }
+      }
+    },
+    "1 look" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 görünüm"
+          }
+        }
+      }
+    },
+    "%lld looks" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld görünüm"
+          }
+        }
+      }
+    },
+    "1 template" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 şablon"
+          }
+        }
+      }
+    },
+    "%lld templates" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld şablon"
+          }
+        }
+      }
+    },
+    "1 sticker" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 çıkartma"
+          }
+        }
+      }
+    },
+    "%lld stickers" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld çıkartma"
+          }
+        }
+      }
+    },
+    "Create something today to keep your streak." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serini sürdürmek için bugün bir şey oluştur."
+          }
+        }
+      }
+    },
+    "Create something today to keep your %lld-day streak." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld günlük serini sürdürmek için bugün bir şey oluştur."
+          }
+        }
+      }
+    },
+    "1 day of creating" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 gün üretim"
+          }
+        }
+      }
+    },
+    "%lld days in a row" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Üst üste %lld gün"
+          }
+        }
+      }
+    },
+    "Velvet Season" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kadife Mevsimi"
+          }
+        }
+      }
+    },
+    "Winter Salon" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kış Salonu"
+          }
+        }
+      }
+    },
+    "First Light" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İlk Işık"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

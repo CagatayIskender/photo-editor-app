@@ -15,6 +15,8 @@ struct SalonView: View {
                 header
                 hero
                 createRow
+                AtelierCreateRow(app: app)
+                DropsSection(app: app)
                 if !app.drafts.isEmpty { continueRow }
                 ForEach(orderedCollections) { collection in
                     collectionRow(collection)
