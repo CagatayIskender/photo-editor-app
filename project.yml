@@ -1,0 +1,75 @@
+name: Aurum
+options:
+  bundleIdPrefix: app.aurum
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.10"
+    DEVELOPMENT_TEAM: ""
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+packages:
+  AurumCore:
+    path: Packages/AurumCore
+  AurumDesign:
+    path: Packages/AurumDesign
+  AurumRender:
+    path: Packages/AurumRender
+  AurumServices:
+    path: Packages/AurumServices
+  AurumFeatures:
+    path: Packages/AurumFeatures
+targets:
+  Aurum:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+      - path: Looks/catalog.json
+        buildPhase: resources
+      - path: Brand/brand.json
+        buildPhase: resources
+    dependencies:
+      - package: AurumCore
+      - package: AurumDesign
+      - package: AurumRender
+      - package: AurumServices
+      - package: AurumFeatures
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: AURUM
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        UIUserInterfaceStyle: Dark
+        NSPhotoLibraryUsageDescription: "AURUM opens your photos so you can edit them. Edits stay on your iPhone."
+        NSPhotoLibraryAddUsageDescription: "AURUM saves your finished photos to your library."
+        UIAppFonts:
+          - Fonts/PlayfairDisplay-Medium.ttf
+          - Fonts/PlayfairDisplay-Italic.ttf
+          - Fonts/Inter-Regular.ttf
+          - Fonts/Inter-Medium.ttf
+          - Fonts/Inter-SemiBold.ttf
+        CFBundleURLTypes:
+          - CFBundleURLSchemes: [aurum]
+        LSApplicationQueriesSchemes: [instagram-stories]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.aurum.ios
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+  AurumUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [AppUITests]
+    dependencies:
+      - target: Aurum
+schemes:
+  Aurum:
+    build:
+      targets:
+        Aurum: all
+    test:
+      targets: [AurumUITests]

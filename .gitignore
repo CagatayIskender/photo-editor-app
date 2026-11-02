@@ -1,0 +1,10 @@
+.DS_Store
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+DerivedData/
+.build/
+.swiftpm/
+Packages/*/.build/
+App/Resources/Fonts/*.ttf
+__pycache__/

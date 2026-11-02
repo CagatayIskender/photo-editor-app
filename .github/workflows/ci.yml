@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  core-linux:
+    name: AurumCore tests (Linux)
+    runs-on: ubuntu-latest
+    container: swift:6.0
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test
+        working-directory: Packages/AurumCore
+        run: swift test
+
+  catalog:
+    name: Look catalogue is up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 tools/generate_catalog.py --check
+
+  ios:
+    name: iOS build and tests
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate project
+        run: xcodegen generate
+      - name: Package tests
+        run: |
+          for p in AurumCore AurumDesign AurumRender AurumServices AurumFeatures; do
+            (cd "Packages/$p" && xcodebuild test -scheme "$p" -destination 'platform=iOS Simulator,name=iPhone 16' -quiet) || exit 1
+          done
+      - name: App build
+        run: xcodebuild build -project Aurum.xcodeproj -scheme Aurum -destination 'platform=iOS Simulator,name=iPhone 16' CODE_SIGNING_ALLOWED=NO -quiet
