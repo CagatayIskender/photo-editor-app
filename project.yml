@@ -27,6 +27,8 @@ targets:
     platform: iOS
     sources:
       - path: App
+        excludes:
+          - "**/*.md"
       - path: Looks/catalog.json
         buildPhase: resources
       - path: Brand/brand.json
@@ -48,14 +50,14 @@ targets:
         NSPhotoLibraryUsageDescription: "AURUM opens your photos so you can edit them. Edits stay on your iPhone."
         NSPhotoLibraryAddUsageDescription: "AURUM saves your finished photos to your library."
         UIAppFonts:
-          - Fonts/PlayfairDisplay-Medium.ttf
-          - Fonts/PlayfairDisplay-Italic.ttf
-          - Fonts/Inter-Regular.ttf
-          - Fonts/Inter-Medium.ttf
-          - Fonts/Inter-SemiBold.ttf
-          - Fonts/CormorantGaramond-MediumItalic.ttf
-          - Fonts/Italiana-Regular.ttf
-          - Fonts/BodoniModa-Medium.ttf
+          - PlayfairDisplay-Medium.ttf
+          - PlayfairDisplay-Italic.ttf
+          - Inter-Regular.ttf
+          - Inter-Medium.ttf
+          - Inter-SemiBold.ttf
+          - CormorantGaramond-MediumItalic.ttf
+          - Italiana-Regular.ttf
+          - BodoniModa-Medium.ttf
         CFBundleURLTypes:
           - CFBundleURLSchemes: [aurum]
         LSApplicationQueriesSchemes: [instagram-stories]
