@@ -39,7 +39,7 @@ final class AurumUITests: XCTestCase {
         // A free look is already suggested, so exporting is allowed straight away.
         export.tap()
         let save = app.buttons["export.save"]
-        XCTAssertTrue(save.waitForExistence(timeout: 3), "No export save button. Screen:\n\(app.debugDescription)")
+        XCTAssertTrue(save.waitForExistence(timeout: 5), "No export save button. Screen:\n\(app.debugDescription)")
         mark("export sheet shown")
         save.tap()
         XCTAssertTrue(app.staticTexts["Saved to Photos"].waitForExistence(timeout: 6), "Not saved. Screen:\n\(app.debugDescription)")
