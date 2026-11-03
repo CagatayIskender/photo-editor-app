@@ -60,6 +60,9 @@ class PhotoExporter(
         }
     }
 
+    /** Saves an already rendered bitmap (collage, carousel panel) to Pictures/AURUM as JPEG. */
+    suspend fun saveToLibrary(bitmap: Bitmap): Uri = withContext(Dispatchers.IO) { save(bitmap) }
+
     /**
      * How large to decode the photo. Free exports only need enough pixels for
      * a 2048 px result after the crop; member exports use full resolution

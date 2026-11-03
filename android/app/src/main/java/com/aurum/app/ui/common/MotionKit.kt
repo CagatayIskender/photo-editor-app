@@ -20,6 +20,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
@@ -241,4 +242,25 @@ fun BusyVeil(progress: Float?, modifier: Modifier = Modifier, caption: @Composab
             caption?.invoke()
         }
     }
+}
+
+/** `clickable` with the sink-under-the-finger press state of [pressable], for tiles and cards. */
+fun Modifier.pressClickable(
+    role: androidx.compose.ui.semantics.Role = androidx.compose.ui.semantics.Role.Button,
+    onClickLabel: String? = null,
+    enabled: Boolean = true,
+    scale: Float = 0.965f,
+    onClick: () -> Unit,
+): Modifier = composed {
+    val interaction = remember { MutableInteractionSource() }
+    pressable(interaction, scale).then(
+        Modifier.clickable(
+            interactionSource = interaction,
+            indication = androidx.compose.foundation.LocalIndication.current,
+            enabled = enabled,
+            onClickLabel = onClickLabel,
+            role = role,
+            onClick = onClick,
+        ),
+    )
 }

@@ -46,6 +46,14 @@ import com.aurum.app.billing.MembershipPlan
 import com.aurum.app.billing.PlanPeriod
 import com.aurum.app.billing.PurchaseOutcome
 import com.aurum.app.billing.RestoreOutcome
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import com.aurum.app.ui.common.AmbientGlow
+import com.aurum.app.ui.common.CrownBadge
+import com.aurum.app.ui.common.SkeletonBlock
+import com.aurum.app.ui.common.aurumEntrance
+import com.aurum.app.ui.common.motion
+import com.aurum.app.ui.common.pressClickable
 import com.aurum.app.l10n.tr
 import com.aurum.app.l10n.trDynamic
 import com.aurum.app.ui.common.AurumIcons
@@ -87,7 +95,9 @@ fun PaywallScreen(container: AppContainer, onClose: () -> Unit, onMember: () -> 
             }
     }
 
-    Box(Modifier.fillMaxSize().background(p.background).safeDrawingPadding()) {
+    Box(Modifier.fillMaxSize().background(p.background)) {
+      AmbientGlow()
+      Box(Modifier.fillMaxSize().safeDrawingPadding()) {
         Column(
             Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = Spacing.l),
             verticalArrangement = Arrangement.spacedBy(Spacing.m),
@@ -95,10 +105,11 @@ fun PaywallScreen(container: AppContainer, onClose: () -> Unit, onMember: () -> 
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 IconAction(AurumIcons.close, tr("Close"), onClose)
             }
-            Text(trDynamic(config.paywallHeadline), style = AurumType.display, color = p.textPrimary)
+            CrownBadge(22.dp)
+            Text(trDynamic(config.paywallHeadline), style = AurumType.display, color = p.textPrimary, modifier = Modifier.aurumEntrance(0, distance = 22.dp))
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
-                for (benefit in config.paywallBenefits) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                config.paywallBenefits.forEachIndexed { index, benefit ->
+                    Row(Modifier.aurumEntrance(index + 1), verticalAlignment = Alignment.CenterVertically) {
                         Icon(AurumIcons.check, null, tint = p.accent, modifier = Modifier.size(18.dp))
                         Spacer(Modifier.size(Spacing.xs))
                         Text(trDynamic(benefit), style = AurumType.body, color = p.textPrimary)
@@ -108,11 +119,14 @@ fun PaywallScreen(container: AppContainer, onClose: () -> Unit, onMember: () -> 
 
             val list = plans
             if (list == null) {
-                Box(Modifier.fillMaxWidth().height(120.dp), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = p.accent, strokeWidth = 2.dp)
+                Column(verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
+                    SkeletonBlock(Modifier.fillMaxWidth().height(72.dp), 14.dp)
+                    SkeletonBlock(Modifier.fillMaxWidth().height(72.dp), 14.dp)
                 }
             } else {
-                for (plan in list) PlanCard(plan, plan == selected) { selected = plan }
+                list.forEachIndexed { index, plan ->
+                    Box(Modifier.aurumEntrance(index + 4)) { PlanCard(plan, plan == selected) { selected = plan } }
+                }
             }
 
             when (message) {
@@ -131,6 +145,7 @@ fun PaywallScreen(container: AppContainer, onClose: () -> Unit, onMember: () -> 
                 if (trial != null) tr("Start %lld-day free trial", trial) else tr("Continue"),
                 enabled = plan != null,
                 busy = busy,
+                sheen = true,
                 onClick = {
                     val activity = context.findActivity() ?: return@GoldButton
                     val chosen = plan ?: return@GoldButton
@@ -174,6 +189,7 @@ fun PaywallScreen(container: AppContainer, onClose: () -> Unit, onMember: () -> 
             }
             Spacer(Modifier.height(Spacing.l))
         }
+      }
     }
 }
 
@@ -181,13 +197,15 @@ fun PaywallScreen(container: AppContainer, onClose: () -> Unit, onMember: () -> 
 private fun PlanCard(plan: MembershipPlan, isSelected: Boolean, onSelect: () -> Unit) {
     val p = LocalPalette.current
     val shape = RoundedCornerShape(14.dp)
+    val border by animateDpAsState(if (isSelected) 2.dp else 1.dp, motion(), label = "planBorder")
+    val borderColor by animateColorAsState(if (isSelected) p.accent else p.hairline, motion(), label = "planColor")
     Row(
         Modifier
             .fillMaxWidth()
             .clip(shape)
             .background(p.surface)
-            .border(if (isSelected) 2.dp else 1.dp, if (isSelected) p.accent else p.hairline, shape)
-            .clickable(role = Role.RadioButton, onClick = onSelect)
+            .border(border, borderColor, shape)
+            .pressClickable(role = Role.RadioButton, scale = 0.985f, onClick = onSelect)
             .semantics(mergeDescendants = true) { selected = isSelected }
             .padding(Spacing.m),
         verticalAlignment = Alignment.CenterVertically,

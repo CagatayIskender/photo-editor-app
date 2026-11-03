@@ -5,30 +5,45 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Paint
 import com.aurum.core.CropSpec
+import com.aurum.app.ondevice.OnDeviceFaces
 import com.aurum.core.EditDocument
+import com.aurum.core.FaceGeometry
+import com.aurum.core.OperationKind
 import com.aurum.core.render.CropGeometry
 import com.aurum.core.render.PixelRenderer
 
 /**
  * The photo pipeline shared by the Studio preview and the export, in the iOS
- * order: looks and adjustments on the whole photo, then straighten, crop,
+ * order: retouch, looks and adjustments on the whole photo, then straighten, crop,
  * flips and quarter turns. Overlays are drawn afterwards by [OverlayPainter].
  */
 object EditRendering {
 
-    /** Looks and adjustments into a new bitmap, then the crop. */
-    fun render(renderer: PixelRenderer, document: EditDocument, source: Bitmap, applyCrop: Boolean = true): Bitmap {
+    /**
+     * Retouch, looks and adjustments into a new bitmap, then the crop.
+     * [faces] are the photo's faces for the retouch operation; when null and
+     * the document retouches, they are detected on [source] (blocking, so
+     * call this off the main thread).
+     */
+    fun render(renderer: PixelRenderer, document: EditDocument, source: Bitmap, applyCrop: Boolean = true, faces: List<FaceGeometry>? = null): Bitmap {
         val w = source.width
         val h = source.height
         val pixels = IntArray(w * h)
         source.getPixels(pixels, 0, w, 0, 0, w, h)
-        renderer.renderInPlace(document, pixels, w, h)
+        val found = faces ?: if (needsFaces(document)) OnDeviceFaces.detect(source) else emptyList()
+        renderer.renderInPlace(document, pixels, w, h, faces = found)
         val graded = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
         graded.setPixels(pixels, 0, w, 0, 0, w, h)
         if (!applyCrop || document.crop.isIdentity) return graded
         val cropped = crop(graded, document.crop)
         if (cropped !== graded) graded.recycle()
         return cropped
+    }
+
+    /** True when the document has an enabled, non-neutral retouch, which needs the photo's faces. */
+    fun needsFaces(document: EditDocument): Boolean = document.operations.any { op ->
+        val k = op.kind
+        op.isEnabled && k is OperationKind.Retouch && !k.retouch.isNeutral
     }
 
     /** Matches iOS `applyCrop`. Core Image's y axis points up, so its counter-clockwise straighten is negated here. */

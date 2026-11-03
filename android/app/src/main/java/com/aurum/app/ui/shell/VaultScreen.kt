@@ -15,7 +15,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +36,8 @@ import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.aurum.app.ui.common.aurumEntrance
+import com.aurum.app.ui.common.pressClickable
 import com.aurum.app.l10n.tr
 import com.aurum.app.ui.AppViewModel
 import com.aurum.app.ui.common.AurumIcons
@@ -76,12 +80,12 @@ fun VaultScreen(model: AppViewModel) {
                     horizontalArrangement = Arrangement.spacedBy(Spacing.s),
                     verticalArrangement = Arrangement.spacedBy(Spacing.m),
                 ) {
-                    items(drafts, key = { it.id }) { draft ->
-                        Box {
+                    itemsIndexed(drafts, key = { _, it -> it.id }) { index, draft ->
+                        Box(Modifier.aurumEntrance(index)) {
                             DraftTile(
                                 draft, 104.dp,
                                 Modifier
-                                    .clickable(role = Role.Button) { model.openDraft(draft.id) }
+                                    .pressClickable { model.openDraft(draft.id) }
                                     .semantics {
                                         customActions = listOf(CustomAccessibilityAction(deleteLabel) { model.deleteDraft(draft.id); true })
                                     },
@@ -98,13 +102,13 @@ fun VaultScreen(model: AppViewModel) {
                 }
             } else {
                 LazyColumn(contentPadding = PaddingValues(Spacing.m), verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
-                    items(presets, key = { it.id }) { preset ->
+                    itemsIndexed(presets, key = { _, it -> it.id }) { index, preset ->
                         val looks = preset.operations.mapNotNull { (it.kind as? OperationKind.Look)?.look?.lookID }
                             .mapNotNull { c.catalog.look(it)?.name }
                         val shareTitle = tr("Share %@", preset.name)
                         val shareText = tr("A preset made in AURUM")
                         Row(
-                            Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(p.surface).padding(start = Spacing.m),
+                            Modifier.fillMaxWidth().aurumEntrance(index).clip(RoundedCornerShape(14.dp)).background(p.surface).padding(start = Spacing.m),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Column(Modifier.weight(1f).padding(vertical = Spacing.s)) {

@@ -55,6 +55,7 @@
     <string name="s_adjustments_only">Yalnızca ayarlar</string>
     <string name="s_all">Tümü</string>
     <string name="s_all_faces">Tüm yüzler</string>
+    <string name="s_allow_camera">Kameraya izin ver</string>
     <string name="s_allow_photo_access">Fotoğraf erişimine izin ver</string>
     <string name="s_applies_a_light_natural_retouch">Hafif, doğal bir rötuş uygular</string>
     <string name="s_aspect">En-boy</string>
@@ -62,6 +63,7 @@
     <string name="s_auto_enhance">Otomatik İyileştir</string>
     <string name="s_auto_studio">Otomatik Stüdyo</string>
     <string name="s_auto_tone">Otomatik ton</string>
+    <string name="s_back">Geri</string>
     <string name="s_background">Arka plan</string>
     <string name="s_background_colour">Arka plan rengi</string>
     <string name="s_balance_colour">Rengi dengele</string>
@@ -175,12 +177,17 @@
     <string name="s_featured_collection">ÖNE ÇIKAN KOLEKSİYON</string>
     <string name="s_fade">Soldurma</string>
     <string name="s_features">Detaylar</string>
+    <string name="s_fewer_panels">Daha az panel</string>
     <string name="s_finding_depth">Derinlik bulunuyor…</string>
     <string name="s_finishing_your_collage">Kolajın tamamlanıyor…</string>
     <string name="s_finishing_your_photo">Fotoğrafın tamamlanıyor…</string>
     <string name="s_finishing_your_video">Videon tamamlanıyor…</string>
     <string name="s_first_light">İlk Işık</string>
     <string name="s_fix_red_eye">Kırmızı gözü düzelt</string>
+    <string name="s_flash">Flaş</string>
+    <string name="s_flash_auto">Flaş otomatik</string>
+    <string name="s_flash_off">Flaş kapalı</string>
+    <string name="s_flash_on">Flaş açık</string>
     <string name="s_flicker">Titreme</string>
     <string name="s_flip_horizontally">Yatay çevir</string>
     <string name="s_float">Süzülme</string>
@@ -196,7 +203,9 @@
     <string name="s_free_for_lld_days_then_per_year_cancel_anytime_i_37bf7d">%1$d gün ücretsiz, sonrasında yılda %2$s. Ayarlar\'dan istediğin zaman iptal edebilirsin.</string>
     <string name="s_free_preview_members_keep">Ücretsiz önizleme · üyeler saklar</string>
     <string name="s_free_to_preview_your_photo_stays_on_your_iphone">Önizleme ücretsiz. Fotoğrafın iPhone\'unda kalır.</string>
+    <string name="s_free_to_preview_your_photo_stays_on_your_phone">Önizleme ücretsiz. Fotoğrafın telefonunda kalır.</string>
     <string name="s_free_on_your_iphone">Ücretsiz · iPhone\'unda</string>
+    <string name="s_free_on_your_phone">Ücretsiz · telefonunda</string>
     <string name="s_from">%s itibarıyla</string>
     <string name="s_front">Önden</string>
     <string name="s_full_resolution_no_watermark">Tam çözünürlük, filigran yok</string>
@@ -251,6 +260,7 @@
     <string name="s_members_tool">Üyelere özel araç</string>
     <string name="s_membership_isn_t_available_right_now">Üyelik şu anda kullanılamıyor.</string>
     <string name="s_monogram">Monogram</string>
+    <string name="s_more_panels">Daha fazla panel</string>
     <string name="s_mosaic">Mozaik</string>
     <string name="s_move_earlier">Öne al</string>
     <string name="s_move_later">Sona al</string>
@@ -281,10 +291,12 @@
     <string name="s_original">ORİJİNAL</string>
     <string name="s_off">Kapalı</string>
     <string name="s_on_your_iphone">iPhone\'unda</string>
+    <string name="s_on_your_phone">Telefonunda</string>
     <string name="s_one_photo_many_panels">Tek fotoğraf, birçok pano</string>
     <string name="s_onyx">Oniks</string>
     <string name="s_open_settings">Ayarlar\'ı aç</string>
     <string name="s_open_a_photo_and_aurum_looks_for_faces_people_th">Bir fotoğraf aç; AURUM yüzleri, kişileri, ufku ve ışığı bulup düzeltmeler önersin. Her şey iPhone\'unda klasik fotoğraf işlemeyle yapılır; hiçbir şey yüklenmez.</string>
+    <string name="s_open_a_photo_and_aurum_looks_for_faces_people_th_c312d9">Bir fotoğraf aç; AURUM yüzleri, kişileri, ufku ve ışığı bulup düzeltmeler önersin. Her şey telefonunda klasik fotoğraf işlemeyle yapılır; hiçbir şey yüklenmez.</string>
     <string name="s_open_in_studio">Stüdyo\'da aç</string>
     <string name="s_opening_title_optional">Açılış başlığı (isteğe bağlı)</string>
     <string name="s_opening_your_photo">Fotoğrafın açılıyor…</string>
@@ -331,6 +343,7 @@
     <string name="s_pulse">Nabız</string>
     <string name="s_quartet">Dörtlü</string>
     <string name="s_quick_fixes_made_on_your_iphone">iPhone\'unda yapılan hızlı düzeltmeler.</string>
+    <string name="s_quick_fixes_made_on_your_phone">Telefonunda yapılan hızlı düzeltmeler.</string>
     <string name="s_record_video">Video kaydet</string>
     <string name="s_recording">Kaydediliyor, %s</string>
     <string name="s_red_eye">Kırmızı göz</string>
@@ -459,6 +472,7 @@
     <string name="s_to_edit_a_photo_allow_aurum_to_access_your_photo">Fotoğraf düzenlemek için Ayarlar\'dan AURUM\'un fotoğraflarına erişmesine izin ver.</string>
     <string name="s_to_make_a_video_allow_aurum_to_access_your_photo">Video hazırlamak için Ayarlar\'dan AURUM\'un fotoğraflarına ve videolarına erişmesine izin ver.</string>
     <string name="s_to_shoot_with_a_look_applied_allow_aurum_to_use">Görünüm uygulanmış halde çekim yapmak için Ayarlar\'dan AURUM\'un kamerayı kullanmasına izin ver. Fotoğrafların iPhone\'unda kalır.</string>
+    <string name="s_to_shoot_with_a_look_applied_allow_aurum_to_use_975870">Bir look uygulanmış çekim yapmak için AURUM\'un kamerayı kullanmasına Ayarlar\'dan izin ver. Fotoğrafların telefonunda kalır.</string>
     <string name="s_tone_colour_horizon_and_red_eye_in_one_tap">Ton, renk, ufuk ve kırmızı göz tek dokunuşta</string>
     <string name="s_touch_and_hold_to_see_the_original">Orijinali görmek için dokunup basılı tut</string>
     <string name="s_transition">Geçiş</string>

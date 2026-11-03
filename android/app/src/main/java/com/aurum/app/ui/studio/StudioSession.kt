@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import com.aurum.app.AppContainer
 import com.aurum.app.imaging.EditRendering
+import com.aurum.app.ondevice.FaceCache
 import com.aurum.app.imaging.ImageLoader
 import com.aurum.app.imaging.OverlayPainter
 import com.aurum.core.EditDocument
@@ -38,7 +39,7 @@ import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.util.UUID
 
-enum class StudioTool(val titleKey: String) { looks("Looks"), adjust("Adjust"), crop("Crop"), text("Text"), stickers("Stickers") }
+enum class StudioTool(val titleKey: String) { looks("Looks"), adjust("Adjust"), retouch("Retouch"), crop("Crop"), text("Text"), stickers("Stickers") }
 
 /**
  * One photo open in the Studio: the document and its undo history, the
@@ -128,7 +129,9 @@ class StudioSession(
                 .collectLatest { doc ->
                     val source = base ?: return@collectLatest
                     val (graded, plain) = withContext(Dispatchers.Default) {
-                        EditRendering.render(renderer, doc, source).asImageBitmap() to
+                        // Retouching needs the photo's faces: detected once per photo, then cached.
+                        val faces = if (EditRendering.needsFaces(doc)) FaceCache.faces(sourceUri.toString(), source) else emptyList()
+                        EditRendering.render(renderer, doc, source, faces = faces).asImageBitmap() to
                             EditRendering.crop(source, doc.crop).asImageBitmap()
                     }
                     preview = graded

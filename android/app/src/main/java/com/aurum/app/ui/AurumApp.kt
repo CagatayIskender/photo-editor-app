@@ -8,6 +8,12 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import com.aurum.app.ui.theme.LocalReduceMotion
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,10 +46,22 @@ fun AurumApp(model: AppViewModel) {
     BackHandler(enabled = model.screen != Screen.Shell && model.screen != Screen.Onboarding) { model.back() }
 
     val fade = motion<Float>()
+    val reduce = LocalReduceMotion.current
     Box(Modifier.fillMaxSize().background(LocalPalette.current.background)) {
         AnimatedContent(
             targetState = model.screen,
-            transitionSpec = { fadeIn(fade) togetherWith fadeOut(fade) },
+            transitionSpec = {
+                val opening = targetState != Screen.Shell && targetState != Screen.Onboarding
+                if (reduce) {
+                    fadeIn(fade) togetherWith fadeOut(fade)
+                } else if (opening) {
+                    (fadeIn(tween(320)) + slideInVertically(tween(380)) { it / 12 } + scaleIn(tween(380), initialScale = 0.98f)) togetherWith
+                        (fadeOut(tween(260)) + scaleOut(tween(320), targetScale = 0.96f))
+                } else {
+                    (fadeIn(tween(300)) + scaleIn(tween(340), initialScale = 0.96f)) togetherWith
+                        (fadeOut(tween(220)) + slideOutVertically(tween(300)) { it / 14 })
+                }
+            },
             contentKey = { if (it is Screen.Video) "video-${it.project?.id}" else it::class },
             label = "screen",
         ) { screen ->

@@ -51,5 +51,61 @@
   "AURUM edits on your phone. Your photos are never uploaded. You choose which photos AURUM can see.": {
     "en": "AURUM edits on your phone. Your photos are never uploaded. You choose which photos AURUM can see.",
     "tr": "AURUM telefonunda düzenler. Fotoğrafların hiçbir zaman yüklenmez. AURUM'un hangi fotoğrafları görebileceğini sen seçersin."
+  },
+  "Back": {
+    "en": "Back",
+    "tr": "Geri"
+  },
+  "Free to preview. Your photo stays on your phone.": {
+    "en": "Free to preview. Your photo stays on your phone.",
+    "tr": "Önizleme ücretsiz. Fotoğrafın telefonunda kalır."
+  },
+  "Free · on your phone": {
+    "en": "Free · on your phone",
+    "tr": "Ücretsiz · telefonunda"
+  },
+  "On your phone": {
+    "en": "On your phone",
+    "tr": "Telefonunda"
+  },
+  "Open a photo and AURUM looks for faces, people, the horizon and the light, then suggests fixes. Everything runs on your phone with classic photo processing; nothing is uploaded.": {
+    "en": "Open a photo and AURUM looks for faces, people, the horizon and the light, then suggests fixes. Everything runs on your phone with classic photo processing; nothing is uploaded.",
+    "tr": "Bir fotoğraf aç; AURUM yüzleri, kişileri, ufku ve ışığı bulup düzeltmeler önersin. Her şey telefonunda klasik fotoğraf işlemeyle yapılır; hiçbir şey yüklenmez."
+  },
+  "Quick fixes, made on your phone.": {
+    "en": "Quick fixes, made on your phone.",
+    "tr": "Telefonunda yapılan hızlı düzeltmeler."
+  },
+  "Flash": {
+    "en": "Flash",
+    "tr": "Flaş"
+  },
+  "Flash off": {
+    "en": "Flash off",
+    "tr": "Flaş kapalı"
+  },
+  "Flash auto": {
+    "en": "Flash auto",
+    "tr": "Flaş otomatik"
+  },
+  "Flash on": {
+    "en": "Flash on",
+    "tr": "Flaş açık"
+  },
+  "Allow camera": {
+    "en": "Allow camera",
+    "tr": "Kameraya izin ver"
+  },
+  "To shoot with a look applied, allow AURUM to use the camera in Settings. Your photos stay on your phone.": {
+    "en": "To shoot with a look applied, allow AURUM to use the camera in Settings. Your photos stay on your phone.",
+    "tr": "Bir look uygulanmış çekim yapmak için AURUM'un kamerayı kullanmasına Ayarlar'dan izin ver. Fotoğrafların telefonunda kalır."
+  },
+  "Fewer panels": {
+    "en": "Fewer panels",
+    "tr": "Daha az panel"
+  },
+  "More panels": {
+    "en": "More panels",
+    "tr": "Daha fazla panel"
   }
 }

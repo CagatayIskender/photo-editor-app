@@ -3,9 +3,8 @@ package com.aurum.core
 import kotlinx.serialization.Serializable
 
 /**
- * Face-aware retouching settings. Kept so documents made on iOS round-trip
- * and the export gate treats them correctly; the Android renderer does not
- * draw retouching yet (see README).
+ * Face-aware retouching settings. Rendered by [com.aurum.core.render.RetouchRenderer]
+ * with faces found on the device.
  */
 @Serializable
 data class RetouchSettings(
@@ -64,6 +63,17 @@ data class FaceRetouch(
         }
     }
 
+    /**
+     * Every control multiplied by [amount] (0...1), for a strength slider
+     * over a preset such as [natural].
+     */
+    fun scaled(amount: Double): FaceRetouch {
+        val k = (0.0..1.0).clamp(amount)
+        var r = this
+        for (control in RetouchControl.entries) r = r.with(control, this[control] * k)
+        return r
+    }
+
     companion object {
         /** The one-tap natural retouch. */
         val natural = FaceRetouch(smoothing = 0.35, blemishRemoval = 0.5, underEye = 0.3, teethWhitening = 0.2, eyeBrightening = 0.2)
@@ -76,4 +86,50 @@ enum class RetouchControl {
 
     val isReshape: Boolean get() = this in setOf(jaw, cheeks, nose, eyes, lips, forehead)
     val range: ClosedFloatingPointRange<Double> get() = if (isReshape) -1.0..1.0 else 0.0..1.0
+
+    val displayName: String
+        get() = when (this) {
+            smoothing -> "Smooth skin"
+            blemishRemoval -> "Blemishes"
+            underEye -> "Under-eye"
+            teethWhitening -> "Teeth"
+            eyeBrightening -> "Bright eyes"
+            jaw -> "Jaw"
+            cheeks -> "Cheeks"
+            nose -> "Nose"
+            eyes -> "Eyes"
+            lips -> "Lips"
+            forehead -> "Forehead"
+        }
+}
+
+/**
+ * A detected face in normalised image coordinates (origin top-left), as
+ * produced by the on-device face detector. Kept in core so render code and
+ * tests can work with faces without the detector.
+ */
+data class FaceGeometry(
+    val bounds: NormalizedRect,
+    val regions: Map<Region, List<NormalizedPoint>> = emptyMap(),
+) {
+    enum class Region { faceContour, leftEye, rightEye, leftEyebrow, rightEyebrow, nose, outerLips, innerLips }
+
+    /** The centre of a region's points, or null if the detector didn't find it. */
+    fun center(region: Region): NormalizedPoint? {
+        val pts = regions[region]
+        if (pts.isNullOrEmpty()) return null
+        return NormalizedPoint(pts.sumOf { it.x } / pts.size, pts.sumOf { it.y } / pts.size)
+    }
+
+    companion object {
+        /**
+         * Sorts faces left to right, then top to bottom, so per-face settings
+         * keep pointing at the same person between detections.
+         */
+        fun readingOrder(faces: List<FaceGeometry>): List<FaceGeometry> = faces.sortedWith { a, b ->
+            val rowA = swiftRound(a.bounds.y / maxOf(a.bounds.height, 0.01))
+            val rowB = swiftRound(b.bounds.y / maxOf(b.bounds.height, 0.01))
+            if (rowA == rowB) a.bounds.x.compareTo(b.bounds.x) else rowA.compareTo(rowB)
+        }
+    }
 }
