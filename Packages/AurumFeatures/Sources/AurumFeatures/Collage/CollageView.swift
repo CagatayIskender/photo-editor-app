@@ -65,7 +65,13 @@ struct CollageView: View {
                 controls
             }
         }
-        .background(AurumColor.background.ignoresSafeArea())
+        .background(
+            ZStack {
+                AurumColor.background
+                AmbientGlow(intensity: 0.4)
+            }
+            .ignoresSafeArea()
+        )
         .preferredColorScheme(.dark)
         .sheet(item: $picker) { request in
             switch request {
@@ -95,11 +101,16 @@ struct CollageView: View {
             switch model.phase {
             case .exporting:
                 HStack(spacing: Spacing.s) {
-                    ProgressView().tint(AurumColor.accent)
+                    GoldProgressRing(progress: nil, size: 22)
                     Text("Finishing your collage…").aurumText(.caption, color: AurumColor.textSecondary)
                 }
+                .transition(.aurumRise)
             case .saved:
-                Text("Saved to Photos").aurumText(.caption, color: AurumColor.accent)
+                HStack(spacing: Spacing.xs) {
+                    DrawnCheckmark(size: 20)
+                    Text("Saved to Photos").aurumText(.caption, color: AurumColor.accent)
+                }
+                .transition(.aurumPop)
             case .failed(let message):
                 Text(message).aurumText(.caption, color: AurumColor.textSecondary)
             case .editing:
@@ -124,6 +135,8 @@ struct CollageView: View {
         }
         .padding(.horizontal, Spacing.m)
         .frame(minHeight: Size.touch)
+        .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.phase)
+        .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.selectedCell)
     }
 
     private var controls: some View {
@@ -158,7 +171,7 @@ struct CollageView: View {
             Button { model.setLayout(layout); Haptics.detent() } label: {
                 CollageLayoutThumbnail(layout: layout, isSelected: model.project.layout.id == layout.id)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.pressable)
             .hoverEffect(.highlight)
             .accessibilityLabel(String(localized: "\(Localized.dynamic(layout.name)) layout, \(layout.photoCount) photos"))
             .accessibilityAddTraits(model.project.layout.id == layout.id ? .isSelected : [])
@@ -185,9 +198,11 @@ struct CollageView: View {
                         Circle().fill(Color(hex: hex))
                             .frame(width: 28, height: 28)
                             .overlay(Circle().stroke(isSelected ? AurumColor.accent : AurumColor.hairline, lineWidth: isSelected ? 2 : 1))
+                            .scaleEffect(isSelected ? 1.12 : 1)
                             .frame(width: Size.touch, height: Size.touch)
+                            .animation(Motion.respectingReduceMotion(Motion.atelier), value: isSelected)
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(.pressable)
                     .accessibilityLabel(String(localized: "Background colour"))
                     .accessibilityAddTraits(isSelected ? .isSelected : [])
                 }
@@ -220,6 +235,7 @@ struct CollageCanvas: View {
                     CollageCellView(model: model, index: index, size: rect.size, radius: min(radius, min(rect.width, rect.height) / 2), onEmpty: onEmptyCell)
                         .frame(width: rect.width, height: rect.height)
                         .offset(x: rect.minX, y: rect.minY)
+                        .aurumEntrance(index, distance: 8)
                 }
             }
             .frame(width: fit.width, height: fit.height)
@@ -249,11 +265,12 @@ struct CollageCellView: View {
                 let frame = CollageCellGeometry.imageFrame(cell: size, image: imageSize, zoom: cell.zoom, center: cell.center)
                 Group {
                     if let thumb = model.thumbnails[cell.source.localIdentifier] {
-                        Image(uiImage: thumb).resizable()
+                        Image(uiImage: thumb).resizable().transition(.opacity)
                     } else {
                         AurumColor.surfaceRaised
                     }
                 }
+                .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.thumbnails[cell.source.localIdentifier] != nil)
                 .frame(width: frame.width, height: frame.height)
                 .position(x: frame.midX, y: frame.midY)
             } else {
@@ -264,6 +281,8 @@ struct CollageCellView: View {
         .frame(width: size.width, height: size.height)
         .clipShape(RoundedRectangle(cornerRadius: radius))
         .overlay(RoundedRectangle(cornerRadius: radius).stroke(AurumColor.accent, lineWidth: isSelected ? 2 : 0))
+        .scaleEffect(isSelected ? 0.985 : 1)
+        .animation(Motion.respectingReduceMotion(Motion.atelier), value: isSelected)
         .contentShape(Rectangle())
         .onTapGesture {
             if cell == nil {
@@ -332,5 +351,7 @@ struct CollageLayoutThumbnail: View {
         }
         .padding(Spacing.xs)
         .background(RoundedRectangle(cornerRadius: Radius.chip).fill(isSelected ? AurumColor.surfaceRaised : Color.clear))
+        .overlay(RoundedRectangle(cornerRadius: Radius.chip).stroke(isSelected ? AurumColor.goldHairline : Color.clear, lineWidth: 1))
+        .animation(Motion.respectingReduceMotion(Motion.velvet), value: isSelected)
     }
 }

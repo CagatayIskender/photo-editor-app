@@ -16,6 +16,7 @@ struct AdjustSheet: View {
                 Text(Self.format(model.adjustment(control), control: control))
                     .aurumText(.caption, color: AurumColor.textSecondary)
                     .monospacedDigit()
+                    .contentTransition(.numericText())
                 Button("Reset all") { model.resetAdjustments() }
                     .buttonStyle(TextActionButtonStyle())
                     .disabled(model.document.adjustments.isNeutral)
@@ -34,7 +35,10 @@ struct AdjustSheet: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Spacing.xs) {
                     ForEach(AdjustmentSet.sliderControls, id: \.self) { c in
-                        Chip(c.localizedName, isSelected: c == control) { control = c }
+                        Chip(c.localizedName, isSelected: c == control) {
+                            withAnimation(Motion.respectingReduceMotion(Motion.atelier)) { control = c }
+                            Haptics.detent()
+                        }
                             .overlay(alignment: .topTrailing) {
                                 if model.adjustment(c) != 0 {
                                     Circle().fill(AurumColor.accent).frame(width: 5, height: 5).offset(x: -4, y: 4)
@@ -48,6 +52,7 @@ struct AdjustSheet: View {
             }
         }
         .padding(.bottom, Spacing.s)
+        .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.document.adjustments.isNeutral)
     }
 
     /// Bipolar controls read −100…+100; others 0…100.

@@ -33,18 +33,22 @@ struct TemplatesView: View {
                     Text("Choose a template, add your photos and clips, and AURUM cuts them to the beat.")
                         .aurumText(.body, color: AurumColor.textSecondary)
                         .padding(.horizontal, Spacing.m)
+                        .aurumEntrance(0, distance: 8)
                     if model.templates.isEmpty {
-                        Text("No templates yet.")
-                            .aurumText(.body, color: AurumColor.textTertiary)
-                            .padding(Spacing.xl)
-                            .frame(maxWidth: .infinity)
+                        VStack(spacing: Spacing.s) {
+                            IconView(.sparkle, size: 28).foregroundColor(AurumColor.textTertiary)
+                            Text("No templates yet.")
+                                .aurumText(.body, color: AurumColor.textTertiary)
+                        }
+                        .padding(Spacing.xl)
+                        .frame(maxWidth: .infinity)
                     }
                     LazyVGrid(columns: columns, spacing: Spacing.s) {
                         ForEach(Array(model.templates.enumerated()), id: \.element.id) { index, template in
                             NavigationLink(value: template.id) {
                                 TemplateCard(template: template, swatch: model.swatch(for: template).map(Color.init(hex:)))
                             }
-                            .buttonStyle(.plain)
+                            .buttonStyle(.pressable)
                             .opacity(hasAppeared || reduceMotion ? 1 : 0)
                             .offset(y: hasAppeared || reduceMotion ? 0 : 16)
                             .animation(Motion.respectingReduceMotion(Motion.atelier.delay(Double(index) * 0.05)), value: hasAppeared)
@@ -118,7 +122,11 @@ struct TemplateCard: View {
                 .overlay(LinearGradient(colors: [.clear, AurumColor.background.opacity(0.92)], startPoint: .top, endPoint: .bottom))
         )
         .clipShape(RoundedRectangle(cornerRadius: Radius.card))
-        .overlay(RoundedRectangle(cornerRadius: Radius.card).stroke(AurumColor.hairline, lineWidth: 1))
+        .overlay(RoundedRectangle(cornerRadius: Radius.card).stroke(
+            LinearGradient(colors: [AurumColor.goldHairline, AurumColor.hairline], startPoint: .topLeading, endPoint: .bottomTrailing),
+            lineWidth: 1
+        ))
+        .shadow(color: .black.opacity(0.28), radius: 10, y: 6)
         .overlay(alignment: .topTrailing) {
             if template.tier == .member { CrownBadge(size: 22).padding(Spacing.xs) }
         }

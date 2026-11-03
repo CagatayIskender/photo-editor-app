@@ -14,6 +14,7 @@ struct CropSheet: View {
                     ForEach(AspectPreset.allCases.filter { $0 != .free }, id: \.self) { aspect in
                         Chip(Localized.dynamic(aspect.label), isSelected: model.document.crop.aspect == aspect) {
                             model.setAspect(aspect)
+                            Haptics.detent()
                         }
                     }
                 }
@@ -40,5 +41,6 @@ struct CropSheet: View {
             .padding(.horizontal, Spacing.m)
         }
         .padding(.bottom, Spacing.s)
+        .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.document.crop.aspect)
     }
 }

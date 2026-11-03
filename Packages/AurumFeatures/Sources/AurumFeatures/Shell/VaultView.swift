@@ -27,6 +27,7 @@ struct VaultView: View {
         VStack(alignment: .leading, spacing: Spacing.m) {
             HStack {
                 Text("Vault").aurumText(.title)
+                    .aurumEntrance(0, distance: 8)
                 Spacer()
                 if app.entitlement == .free {
                     Button { isPaywallPresented = true } label: {
@@ -38,19 +39,32 @@ struct VaultView: View {
             }
             HStack(spacing: Spacing.xs) {
                 ForEach(VaultSection.allCases, id: \.self) { s in
-                    Chip(s.title, isSelected: section == s) { section = s }
+                    Chip(s.title, isSelected: section == s) {
+                        withAnimation(Motion.respectingReduceMotion(Motion.velvet)) { section = s }
+                    }
                 }
             }
+            .aurumEntrance(1, distance: 8)
             ScrollView {
-                switch section {
-                case .drafts: drafts
-                case .presets: presets
+                Group {
+                    switch section {
+                    case .drafts: drafts
+                    case .presets: presets
+                    }
                 }
+                .transition(.opacity)
+                .id(section)
             }
         }
         .padding(.horizontal, Spacing.m)
         .padding(.top, Spacing.m)
-        .background(AurumColor.background.ignoresSafeArea())
+        .background(
+            ZStack {
+                AurumColor.background
+                AmbientGlow(intensity: 0.45)
+            }
+            .ignoresSafeArea()
+        )
         .task { await app.refreshVault() }
         .sheet(isPresented: $isPaywallPresented) {
             PaywallView(app: app, trigger: "vault") { isPaywallPresented = false }
@@ -60,14 +74,15 @@ struct VaultView: View {
     @ViewBuilder
     private var drafts: some View {
         if app.drafts.isEmpty {
-            EmptyVaultMessage(title: String(localized: "No drafts yet"), message: String(localized: "Edits you leave unfinished are kept here."))
+            EmptyVaultMessage(icon: .vault, title: String(localized: "No drafts yet"), message: String(localized: "Edits you leave unfinished are kept here."))
         } else {
             LazyVGrid(columns: columns, alignment: .leading, spacing: Spacing.m) {
-                ForEach(app.drafts) { draft in
+                ForEach(Array(app.drafts.enumerated()), id: \.element.id) { index, draft in
                     Button { Task { await app.openDraft(id: draft.id) } } label: {
                         DraftTile(draft: draft, width: 104)
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(.pressable)
+                    .aurumEntrance(min(index, 8), distance: 10)
                     .contextMenu {
                         Button(role: .destructive) { Task { await app.deleteDraft(id: draft.id) } } label: {
                             Label("Delete draft", systemImage: "trash")
@@ -82,11 +97,12 @@ struct VaultView: View {
     @ViewBuilder
     private var presets: some View {
         if app.presets.isEmpty {
-            EmptyVaultMessage(title: String(localized: "No presets yet"), message: String(localized: "Save an edit as a preset in the Studio to reuse it on any photo."))
+            EmptyVaultMessage(icon: .sparkle, title: String(localized: "No presets yet"), message: String(localized: "Save an edit as a preset in the Studio to reuse it on any photo."))
         } else {
             VStack(spacing: 0) {
-                ForEach(app.presets) { preset in
+                ForEach(Array(app.presets.enumerated()), id: \.element.id) { index, preset in
                     PresetRow(preset: preset, app: app)
+                        .aurumEntrance(min(index, 8), distance: 8)
                     Divider().overlay(AurumColor.hairline)
                 }
             }
@@ -137,15 +153,33 @@ struct PresetRow: View {
 }
 
 struct EmptyVaultMessage: View {
+    var icon: AurumIcon = .vault
     let title: String
     let message: String
 
     var body: some View {
         VStack(spacing: Spacing.xs) {
+            emblem
+                .padding(.bottom, Spacing.s)
+                .aurumEntrance(0)
             Text(title).aurumText(.editorial)
+                .aurumEntrance(1, distance: 8)
             Text(message).aurumText(.body, color: AurumColor.textTertiary).multilineTextAlignment(.center)
+                .aurumEntrance(2, distance: 8)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, Spacing.xxl)
+    }
+
+    /// An icon in two quiet rings, drawn from shapes.
+    private var emblem: some View {
+        ZStack {
+            Circle().stroke(AurumColor.hairline, lineWidth: 1).frame(width: 104, height: 104)
+            Circle().stroke(AurumColor.goldHairline, lineWidth: 1).frame(width: 76, height: 76)
+            Circle().fill(AurumColor.accent.opacity(0.07)).frame(width: 76, height: 76)
+            IconView(icon, size: 30).foregroundColor(AurumColor.accent)
+        }
+        .frame(width: 104, height: 104)
+        .accessibilityHidden(true)
     }
 }

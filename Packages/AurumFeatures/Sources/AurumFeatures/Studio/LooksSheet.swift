@@ -30,9 +30,10 @@ struct LooksSheet: View {
             thumbnails
             if let look = model.activeLook {
                 intensity(look)
-                if showsRefine { refine(look) }
+                if showsRefine { refine(look).transition(.aurumRise) }
             }
         }
+        .animation(Motion.respectingReduceMotion(Motion.atelier), value: showsRefine)
         .padding(.bottom, Spacing.s)
         .alert("Save preset", isPresented: $isNamingPreset) {
             TextField("Name", text: $presetName)
@@ -75,12 +76,18 @@ struct LooksSheet: View {
                     HStack(spacing: Spacing.xs) {
                         if !model.favouriteLookIDs.isEmpty {
                             Chip(String(localized: "Saved"), isSelected: model.selectedCollectionID == StudioViewModel.favouritesID) {
-                                model.selectedCollectionID = StudioViewModel.favouritesID
+                                withAnimation(Motion.respectingReduceMotion(Motion.atelier)) {
+                                    model.selectedCollectionID = StudioViewModel.favouritesID
+                                }
+                                Haptics.detent()
                             }
                         }
                         ForEach(model.catalog.collections) { collection in
                             Chip(collection.name, isSelected: model.selectedCollectionID == collection.id) {
-                                model.selectedCollectionID = collection.id
+                                withAnimation(Motion.respectingReduceMotion(Motion.atelier)) {
+                                    model.selectedCollectionID = collection.id
+                                }
+                                Haptics.detent()
                             }
                         }
                     }
@@ -95,7 +102,7 @@ struct LooksSheet: View {
         ScrollViewReader { proxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: Spacing.s) {
-                    ForEach(model.visibleLooks) { look in
+                    ForEach(Array(model.visibleLooks.enumerated()), id: \.element.id) { index, look in
                         Button { model.selectLook(look.id); Haptics.apply() } label: {
                             LookThumbnail(
                                 name: look.name,
@@ -105,7 +112,8 @@ struct LooksSheet: View {
                                 isPremium: look.tier == .member
                             )
                         }
-                        .buttonStyle(.plain)
+                        .buttonStyle(.pressable)
+                        .aurumEntrance(index, distance: 10)
                         .id(look.id)
                         .onAppear { model.requestThumbnail(for: look.id) }
                         .contextMenu {
@@ -122,6 +130,7 @@ struct LooksSheet: View {
                 .padding(.vertical, 4)
             }
             .frame(height: 112)
+            .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.selectedCollectionID)
             .onChange(of: model.activeLook?.lookID) { id in
                 guard let id else { return }
                 withAnimation(Motion.respectingReduceMotion(Motion.velvet)) { proxy.scrollTo(id, anchor: .center) }

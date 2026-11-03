@@ -118,6 +118,9 @@ struct MediaPickerView: View {
                             .padding(Spacing.m)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
+                    if isLoading && items.isEmpty {
+                        skeletonGrid
+                    }
                     LazyVGrid(columns: columns, spacing: 2) {
                         ForEach(Array(visibleItems.enumerated()), id: \.element.id) { index, item in
                             MediaPickerCell(item: item, photos: app.deps.photos, order: picked.firstIndex(of: item).map { $0 + 1 }) {
@@ -136,11 +139,23 @@ struct MediaPickerView: View {
         }
     }
 
+    /// Placeholder tiles shown until the library answers.
+    private var skeletonGrid: some View {
+        LazyVGrid(columns: columns, spacing: 2) {
+            ForEach(0..<18, id: \.self) { _ in
+                SkeletonBlock(cornerRadius: 0)
+                    .aspectRatio(1, contentMode: .fill)
+            }
+        }
+        .transition(.identity) // leave at once so the real grid never sits below it
+        .accessibilityHidden(true)
+    }
+
     private var filterBar: some View {
         HStack(spacing: Spacing.xs) {
-            Chip(String(localized: "All"), isSelected: filter == .all) { filter = .all }
-            Chip(String(localized: "Photos"), isSelected: filter == .photos) { filter = .photos }
-            Chip(String(localized: "Videos"), isSelected: filter == .videos) { filter = .videos }
+            Chip(String(localized: "All"), isSelected: filter == .all) { setFilter(.all) }
+            Chip(String(localized: "Photos"), isSelected: filter == .photos) { setFilter(.photos) }
+            Chip(String(localized: "Videos"), isSelected: filter == .videos) { setFilter(.videos) }
             Spacer()
         }
         .padding(.horizontal, Spacing.m)
@@ -157,6 +172,7 @@ struct MediaPickerView: View {
                 .buttonStyle(GoldButtonStyle(compact: true))
                 .disabled(picked.isEmpty)
                 .accessibilityIdentifier("mediaPicker.continue")
+                .animation(Motion.respectingReduceMotion(Motion.velvet), value: picked.isEmpty)
         }
         .padding(.horizontal, Spacing.m)
         .padding(.vertical, Spacing.s)
@@ -165,6 +181,10 @@ struct MediaPickerView: View {
                 .overlay(alignment: .top) { Rectangle().fill(AurumColor.hairline).frame(height: 0.5) }
                 .ignoresSafeArea(edges: .bottom)
         )
+    }
+
+    private func setFilter(_ new: Filter) {
+        withAnimation(Motion.respectingReduceMotion(Motion.velvet)) { filter = new }
     }
 
     private var countText: String {
@@ -211,8 +231,11 @@ struct MediaPickerView: View {
         async let clips = photos.recentVideos(limit: 150)
         let merged = (await stills).map { PickedMedia(id: $0.id, kind: .photo, pixelSize: $0.pixelSize, creationDate: $0.creationDate) }
             + (await clips).map { PickedMedia(id: $0.id, kind: .video, pixelSize: $0.pixelSize, duration: $0.duration, creationDate: $0.creationDate) }
-        items = merged.sorted { ($0.creationDate ?? .distantPast) > ($1.creationDate ?? .distantPast) }
-        isLoading = false
+        let sorted = merged.sorted { ($0.creationDate ?? .distantPast) > ($1.creationDate ?? .distantPast) }
+        withAnimation(Motion.respectingReduceMotion(Motion.velvet)) {
+            items = sorted
+            isLoading = false
+        }
     }
 
     /// A plain timeline of the picked items, in picking order.
@@ -239,9 +262,11 @@ struct MediaPickerCell: View {
                 .overlay {
                     if let image {
                         Image(uiImage: image).resizable().scaledToFill()
+                            .transition(.opacity)
                     }
                 }
                 .clipped()
+                .animation(Motion.respectingReduceMotion(Motion.velvet), value: image != nil)
                 .overlay(alignment: .bottomTrailing) {
                     if item.kind == .video {
                         Text(verbatim: VideoEditorView.timecode(item.duration))
@@ -266,13 +291,13 @@ struct MediaPickerCell: View {
                             .frame(width: 24, height: 24)
                             .background(Circle().fill(AurumColor.accent))
                             .padding(6)
-                            .transition(.scale.combined(with: .opacity))
+                            .transition(.aurumPop)
                     }
                 }
                 .animation(Motion.respectingReduceMotion(Motion.atelier), value: order)
                 .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.pressable)
         .accessibilityAddTraits(order != nil ? [.isButton, .isSelected] : .isButton)
         .task(id: item.id) {
             image = await photos.thumbnail(for: item.id, side: 240)
@@ -284,6 +309,7 @@ struct MediaPickerCell: View {
 struct MediaAccessDeniedView: View {
     var body: some View {
         VStack(spacing: Spacing.m) {
+            IconView(.camera, size: 32).foregroundColor(AurumColor.textTertiary)
             Text("Photo access is off").aurumText(.title)
             Text("To make a video, allow AURUM to access your photos and videos in Settings.")
                 .aurumText(.body, color: AurumColor.textSecondary)

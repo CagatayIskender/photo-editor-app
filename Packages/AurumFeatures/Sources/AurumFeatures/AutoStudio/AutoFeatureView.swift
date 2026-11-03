@@ -21,6 +21,7 @@ struct AutoFeatureView: View {
                 stage
                     .frame(maxWidth: .infinity)
                     .frame(height: 380)
+                    .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.resultPreview != nil)
                 photoButton
                 if feature.tier == .member {
                     AtelierNote(
@@ -35,6 +36,7 @@ struct AutoFeatureView: View {
                 actions
             }
             .padding(Spacing.m)
+            .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.phase)
         }
         .background(AurumColor.background.ignoresSafeArea())
         .navigationTitle(AutoStudioViewModel.title(for: feature))
@@ -68,14 +70,15 @@ struct AutoFeatureView: View {
     @ViewBuilder
     private var stage: some View {
         if let result = model.resultPreview {
-            AtelierImage(image: result)
+            BeforeAfterReveal(before: model.sourcePreview, after: result)
                 .accessibilityLabel(String(localized: "Result"))
                 .accessibilityAddTraits(.isImage)
+                .transition(.opacity)
         } else if let source = model.sourcePreview {
             if feature.requiresMask {
                 MaskCanvas(image: source, editor: $model.maskEditor)
             } else {
-                AtelierImage(image: source)
+                AtelierImage(image: source, isScanning: model.isAnalysing || model.phase == .working)
                     .accessibilityLabel(String(localized: "Your photo"))
                     .accessibilityAddTraits(.isImage)
             }
@@ -83,7 +86,7 @@ struct AutoFeatureView: View {
             Button { isPicking = true } label: {
                 AtelierImage(image: nil, placeholder: String(localized: "Choose a photo to begin"))
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.pressable)
             .accessibilityIdentifier("auto.feature.choosePhoto")
         }
     }
@@ -95,7 +98,7 @@ struct AutoFeatureView: View {
                 .disabled(model.isBusy)
             Spacer()
             if model.isAnalysing {
-                ProgressView().tint(AurumColor.accent)
+                GoldProgressRing(progress: nil, size: 22)
                     .accessibilityLabel(String(localized: "Looking at your photo…"))
             }
         }
@@ -224,7 +227,8 @@ struct AutoFeatureView: View {
                 Text(choice.title).aurumText(.caption, color: isSelected ? AurumColor.textPrimary : AurumColor.textTertiary)
             }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.pressable)
+        .animation(Motion.respectingReduceMotion(Motion.velvet), value: isSelected)
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
         .contextMenu {
             if choice == .photo && model.hasBackgroundPhoto {
@@ -249,15 +253,17 @@ struct AutoFeatureView: View {
         switch model.phase {
         case .loading, .saving:
             HStack(spacing: Spacing.s) {
-                ProgressView().tint(AurumColor.accent)
+                GoldProgressRing(progress: nil, size: 24)
                 Text(model.phase == .saving ? String(localized: "Saving to Photos…") : String(localized: "Opening your photo…"))
                     .aurumText(.caption, color: AurumColor.textSecondary)
             }
+            .transition(.aurumRise)
         case .working:
             HStack(spacing: Spacing.s) {
-                ProgressView().tint(AurumColor.accent)
+                GoldProgressRing(progress: nil, size: 24)
                 Text("Working…").aurumText(.caption, color: AurumColor.textSecondary)
             }
+            .transition(.aurumRise)
         case .failed(let message):
             Text(message).aurumText(.caption, color: AurumColor.textSecondary)
         case .idle, .result:

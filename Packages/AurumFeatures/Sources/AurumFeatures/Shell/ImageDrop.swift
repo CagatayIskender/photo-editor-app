@@ -58,13 +58,19 @@ struct DropTargetHighlight: View {
     var body: some View {
         ZStack {
             AurumColor.background.opacity(0.55)
+            AmbientGlow(intensity: 0.8)
+            RoundedRectangle(cornerRadius: Radius.card)
+                .fill(AurumColor.accent.opacity(0.05))
+                .padding(Spacing.m)
             RoundedRectangle(cornerRadius: Radius.card)
                 .stroke(AurumColor.accent, style: StrokeStyle(lineWidth: 1.5, dash: [6, 6]))
                 .padding(Spacing.m)
             VStack(spacing: Spacing.xs) {
                 IconView(.plus, size: 28, lineWidth: 1.4)
                     .foregroundColor(AurumColor.accent)
+                    .aurumEntrance(0, distance: 8)
                 Text("Drop to edit in the Studio").aurumText(.headline)
+                    .aurumEntrance(1, distance: 8)
             }
         }
         .ignoresSafeArea()

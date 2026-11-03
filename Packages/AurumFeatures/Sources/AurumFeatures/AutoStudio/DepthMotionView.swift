@@ -22,9 +22,16 @@ struct DepthMotionView: View {
             preview
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(.horizontal, Spacing.m)
+                .animation(Motion.respectingReduceMotion(Motion.atelier), value: model.phase)
             controls
         }
-        .background(AurumColor.background.ignoresSafeArea())
+        .background(
+            ZStack {
+                AurumColor.background
+                AmbientGlow(intensity: 0.5)
+            }
+            .ignoresSafeArea()
+        )
         .preferredColorScheme(.dark)
         .task(id: previewKey) { await model.runPreview(reduceMotion: reduceMotion) }
         .sheet(isPresented: $isPicking) {
@@ -57,12 +64,13 @@ struct DepthMotionView: View {
             Button { isPicking = true } label: {
                 AtelierImage(image: nil, placeholder: String(localized: "Choose a photo to begin"))
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.pressable)
         case .loading:
             VStack(spacing: Spacing.s) {
-                ProgressView().tint(AurumColor.accent)
+                GoldProgressRing(progress: nil, size: 40)
                 Text("Finding depth…").aurumText(.caption, color: AurumColor.textSecondary)
             }
+            .transition(.opacity)
         default:
             AtelierImage(image: model.frame)
                 .accessibilityLabel(String(localized: "Preview of your photo with the \(model.preset.title) move"))
@@ -120,11 +128,16 @@ struct DepthMotionView: View {
         switch model.phase {
         case .exporting(let progress):
             HStack(spacing: Spacing.s) {
-                ProgressView(value: progress).tint(AurumColor.accent)
+                GoldProgressRing(progress: progress, size: 26)
                 Text("Rendering your video…").aurumText(.caption, color: AurumColor.textSecondary)
             }
+            .transition(.aurumRise)
         case .saved:
-            Text("Saved to Photos").aurumText(.caption, color: AurumColor.accent)
+            HStack(spacing: Spacing.xs) {
+                DrawnCheckmark(size: 22)
+                Text("Saved to Photos").aurumText(.caption, color: AurumColor.accent)
+            }
+            .transition(.aurumPop)
         case .failed(let message):
             Text(message).aurumText(.caption, color: AurumColor.textSecondary)
         default:

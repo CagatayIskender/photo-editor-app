@@ -31,6 +31,7 @@ struct InspectorColumn<Content: View>: View {
                 .padding(.top, Spacing.m)
                 .padding(.bottom, Spacing.xs)
                 .accessibilityAddTraits(.isHeader)
+                .aurumEntrance(0, distance: 6)
             ScrollView(.vertical, showsIndicators: false) {
                 content
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -40,7 +41,7 @@ struct InspectorColumn<Content: View>: View {
         .frame(width: RegularLayout.inspectorWidth)
         .frame(maxHeight: .infinity, alignment: .top)
         .background(
-            AurumColor.surface.opacity(0.96)
+            LinearGradient(colors: [AurumColor.surfaceRaised.opacity(0.96), AurumColor.surface.opacity(0.96)], startPoint: .top, endPoint: .bottom)
                 .overlay(alignment: .leading) {
                     Rectangle().fill(AurumColor.goldHairline).frame(width: 0.5)
                 }

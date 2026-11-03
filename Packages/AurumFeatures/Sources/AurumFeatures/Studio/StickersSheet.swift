@@ -14,7 +14,10 @@ struct StickersSheet: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Spacing.xs) {
                     ForEach(StickerDefinition.categories, id: \.self) { c in
-                        Chip(Localized.dynamic(c), isSelected: c == category) { category = c }
+                        Chip(Localized.dynamic(c), isSelected: c == category) {
+                            withAnimation(Motion.respectingReduceMotion(Motion.atelier)) { category = c }
+                            Haptics.detent()
+                        }
                     }
                     if model.selectedOverlay.map(Self.isSticker) == true {
                         Button("Remove") { model.removeSelectedOverlay() }
@@ -25,7 +28,7 @@ struct StickersSheet: View {
             }
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Spacing.s) {
-                    ForEach(StickerDefinition.starterSet.filter { $0.category == category }) { sticker in
+                    ForEach(Array(StickerDefinition.starterSet.filter { $0.category == category }.enumerated()), id: \.element.id) { index, sticker in
                         Button {
                             model.addSticker(sticker)
                             Haptics.apply()
@@ -37,7 +40,8 @@ struct StickersSheet: View {
                                     if sticker.tier == .member && entitlement == .free { CrownBadge(size: 16).padding(4) }
                                 }
                         }
-                        .buttonStyle(.plain)
+                        .buttonStyle(.pressable)
+                        .aurumEntrance(index, distance: 8)
                         .accessibilityLabel(sticker.tier == .member ? String(localized: "\(Localized.dynamic(sticker.name)), members only") : Localized.dynamic(sticker.name))
                     }
                 }

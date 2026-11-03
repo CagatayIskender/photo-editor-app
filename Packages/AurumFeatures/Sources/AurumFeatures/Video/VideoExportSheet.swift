@@ -24,6 +24,7 @@ struct VideoExportSheet: View {
             }
             content
         }
+        .animation(Motion.respectingReduceMotion(Motion.atelier), value: phaseKey)
         .padding(Spacing.m)
         .formSheetWidth()
         .background(AurumColor.surface.ignoresSafeArea())
@@ -39,6 +40,17 @@ struct VideoExportSheet: View {
         .onChange(of: app.entitlement) { model.membershipChanged(to: $0) }
     }
 
+    /// Changes when the phase kind changes (not on every progress tick).
+    private var phaseKey: Int {
+        switch model.phase {
+        case .ready: return 0
+        case .rendering: return 1
+        case .saved: return 2
+        case .shareReady: return 3
+        case .failed: return 4
+        }
+    }
+
     private var isRendering: Bool {
         if case .rendering = model.phase { return true }
         return false
@@ -48,23 +60,25 @@ struct VideoExportSheet: View {
     private var content: some View {
         switch model.phase {
         case .rendering(let progress):
-            VStack(alignment: .leading, spacing: Spacing.s) {
-                Text("Finishing your video…").aurumText(.body, color: AurumColor.textSecondary)
-                ProgressView(value: progress)
-                    .tint(AurumColor.accent)
+            VStack(spacing: Spacing.s) {
+                GoldProgressRing(progress: progress, size: 64)
                     .accessibilityLabel("Export progress")
+                Text("Finishing your video…").aurumText(.body, color: AurumColor.textSecondary)
                 Text(verbatim: "\(Int((progress * 100).rounded()))%")
                     .aurumText(.caption, color: AurumColor.textTertiary)
                     .monospacedDigit()
+                    .contentTransition(.numericText())
             }
             .frame(maxWidth: .infinity, minHeight: 120)
+            .transition(.opacity)
         case .saved:
             VStack(spacing: Spacing.s) {
-                IconView(.check, size: 32).foregroundColor(AurumColor.accent)
+                DrawnCheckmark(size: 56)
                 Text("Saved to Photos").aurumText(.headline)
                 Button("Done") { dismiss() }.buttonStyle(GoldButtonStyle())
             }
             .frame(maxWidth: .infinity)
+            .transition(.aurumPop)
         case .shareReady(let url):
             VStack(spacing: Spacing.s) {
                 ShareLink(item: url) {
