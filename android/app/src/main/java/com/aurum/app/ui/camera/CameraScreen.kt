@@ -413,7 +413,7 @@ private fun CameraContent(model: AppViewModel) {
             ) {
                 AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize())
                 // The graded frame covers the plain preview; with "Original" there is none.
-                AnimatedVisibility(camera.frame != null, enter = fadeIn(motion(200)), exit = fadeOut(motion(200))) {
+                androidx.compose.animation.AnimatedVisibility(camera.frame != null, enter = fadeIn(motion(200)), exit = fadeOut(motion(200))) {
                     camera.frame?.let { Image(it, contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize()) }
                 }
                 if (showsGrid) CameraGrid()
@@ -435,7 +435,7 @@ private fun CameraContent(model: AppViewModel) {
                     Text(n.toString(), style = AurumType.display.copy(fontSize = 84.sp), color = p.textPrimary)
                 }
             }
-            AnimatedVisibility(
+            androidx.compose.animation.AnimatedVisibility(
                 message != null,
                 modifier = Modifier.align(Alignment.TopCenter).padding(top = Spacing.s),
                 enter = fadeIn(motion(200)),

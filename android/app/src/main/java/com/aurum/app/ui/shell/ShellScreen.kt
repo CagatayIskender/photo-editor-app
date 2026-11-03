@@ -73,7 +73,7 @@ fun ShellScreen(model: AppViewModel) {
                     model.notice = null
                 }
             }
-            AnimatedVisibility(notice != null, Modifier.align(Alignment.BottomCenter), enter = aurumRiseIn(), exit = aurumRiseOut()) {
+            androidx.compose.animation.AnimatedVisibility(notice != null, Modifier.align(Alignment.BottomCenter), enter = aurumRiseIn(), exit = aurumRiseOut()) {
                 Text(
                     shown,
                     style = AurumType.body,
