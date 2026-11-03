@@ -1,9 +1,17 @@
 name: CI
 
 on:
+  # Android-only changes are built by android.yml; skip the macOS job for them
+  # to save CI minutes.
   pull_request:
+    paths-ignore:
+      - "android/**"
+      - ".github/workflows/android.yml"
   push:
     branches: [main]
+    paths-ignore:
+      - "android/**"
+      - ".github/workflows/android.yml"
 
 jobs:
   core-linux:
