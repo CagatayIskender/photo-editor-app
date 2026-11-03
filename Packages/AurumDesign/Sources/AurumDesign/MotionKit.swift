@@ -29,6 +29,8 @@ public struct AurumEntrance: ViewModifier {
             .scaleEffect(shown || reduceMotion ? 1 : 0.985, anchor: .top)
             .onAppear {
                 guard !shown else { return }
+                // UI tests run on a slow simulator; skip the entrance there.
+                guard Motion.loopsEnabled else { shown = true; return }
                 let step = min(Double(index), 12) * 0.045
                 let animation = reduceMotion
                     ? Animation.easeOut(duration: 0.2)
@@ -173,7 +175,6 @@ public struct AmbientGlow: View {
                     .offset(x: drift ? -s * 0.20 : s * 0.24, y: drift ? s * 0.30 : s * 0.18)
             }
             .frame(width: geo.size.width, height: geo.size.height)
-            .blur(radius: 30)
         }
         .allowsHitTesting(false)
         .accessibilityHidden(true)

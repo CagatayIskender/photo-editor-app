@@ -36,7 +36,11 @@ final class AurumUITests: XCTestCase {
         let export = app.buttons["studio.export"]
         XCTAssertTrue(export.waitForExistence(timeout: 3), "No Studio export button. Screen:\n\(app.debugDescription)")
         mark("studio shown")
-        // A free look is already suggested, so exporting is allowed straight away.
+        // Export unlocks once the photo has loaded and a free look is applied,
+        // as a person would see. The 10-second budget below still counts it.
+        let enabled = expectation(for: NSPredicate(format: "isEnabled == true"), evaluatedWith: export)
+        wait(for: [enabled], timeout: 6)
+        mark("export enabled")
         export.tap()
         let save = app.buttons["export.save"]
         XCTAssertTrue(save.waitForExistence(timeout: 3), "No export save button. Screen:\n\(app.debugDescription)")
