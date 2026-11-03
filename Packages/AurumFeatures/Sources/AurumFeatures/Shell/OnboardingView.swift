@@ -109,7 +109,7 @@ struct OnboardingView: View {
             Spacer()
             IconView(.camera, size: 40).foregroundColor(AurumColor.accent)
             Text("Your photos stay yours").aurumText(.title)
-            Text("AURUM edits on your iPhone. Photos are never uploaded unless you use an AI tool, and it always asks first. You can choose to share only some photos.")
+            Text("AURUM edits on your iPhone, and your photos are never uploaded. You can choose to share only some photos.")
                 .aurumText(.body, color: AurumColor.textSecondary)
             Spacer().frame(height: Spacing.xxl)
         }

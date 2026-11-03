@@ -49,3 +49,4 @@ Fonts: download Playfair Display and Inter (both SIL Open Font License) from Goo
 - Tools never touch pixels. They change the `EditDocument`; `AurumRender` turns it into an image.
 - Every service is a protocol with a live and a preview/test implementation, injected through `AppEnvironment`.
 - All look, collection and sticker names are original. `LookCatalogTests` rejects names on the deny-list.
+- The Auto Studio (enhance, portrait blur, background, relight, retouch, object remove, portrait looks, 3D motion) runs entirely on the device with Apple's Vision detection and classic Core Image processing. There is no generative model, AI provider, image server or credit system; photos never leave the device. Members' tools and looks preview freely and ask for membership only when the result is kept, like every other export.

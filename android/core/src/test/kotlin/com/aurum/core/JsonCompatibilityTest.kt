@@ -36,7 +36,7 @@ class JsonCompatibilityTest {
     @Test fun transitionsUseTheSwiftTags() {
         assertEquals("""{"type":"cut"}""", AurumJson.encodeCanonical(TransitionSerializer, Transition.Cut))
         assertEquals("""{"duration":0.5,"type":"dipToBlack"}""", AurumJson.encodeCanonical(TransitionSerializer, Transition.DipToBlack(0.5)))
-        assertEquals("""{"duration":0.8,"jobID":"j","type":"ai"}""", AurumJson.encodeCanonical(TransitionSerializer, Transition.Ai("j", 0.8)))
+        assertEquals(Transition.Dissolve(0.8), AurumJson.decode<Transition>("""{"duration":0.8,"jobID":"j","type":"ai"}"""))
         assertEquals(Transition.Dissolve(0.5), AurumJson.decode<Transition>("""{"type":"dissolve"}"""))
     }
 

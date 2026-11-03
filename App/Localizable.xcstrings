@@ -51,16 +51,6 @@
         }
       }
     },
-    "AURUM edits on your iPhone. Photos are never uploaded unless you use an AI tool, and it always asks first. You can choose to share only some photos." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AURUM düzenlemeleri iPhone'unda yapar. Bir yapay zekâ aracı kullanmadıkça fotoğrafların asla yüklenmez ve bu araç önce her zaman izin ister. Yalnızca bazı fotoğrafları paylaşmayı seçebilirsin."
-          }
-        }
-      }
-    },
     "Page %lld of 3" : {
       "localizations" : {
         "tr" : {
@@ -3281,26 +3271,6 @@
         }
       }
     },
-    "AI Studio" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yapay Zekâ Stüdyosu"
-          }
-        }
-      }
-    },
-    "Enhance, relight, restyle" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "İyileştir, ışıkla, yeniden biçimlendir"
-          }
-        }
-      }
-    },
     "3D Motion" : {
       "localizations" : {
         "tr" : {
@@ -3361,122 +3331,12 @@
         }
       }
     },
-    "Considered help, when you want it." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "İstediğinde, özenli bir yardım."
-          }
-        }
-      }
-    },
-    "Enhance, Background and Relight run on your iPhone for free. Other tools use credits and run on AURUM's servers; the cost is always shown first." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "İyileştir, Arka Plan ve Yeniden Işıkla iPhone'unda ücretsiz çalışır. Diğer araçlar kredi kullanır ve AURUM'un sunucularında çalışır; bedeli her zaman önce gösterilir."
-          }
-        }
-      }
-    },
     "Depth and gentle movement for a still photo" : {
       "localizations" : {
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Durağan bir fotoğrafa derinlik ve yumuşak bir hareket"
-          }
-        }
-      }
-    },
-    "On device" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cihazda"
-          }
-        }
-      }
-    },
-    "Recent" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Son işler"
-          }
-        }
-      }
-    },
-    "Jobs you start appear here, with their status and any refunds." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Başlattığın işler durumları ve iadeleriyle birlikte burada görünür."
-          }
-        }
-      }
-    },
-    "On device · free preview" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cihazda · ücretsiz önizleme"
-          }
-        }
-      }
-    },
-    "Uses credits" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kredi kullanır"
-          }
-        }
-      }
-    },
-    "Coming soon" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yakında"
-          }
-        }
-      }
-    },
-    "Balance, %@" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bakiye, %@"
-          }
-        }
-      }
-    },
-    "1 credit" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 kredi"
-          }
-        }
-      }
-    },
-    "%lld credits" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld kredi"
           }
         }
       }
@@ -3491,32 +3351,12 @@
         }
       }
     },
-    "Avatar" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Avatar"
-          }
-        }
-      }
-    },
     "Relight" : {
       "localizations" : {
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Yeniden ışıkla"
-          }
-        }
-      }
-    },
-    "Remove object" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nesne kaldır"
           }
         }
       }
@@ -3541,36 +3381,6 @@
         }
       }
     },
-    "AI transition" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yapay zekâ geçişi"
-          }
-        }
-      }
-    },
-    "A styled portrait of the person in your photo" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fotoğraftaki kişinin stilize bir portresi"
-          }
-        }
-      }
-    },
-    "A profile picture in a chosen style" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seçtiğin tarzda bir profil fotoğrafı"
-          }
-        }
-      }
-    },
     "Soft, warm light on faces" : {
       "localizations" : {
         "tr" : {
@@ -3587,36 +3397,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Orada olmaması gerekenin üzerini fırçala"
-          }
-        }
-      }
-    },
-    "Keep the subject, change the scene" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Konuyu koru, sahneyi değiştir"
-          }
-        }
-      }
-    },
-    "Clearer detail, cleaner colour" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Daha net ayrıntı, daha temiz renk"
-          }
-        }
-      }
-    },
-    "A generated move between two photos" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "İki fotoğraf arasında üretilmiş bir geçiş"
           }
         }
       }
@@ -3671,52 +3451,12 @@
         }
       }
     },
-    "Keep the description under %lld characters." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Açıklamayı %lld karakterin altında tut."
-          }
-        }
-      }
-    },
-    "That description can't be used. Try describing the scene another way." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bu açıklama kullanılamıyor. Sahneyi başka bir şekilde anlatmayı dene."
-          }
-        }
-      }
-    },
-    "Describe the scene you'd like." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "İstediğin sahneyi anlat."
-          }
-        }
-      }
-    },
     "Brush over what you'd like removed." : {
       "localizations" : {
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kaldırmak istediğin şeyin üzerini fırçala."
-          }
-        }
-      }
-    },
-    "Choose a style." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bir tarz seç."
           }
         }
       }
@@ -3731,46 +3471,6 @@
         }
       }
     },
-    "Choose %lld photos." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld fotoğraf seç."
-          }
-        }
-      }
-    },
-    "This photo can't be used." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bu fotoğraf kullanılamıyor."
-          }
-        }
-      }
-    },
-    "This needs %lld credits. You have %lld." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bunun için %lld kredi gerekiyor. Sende %lld var."
-          }
-        }
-      }
-    },
-    "No person was found in this photo. Background works best on portraits." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bu fotoğrafta kişi bulunamadı. Arka plan en iyi portrelerde çalışır."
-          }
-        }
-      }
-    },
     "That didn't work on this photo. Please try another." : {
       "localizations" : {
         "tr" : {
@@ -3781,102 +3481,12 @@
         }
       }
     },
-    "The result couldn't be downloaded. Your credits are safe; please try again later." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sonuç indirilemedi. Kredilerin güvende; lütfen daha sonra tekrar dene."
-          }
-        }
-      }
-    },
-    "This request wasn't accepted. Your credits have been returned." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bu istek kabul edilmedi. Kredilerin iade edildi."
-          }
-        }
-      }
-    },
-    "The job didn't finish. Your credits have been returned." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "İş tamamlanmadı. Kredilerin iade edildi."
-          }
-        }
-      }
-    },
-    "Waiting" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bekliyor"
-          }
-        }
-      }
-    },
     "Working" : {
       "localizations" : {
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Çalışıyor"
-          }
-        }
-      }
-    },
-    "Ready" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hazır"
-          }
-        }
-      }
-    },
-    "Didn't finish · refunded" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tamamlanmadı · iade edildi"
-          }
-        }
-      }
-    },
-    "Not accepted · refunded" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kabul edilmedi · iade edildi"
-          }
-        }
-      }
-    },
-    "This tool runs on AURUM's servers, which open soon. Nothing is uploaded and no credits are used until then." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bu araç yakında açılacak olan AURUM sunucularında çalışır. O zamana kadar hiçbir şey yüklenmez ve kredi kullanılmaz."
-          }
-        }
-      }
-    },
-    "Choose %lld photos" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld fotoğraf seç"
           }
         }
       }
@@ -3907,56 +3517,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fotoğrafı değiştir"
-          }
-        }
-      }
-    },
-    "Cost, %@" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bedel, %@"
-          }
-        }
-      }
-    },
-    "Style" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tarz"
-          }
-        }
-      }
-    },
-    "Describe the scene" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sahneyi anlat"
-          }
-        }
-      }
-    },
-    "Description (optional)" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Açıklama (isteğe bağlı)"
-          }
-        }
-      }
-    },
-    "For example, a quiet terrace at golden hour" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Örneğin, altın saatte sakin bir teras"
           }
         }
       }
@@ -4121,46 +3681,6 @@
         }
       }
     },
-    "Preview on device" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cihazda önizle"
-          }
-        }
-      }
-    },
-    "Free. Your photo stays on your iPhone." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ücretsiz. Fotoğrafın iPhone'unda kalır."
-          }
-        }
-      }
-    },
-    "Generate · %@" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oluştur · %@"
-          }
-        }
-      }
-    },
-    "Your photo is sent to AURUM's servers for this job only. Credits come back if it doesn't finish." : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fotoğrafın yalnızca bu iş için AURUM sunucularına gönderilir. İş tamamlanmazsa kredilerin geri gelir."
-          }
-        }
-      }
-    },
     "Your photo. Drag to brush over what should be removed." : {
       "localizations" : {
         "tr" : {
@@ -4191,16 +3711,6 @@
         }
       }
     },
-    "Studio" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stüdyo"
-          }
-        }
-      }
-    },
     "Editorial" : {
       "localizations" : {
         "tr" : {
@@ -4211,52 +3721,12 @@
         }
       }
     },
-    "Oil Portrait" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yağlı Boya Portre"
-          }
-        }
-      }
-    },
     "Silver Screen" : {
       "localizations" : {
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Beyaz Perde"
-          }
-        }
-      }
-    },
-    "Clean" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sade"
-          }
-        }
-      }
-    },
-    "Illustrated" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "İllüstrasyon"
-          }
-        }
-      }
-    },
-    "Soft Clay" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yumuşak Kil"
           }
         }
       }
@@ -4957,6 +4427,506 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Düzen"
+          }
+        }
+      }
+    },
+    "Auto Studio" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otomatik Stüdyo"
+          }
+        }
+      }
+    },
+    "Quick fixes, made on your iPhone." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone'unda yapılan hızlı düzeltmeler."
+          }
+        }
+      }
+    },
+    "Open a photo and AURUM looks for faces, people, the horizon and the light, then suggests fixes. Everything runs on your iPhone with classic photo processing; nothing is uploaded." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir fotoğraf aç; AURUM yüzleri, kişileri, ufku ve ışığı bulup düzeltmeler önersin. Her şey iPhone'unda klasik fotoğraf işlemeyle yapılır; hiçbir şey yüklenmez."
+          }
+        }
+      }
+    },
+    "Looking at your photo…" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotoğrafına bakılıyor…"
+          }
+        }
+      }
+    },
+    "Suggested for this photo" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu fotoğraf için öneriler"
+          }
+        }
+      }
+    },
+    "On your iPhone" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone'unda"
+          }
+        }
+      }
+    },
+    "Members" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Üyeler"
+          }
+        }
+      }
+    },
+    "Free preview · members keep" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ücretsiz önizleme · üyeler saklar"
+          }
+        }
+      }
+    },
+    "Free and members' looks" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ücretsiz ve üyelere özel görünümler"
+          }
+        }
+      }
+    },
+    "Free · on your iPhone" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ücretsiz · iPhone'unda"
+          }
+        }
+      }
+    },
+    "Members' tool" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Üyelere özel araç"
+          }
+        }
+      }
+    },
+    "Preview it as often as you like. Membership is needed only to keep the result." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İstediğin kadar önizle. Üyelik yalnızca sonucu saklamak için gerekir."
+          }
+        }
+      }
+    },
+    "Choose a background" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arka plan seç"
+          }
+        }
+      }
+    },
+    "Blur" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bulanıklık"
+          }
+        }
+      }
+    },
+    "Blur amount" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bulanıklık miktarı"
+          }
+        }
+      }
+    },
+    "Strength" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Güç"
+          }
+        }
+      }
+    },
+    "Retouch strength" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rötuş gücü"
+          }
+        }
+      }
+    },
+    "Works best on small things against plain or repeating backgrounds, such as sky, sand, walls or grass." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En iyi sonucu gökyüzü, kum, duvar ya da çimen gibi düz veya tekrar eden arka planların önündeki küçük nesnelerde verir."
+          }
+        }
+      }
+    },
+    "Include" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dahil et"
+          }
+        }
+      }
+    },
+    "Auto tone" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otomatik ton"
+          }
+        }
+      }
+    },
+    "White balance" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beyaz dengesi"
+          }
+        }
+      }
+    },
+    "Red eye" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kırmızı göz"
+          }
+        }
+      }
+    },
+    "Choose another photo" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başka bir fotoğraf seç"
+          }
+        }
+      }
+    },
+    "Preview" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Önizle"
+          }
+        }
+      }
+    },
+    "Free to preview. Your photo stays on your iPhone." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Önizleme ücretsiz. Fotoğrafın iPhone'unda kalır."
+          }
+        }
+      }
+    },
+    "Auto Enhance" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otomatik İyileştir"
+          }
+        }
+      }
+    },
+    "Portrait Blur" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Portre Bulanıklığı"
+          }
+        }
+      }
+    },
+    "Skin Retouch" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cilt Rötuşu"
+          }
+        }
+      }
+    },
+    "Remove Object" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nesne Kaldır"
+          }
+        }
+      }
+    },
+    "Portrait Looks" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Portre Görünümleri"
+          }
+        }
+      }
+    },
+    "Tone, colour, horizon and red eye in one tap" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton, renk, ufuk ve kırmızı göz tek dokunuşta"
+          }
+        }
+      }
+    },
+    "A soft, blurred background behind people" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kişilerin arkasında yumuşak, bulanık bir arka plan"
+          }
+        }
+      }
+    },
+    "Keep the subject, change what's behind" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konuyu koru, arkasını değiştir"
+          }
+        }
+      }
+    },
+    "Natural smoothing, placed on each face" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Her yüze ayrı uygulanan doğal yumuşatma"
+          }
+        }
+      }
+    },
+    "Curated looks made for faces" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yüzler için seçilmiş görünümler"
+          }
+        }
+      }
+    },
+    "Fix red eye" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kırmızı gözü düzelt"
+          }
+        }
+      }
+    },
+    "Straighten %@°" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@° düzelt"
+          }
+        }
+      }
+    },
+    "Brighten faces" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yüzleri aydınlat"
+          }
+        }
+      }
+    },
+    "Blur background" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arka planı bulanıklaştır"
+          }
+        }
+      }
+    },
+    "Balance colour" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rengi dengele"
+          }
+        }
+      }
+    },
+    "Choose the photo to put behind." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arkaya konacak fotoğrafı seç."
+          }
+        }
+      }
+    },
+    "No person was found in this photo. This tool works best on portraits." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu fotoğrafta kişi bulunamadı. Bu araç en iyi portrelerde çalışır."
+          }
+        }
+      }
+    },
+    "No face was found in this photo." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu fotoğrafta yüz bulunamadı."
+          }
+        }
+      }
+    },
+    "AURUM edits on your iPhone, and your photos are never uploaded. You can choose to share only some photos." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AURUM düzenlemeleri iPhone'unda yapar ve fotoğrafların asla yüklenmez. Yalnızca bazı fotoğrafları paylaşmayı seçebilirsin."
+          }
+        }
+      }
+    },
+    "Enhance, retouch, remove" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İyileştir, rötuşla, kaldır"
+          }
+        }
+      }
+    },
+    "Soft Studio" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yumuşak Stüdyo"
+          }
+        }
+      }
+    },
+    "Window Light" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pencere Işığı"
+          }
+        }
+      }
+    },
+    "Silver" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gümüş"
+          }
+        }
+      }
+    },
+    "Golden" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altın"
+          }
+        }
+      }
+    },
+    "Matte Film" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mat Film"
           }
         }
       }

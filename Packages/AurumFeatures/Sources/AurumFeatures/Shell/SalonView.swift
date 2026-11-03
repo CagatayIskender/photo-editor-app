@@ -120,10 +120,10 @@ struct SalonView: View {
                     app.openCamera()
                 }
                 .accessibilityIdentifier("salon.camera")
-                CreateTile(icon: .ai, title: String(localized: "AI Studio"), subtitle: String(localized: "Enhance, relight, restyle")) {
-                    app.openAIStudio()
+                CreateTile(icon: .wand, title: String(localized: "Auto Studio"), subtitle: String(localized: "Enhance, retouch, remove")) {
+                    app.openAutoStudio()
                 }
-                .accessibilityIdentifier("salon.aiStudio")
+                .accessibilityIdentifier("salon.autoStudio")
                 CreateTile(icon: .threeD, title: String(localized: "3D Motion"), subtitle: String(localized: "Depth for a still")) {
                     app.openDepthMotion()
                 }

@@ -81,12 +81,17 @@ final class VideoProjectTests: XCTestCase {
 
     func testRoundTripThroughJSON() throws {
         var project = VideoProject(clips: [video(4), .photo(asset)])
-        project.clips[1].transitionIn = .ai(jobID: "job-1", duration: 0.8)
+        project.clips[1].transitionIn = .zoom(duration: 0.8)
         project.layers = [TimedLayer(overlay: Overlay(content: .text(TextOverlay(text: "Hi"))), start: 1, end: 3, animationIn: .rise)]
         project.music = MusicSelection(source: .library(trackID: "t1"), title: "Velvet", beats: BeatGrid(bpm: 96))
         project.effects = [AnimatedEffect(kind: .lightLeak)]
         let decoded = try VideoProject.decode(from: project.encoded())
         XCTAssertEqual(decoded, project)
+    }
+
+    func testLegacyGeneratedTransitionReadsAsDissolve() throws {
+        let json = Data(#"{"type":"ai","duration":0.8,"jobID":"job-1"}"#.utf8)
+        XCTAssertEqual(try JSONDecoder().decode(Transition.self, from: json), .dissolve(duration: 0.8))
     }
 
     func testLayerPresenceFadesInAndOut() {

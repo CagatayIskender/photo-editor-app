@@ -1,17 +1,17 @@
 import SwiftUI
 import AurumDesign
 
-/// The Salon's second row of create tiles: AI Studio, 3D Motion, collage and carousel.
+/// The Salon's second row of create tiles: Auto Studio, 3D Motion, collage and carousel.
 struct AtelierCreateRow: View {
     @ObservedObject var app: AppModel
 
     var body: some View {
         VStack(spacing: Spacing.s) {
             HStack(spacing: Spacing.s) {
-                CreateTile(icon: .ai, title: String(localized: "AI Studio"), subtitle: String(localized: "Enhance, relight, restyle")) {
-                    app.openAIStudio()
+                CreateTile(icon: .wand, title: String(localized: "Auto Studio"), subtitle: String(localized: "Enhance, retouch, remove")) {
+                    app.openAutoStudio()
                 }
-                .accessibilityIdentifier("salon.aiStudio")
+                .accessibilityIdentifier("salon.autoStudio")
                 CreateTile(icon: .threeD, title: String(localized: "3D Motion"), subtitle: String(localized: "Depth for a still")) {
                     app.openDepthMotion()
                 }

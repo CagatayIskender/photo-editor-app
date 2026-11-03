@@ -28,7 +28,7 @@ struct AurumSidebar: View {
                 flowRow(icon: .layers, title: String(localized: "Video"), id: "video") { app.startVideo() }
                 flowRow(icon: .sparkle, title: String(localized: "Templates"), id: "templates") { app.openTemplates() }
                 flowRow(icon: .camera, title: String(localized: "Camera"), id: "camera") { app.openCamera() }
-                flowRow(icon: .ai, title: String(localized: "AI Studio"), id: "aiStudio") { app.openAIStudio() }
+                flowRow(icon: .wand, title: String(localized: "Auto Studio"), id: "autoStudio") { app.openAutoStudio() }
                 flowRow(icon: .threeD, title: String(localized: "3D Motion"), id: "depthMotion") { app.openDepthMotion() }
                 flowRow(icon: .compare, title: String(localized: "Collage"), id: "collage") { app.openCollage() }
                 flowRow(icon: .crop, title: String(localized: "Carousel"), id: "carousel") { app.openCarousel() }

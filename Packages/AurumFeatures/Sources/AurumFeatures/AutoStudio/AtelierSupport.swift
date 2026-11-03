@@ -4,7 +4,7 @@ import AurumCore
 import AurumDesign
 import AurumServices
 
-/// Small pieces shared by the Phase 3 screens (AI Studio, 3D Motion, collage
+/// Small pieces shared by the Phase 3 screens (Auto Studio, 3D Motion, collage
 /// and carousel).
 enum AtelierSupport {
     /// Saves encoded image data to Photos and returns the new photo, the same
