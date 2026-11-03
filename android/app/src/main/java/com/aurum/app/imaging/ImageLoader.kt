@@ -19,7 +19,9 @@ object ImageLoader {
     /** The photo's upright size in pixels, without decoding it. */
     fun size(context: Context, uri: Uri): PixelSize? {
         val opts = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, opts) } ?: return null
+        // decodeStream returns null when it only reads bounds, so only a missing stream means failure.
+        val stream = context.contentResolver.openInputStream(uri) ?: return null
+        stream.use { BitmapFactory.decodeStream(it, null, opts) }
         if (opts.outWidth <= 0 || opts.outHeight <= 0) return null
         val turned = orientation(context, uri).let { it.rotation % 180 != 0 }
         return if (turned) PixelSize(opts.outHeight, opts.outWidth) else PixelSize(opts.outWidth, opts.outHeight)
