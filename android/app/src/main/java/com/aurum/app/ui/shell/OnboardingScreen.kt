@@ -40,6 +40,15 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.unit.dp
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import com.aurum.app.ui.common.AmbientGlow
+import com.aurum.app.ui.common.CrownBadge
+import com.aurum.app.ui.common.aurumEntrance
+import com.aurum.app.ui.common.pressable
 import com.aurum.app.l10n.tr
 import com.aurum.app.l10n.trDynamic
 import com.aurum.app.ui.AppViewModel
@@ -62,6 +71,8 @@ fun OnboardingScreen(model: AppViewModel) {
     val catalog = model.container.catalog
     val fade = motion<Float>()
 
+    Box(Modifier.fillMaxSize()) {
+    AmbientGlow(intensity = if (page == 1) 0.5f else 1f)
     Column(Modifier.fillMaxSize().safeDrawingPadding().padding(Spacing.l)) {
         AnimatedContent(
             targetState = page,
@@ -71,30 +82,35 @@ fun OnboardingScreen(model: AppViewModel) {
         ) { current ->
             when (current) {
                 0 -> Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(Spacing.s, Alignment.Bottom)) {
-                    Text(model.container.brand.appName, style = AurumType.label, color = p.accent)
-                    Text(tr("Make every photo\nlook considered."), style = AurumType.display, color = p.textPrimary)
-                    Text(tr("Pick a photo, choose a look, export. Most edits take less than ten seconds."), style = AurumType.body, color = p.textSecondary)
+                    Text(model.container.brand.appName, style = AurumType.label, color = p.accent, modifier = Modifier.aurumEntrance(0))
+                    Text(tr("Make every photo\nlook considered."), style = AurumType.display, color = p.textPrimary, modifier = Modifier.aurumEntrance(1, distance = 22.dp))
+                    Text(tr("Pick a photo, choose a look, export. Most edits take less than ten seconds."), style = AurumType.body, color = p.textSecondary, modifier = Modifier.aurumEntrance(2))
                     Spacer(Modifier.height(Spacing.l))
                 }
                 1 -> Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
                     Spacer(Modifier.height(Spacing.l))
-                    Text(tr("Choose your aesthetic"), style = AurumType.title, color = p.textPrimary)
-                    Text(tr("Pick up to three. We'll start your edits from these."), style = AurumType.body, color = p.textSecondary)
+                    Text(tr("Choose your aesthetic"), style = AurumType.title, color = p.textPrimary, modifier = Modifier.aurumEntrance(0))
+                    Text(tr("Pick up to three. We'll start your edits from these."), style = AurumType.body, color = p.textSecondary, modifier = Modifier.aurumEntrance(1))
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2),
                         horizontalArrangement = Arrangement.spacedBy(Spacing.s),
                         verticalArrangement = Arrangement.spacedBy(Spacing.s),
                         modifier = Modifier.weight(1f),
                     ) {
-                        items(catalog.collections, key = { it.id }) { collection ->
+                        itemsIndexed(catalog.collections, key = { _, it -> it.id }) { index, collection ->
                             val isSelected = collection.id in vibes
+                            val interaction = remember { MutableInteractionSource() }
+                            val border by animateDpAsState(if (isSelected) 2.dp else 1.dp, motion(), label = "vibeBorder")
+                            val borderColor by animateColorAsState(if (isSelected) p.accent else p.hairline, motion(), label = "vibeColor")
                             val swatch = catalog.looks(collection.id).firstOrNull()?.swatch?.map(::hex).orEmpty()
                             Column(
                                 Modifier
+                                    .aurumEntrance(index + 2)
+                                    .pressable(interaction)
                                     .clip(RoundedCornerShape(14.dp))
                                     .background(p.surface)
-                                    .border(if (isSelected) 2.dp else 1.dp, if (isSelected) p.accent else p.hairline, RoundedCornerShape(14.dp))
-                                    .clickable(role = Role.Checkbox) {
+                                    .border(border, borderColor, RoundedCornerShape(14.dp))
+                                    .clickable(interactionSource = interaction, indication = null, role = Role.Checkbox) {
                                         if (isSelected) vibes.remove(collection.id) else if (vibes.size < MAX_VIBES) vibes.add(collection.id)
                                     }
                                     .semantics { selected = isSelected }
@@ -112,10 +128,11 @@ fun OnboardingScreen(model: AppViewModel) {
                     }
                 }
                 else -> Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(Spacing.s, Alignment.Bottom)) {
-                    Text(tr("Your photos stay yours"), style = AurumType.title, color = p.textPrimary)
+                    CrownBadge(22.dp)
+                    Text(tr("Your photos stay yours"), style = AurumType.title, color = p.textPrimary, modifier = Modifier.aurumEntrance(0))
                     Text(
                         tr("AURUM edits on your phone. Your photos are never uploaded. You choose which photos AURUM can see."),
-                        style = AurumType.body, color = p.textSecondary,
+                        style = AurumType.body, color = p.textSecondary, modifier = Modifier.aurumEntrance(1),
                     )
                     Spacer(Modifier.height(Spacing.l))
                 }
@@ -128,7 +145,9 @@ fun OnboardingScreen(model: AppViewModel) {
             horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
         ) {
             repeat(3) { i ->
-                Box(Modifier.size(6.dp).clip(CircleShape).background(if (i == page) p.accent else p.hairline))
+                val width by animateDpAsState(if (i == page) 18.dp else 6.dp, motion(), label = "dot")
+                val color by animateColorAsState(if (i == page) p.accent else p.hairline, motion(), label = "dotColor")
+                Box(Modifier.height(6.dp).width(width).clip(CircleShape).background(color))
             }
         }
         val primary = when (page) {
@@ -144,5 +163,6 @@ fun OnboardingScreen(model: AppViewModel) {
                 TextAction(tr("Skip for now"), onClick = { model.completeOnboarding(emptyList()) }, color = p.textSecondary)
             }
         }
+    }
     }
 }

@@ -4,6 +4,7 @@ import com.aurum.core.AdjustmentSet
 import com.aurum.core.ColorCube
 import com.aurum.core.CropSpec
 import com.aurum.core.EditDocument
+import com.aurum.core.FaceGeometry
 import com.aurum.core.ImageStats
 import com.aurum.core.LookApplication
 import com.aurum.core.LookCatalog
@@ -40,15 +41,19 @@ import kotlin.math.sqrt
  */
 class PixelRenderer(private val catalog: LookCatalog) {
 
-    /** Renders every enabled look and adjustment into a copy of [pixels]. */
-    fun render(document: EditDocument, pixels: IntArray, width: Int, height: Int, seed: Long = seed(document.id)): IntArray {
+    /**
+     * Renders every enabled operation into a copy of [pixels]. [faces] are the
+     * photo's faces (normalised, top-left origin) for the retouch operation;
+     * without faces retouching has nothing to work on, as on iOS.
+     */
+    fun render(document: EditDocument, pixels: IntArray, width: Int, height: Int, seed: Long = seed(document.id), faces: List<FaceGeometry> = emptyList()): IntArray {
         val out = pixels.copyOf(width * height)
-        renderInPlace(document, out, width, height, seed)
+        renderInPlace(document, out, width, height, seed, faces)
         return out
     }
 
-    /** Renders every enabled look and adjustment, overwriting [pixels]. */
-    fun renderInPlace(document: EditDocument, pixels: IntArray, width: Int, height: Int, seed: Long = seed(document.id)) {
+    /** Renders every enabled operation, overwriting [pixels]. */
+    fun renderInPlace(document: EditDocument, pixels: IntArray, width: Int, height: Int, seed: Long = seed(document.id), faces: List<FaceGeometry> = emptyList()) {
         require(pixels.size >= width * height) { "pixel buffer too small" }
         val img = ArgbImage(pixels, width, height)
         for (op in document.operations) {
@@ -56,8 +61,7 @@ class PixelRenderer(private val catalog: LookCatalog) {
             when (val k = op.kind) {
                 is OperationKind.Look -> applyLook(k.look, img, seed)
                 is OperationKind.Adjust -> applyAdjustments(k.adjust, img, seed + 1)
-                // Face-aware retouching needs on-device face landmarks; not rendered on Android yet.
-                is OperationKind.Retouch -> Unit
+                is OperationKind.Retouch -> RetouchRenderer.apply(k.retouch, faces, img)
             }
         }
     }

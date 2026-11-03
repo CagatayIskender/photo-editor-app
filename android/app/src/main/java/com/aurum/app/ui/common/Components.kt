@@ -1,5 +1,14 @@
 package com.aurum.app.ui.common
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.FiniteAnimationSpec
@@ -62,22 +71,30 @@ fun GoldButton(
     enabled: Boolean = true,
     compact: Boolean = false,
     busy: Boolean = false,
+    /** A slow sheen of light, for the single most important action on a hero screen (paywall, export). */
+    sheen: Boolean = false,
 ) {
     val p = LocalPalette.current
+    val interaction = remember { MutableInteractionSource() }
+    val background by animateColorAsState(if (enabled) p.accent else p.accent.copy(alpha = 0.4f), motion(), label = "goldButton")
     Box(
         modifier
             .then(if (compact) Modifier else Modifier.fillMaxWidth())
             .heightIn(min = if (compact) 40.dp else 52.dp)
+            .pressable(interaction, 0.975f)
             .clip(RoundedCornerShape(26.dp))
-            .background(if (enabled) p.accent else p.accent.copy(alpha = 0.4f))
-            .clickable(enabled = enabled && !busy, role = Role.Button, onClick = onClick)
+            .background(background)
+            .aurumShimmer(active = sheen && enabled && !busy, intensity = 0.45f)
+            .clickable(interactionSource = interaction, indication = LocalIndication.current, enabled = enabled && !busy, role = Role.Button, onClick = onClick)
             .padding(horizontal = Spacing.l, vertical = 10.dp),
         contentAlignment = Alignment.Center,
     ) {
-        if (busy) {
-            CircularProgressIndicator(Modifier.size(20.dp), color = p.onAccent, strokeWidth = 2.dp)
-        } else {
-            Text(text, style = AurumType.headline, color = p.onAccent, textAlign = TextAlign.Center)
+        Crossfade(busy, animationSpec = motion(), label = "goldButtonBusy") { isBusy ->
+            if (isBusy) {
+                CircularProgressIndicator(Modifier.size(20.dp), color = p.onAccent, strokeWidth = 2.dp)
+            } else {
+                Text(text, style = AurumType.headline, color = p.onAccent, textAlign = TextAlign.Center)
+            }
         }
     }
 }
@@ -85,12 +102,14 @@ fun GoldButton(
 @Composable
 fun OutlineButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, icon: ImageVector? = null) {
     val p = LocalPalette.current
+    val interaction = remember { MutableInteractionSource() }
     Row(
         modifier
             .heightIn(min = 48.dp)
+            .pressable(interaction, 0.975f)
             .clip(RoundedCornerShape(24.dp))
             .border(1.dp, p.hairline, RoundedCornerShape(24.dp))
-            .clickable(role = Role.Button, onClick = onClick)
+            .clickable(interactionSource = interaction, indication = LocalIndication.current, role = Role.Button, onClick = onClick)
             .padding(horizontal = Spacing.m, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
@@ -138,17 +157,19 @@ fun IconAction(icon: ImageVector, label: String, onClick: () -> Unit, modifier: 
 fun Chip(text: String, selected: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier, fontFamilyStyle: androidx.compose.ui.text.TextStyle? = null) {
     val p = LocalPalette.current
     val isSelected = selected
+    val background by animateColorAsState(if (selected) p.accent else p.surfaceRaised, motion(), label = "chip")
+    val foreground by animateColorAsState(if (selected) p.onAccent else p.textPrimary, motion(), label = "chipText")
     Box(
         modifier
             .heightIn(min = 36.dp)
+            .pressClickable(role = Role.Tab, scale = 0.94f, onClick = onClick)
             .clip(RoundedCornerShape(18.dp))
-            .background(if (selected) p.accent else p.surfaceRaised)
-            .clickable(role = Role.Tab, onClick = onClick)
+            .background(background)
             .semantics { this.selected = isSelected }
             .padding(horizontal = 14.dp, vertical = 8.dp),
         contentAlignment = Alignment.Center,
     ) {
-        Text(text, style = fontFamilyStyle ?: AurumType.caption, color = if (selected) p.onAccent else p.textPrimary, maxLines = 1)
+        Text(text, style = fontFamilyStyle ?: AurumType.caption, color = foreground, maxLines = 1)
     }
 }
 
@@ -175,12 +196,16 @@ fun LookThumbnail(
     favourite: Boolean = false,
 ) {
     val p = LocalPalette.current
+    val border by animateDpAsState(if (selected) 2.dp else 1.dp, motion(), label = "lookBorder")
+    val borderColor by animateColorAsState(if (selected) p.accent else p.hairline, motion(), label = "lookBorderColor")
+    val lift by animateFloatAsState(if (selected) 1.04f else 1f, motion(), label = "lookLift")
     Column(modifier.width(size), horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
             Modifier
                 .size(size)
+                .graphicsLayer { scaleX = lift; scaleY = lift }
                 .clip(RoundedCornerShape(10.dp))
-                .border(if (selected) 2.dp else 1.dp, if (selected) p.accent else p.hairline, RoundedCornerShape(10.dp)),
+                .border(border, borderColor, RoundedCornerShape(10.dp)),
         ) {
             if (image != null) {
                 Image(image, contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.matchParentSize())

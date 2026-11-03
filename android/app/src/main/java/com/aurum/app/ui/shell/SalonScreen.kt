@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -47,8 +48,11 @@ import com.aurum.app.data.DraftSummary
 import com.aurum.app.l10n.tr
 import com.aurum.app.l10n.trDynamic
 import com.aurum.app.ui.AppViewModel
-import com.aurum.app.ui.ComingFeature
 import com.aurum.app.ui.common.AurumIcons
+import com.aurum.app.ui.common.AmbientGlow
+import com.aurum.app.ui.common.aurumEntrance
+import com.aurum.app.ui.common.aurumShimmer
+import com.aurum.app.ui.common.pressClickable
 import com.aurum.app.ui.common.CrownBadge
 import com.aurum.app.ui.common.GoldButton
 import com.aurum.app.ui.common.LookThumbnail
@@ -94,17 +98,17 @@ fun SalonScreen(model: AppViewModel) {
                 }
             }
         }
-        item { Hero(model) }
-        item { CreateRow(model) }
-        item { AtelierRow(model) }
-        item { DropsCard(model) }
+        item { Box(Modifier.aurumEntrance(0)) { Hero(model) } }
+        item { Box(Modifier.aurumEntrance(1)) { CreateRow(model) } }
+        item { Box(Modifier.aurumEntrance(2)) { AtelierRow(model) } }
+        item { Box(Modifier.aurumEntrance(3)) { DropsCard(model) } }
         if (drafts.isNotEmpty()) {
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
                     SectionTitle(tr("Continue"), Modifier.padding(horizontal = Spacing.m))
                     LazyRow(contentPadding = PaddingValues(horizontal = Spacing.m), horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
                         items(drafts.take(10), key = { it.id }) { draft ->
-                            DraftTile(draft, 104.dp, Modifier.clickable(role = Role.Button) { model.openDraft(draft.id) })
+                            DraftTile(draft, 104.dp, Modifier.pressClickable { model.openDraft(draft.id) })
                         }
                     }
                 }
@@ -125,7 +129,7 @@ fun SalonScreen(model: AppViewModel) {
                             swatch = look.swatch,
                             selected = false,
                             premium = look.tier == Tier.member,
-                            modifier = Modifier.clickable(role = Role.Button, onClickLabel = hint) { model.startCreating(look.id) },
+                            modifier = Modifier.pressClickable(onClickLabel = hint) { model.startCreating(look.id) },
                         )
                     }
                 }
@@ -148,8 +152,10 @@ private fun Hero(model: AppViewModel) {
             .heightIn(min = 320.dp)
             .clip(RoundedCornerShape(20.dp))
             .background(Brush.linearGradient(swatch.reversed()))
-            .background(Brush.verticalGradient(listOf(Color.Transparent, p.background.copy(alpha = 0.9f)))),
+            .background(Brush.verticalGradient(listOf(Color.Transparent, p.background.copy(alpha = 0.9f))))
+            .aurumShimmer(intensity = 0.08f, durationMillis = 5200),
     ) {
+        AmbientGlow(intensity = 0.7f)
         Column(Modifier.align(Alignment.BottomStart).padding(Spacing.l), verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
             Text(tr("FEATURED COLLECTION"), style = AurumType.label, color = p.accent)
             Text(collection?.let { trDynamic(it.name) }.orEmpty(), style = AurumType.display, color = p.textPrimary)
@@ -165,25 +171,26 @@ private fun CreateRow(model: AppViewModel) {
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
         SectionTitle(tr("Create"), Modifier.padding(horizontal = Spacing.m))
         Row(Modifier.padding(horizontal = Spacing.m), horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
-            CreateTile(AurumIcons.layers, tr("Video"), tr("Clips and photos"), Modifier.weight(1f)) { model.openComingSoon(ComingFeature.video) }
-            CreateTile(AurumIcons.sparkle, tr("Templates"), tr("Cut to the beat"), Modifier.weight(1f)) { model.openComingSoon(ComingFeature.templates) }
-            CreateTile(AurumIcons.camera, tr("Camera"), tr("Shoot in a look"), Modifier.weight(1f)) { model.openComingSoon(ComingFeature.camera) }
+            CreateTile(AurumIcons.layers, tr("Video"), tr("Clips and photos"), Modifier.weight(1f)) { model.startVideo() }
+            CreateTile(AurumIcons.sparkle, tr("Templates"), tr("Cut to the beat"), Modifier.weight(1f)) { model.openTemplates() }
+            CreateTile(AurumIcons.camera, tr("Camera"), tr("Shoot in a look"), Modifier.weight(1f)) { model.openCamera() }
         }
     }
 }
 
-/** Auto Studio, 3D Motion, Collage and Carousel; on Android these open a coming-soon page. */
+/** Auto Studio, 3D Motion, Collage and Carousel. */
 @Composable
 fun AtelierRow(model: AppViewModel) {
+    data class Entry(val title: String, val subtitle: String, val icon: ImageVector, val open: () -> Unit)
     val entries = listOf(
-        Triple(ComingFeature.autoStudio, "Enhance, retouch, remove", AurumIcons.sparkle),
-        Triple(ComingFeature.motion, "Depth for a still", AurumIcons.layers),
-        Triple(ComingFeature.collage, "Photos, composed", AurumIcons.photo),
-        Triple(ComingFeature.carousel, "One photo, many panels", AurumIcons.more),
+        Entry("Auto Studio", "Enhance, retouch, remove", AurumIcons.sparkle, model::openAutoStudio),
+        Entry("3D Motion", "Depth for a still", AurumIcons.layers, model::openDepthMotion),
+        Entry("Collage", "Photos, composed", AurumIcons.photo, model::openCollage),
+        Entry("Carousel", "One photo, many panels", AurumIcons.more, model::openCarousel),
     )
     LazyRow(contentPadding = PaddingValues(horizontal = Spacing.m), horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
-        items(entries, key = { it.first.name }) { (feature, subtitleKey, icon) ->
-            CreateTile(icon, tr(feature.titleKey), tr(subtitleKey), Modifier.width(150.dp)) { model.openComingSoon(feature) }
+        itemsIndexed(entries, key = { _, e -> e.title }) { index, e ->
+            CreateTile(e.icon, tr(e.title), tr(e.subtitle), Modifier.width(150.dp).aurumEntrance(index)) { e.open() }
         }
     }
 }
@@ -196,7 +203,7 @@ fun CreateTile(icon: ImageVector, title: String, subtitle: String, modifier: Mod
             .clip(RoundedCornerShape(14.dp))
             .background(p.surface)
             .border(1.dp, p.hairline, RoundedCornerShape(14.dp))
-            .clickable(role = Role.Button, onClick = onClick)
+            .pressClickable(onClick = onClick)
             .padding(Spacing.s),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
@@ -235,7 +242,8 @@ private fun DropsCard(model: AppViewModel) {
                     .clip(RoundedCornerShape(14.dp))
                     .background(p.surface)
                     .border(1.dp, p.hairline, RoundedCornerShape(14.dp))
-                    .clickable(role = Role.Button) { model.startCreating(active.lookIDs.firstOrNull()) }
+                    .aurumShimmer(intensity = 0.1f)
+                    .pressClickable(scale = 0.985f) { model.startCreating(active.lookIDs.firstOrNull()) }
                     .padding(Spacing.m),
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {

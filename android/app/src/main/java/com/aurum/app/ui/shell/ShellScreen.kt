@@ -19,6 +19,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.graphicsLayer
+import com.aurum.app.ui.common.aurumRiseIn
+import com.aurum.app.ui.common.aurumRiseOut
+import com.aurum.app.ui.common.motion
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,23 +55,30 @@ fun ShellScreen(model: AppViewModel) {
     val p = LocalPalette.current
     Column(Modifier.fillMaxSize().background(p.background)) {
         Box(Modifier.weight(1f).statusBarsPadding()) {
-            when (model.tab) {
-                Tab.salon -> SalonScreen(model)
-                Tab.create -> CreateScreen(model)
-                Tab.vault -> VaultScreen(model)
+            val fade = motion<Float>(220)
+            Crossfade(model.tab, animationSpec = fade, label = "tab") { tab ->
+                when (tab) {
+                    Tab.salon -> SalonScreen(model)
+                    Tab.create -> CreateScreen(model)
+                    Tab.vault -> VaultScreen(model)
+                }
             }
             val notice = model.notice
+            // Keeps the last text on screen while the notice animates out.
+            var shown by remember { mutableStateOf("") }
             if (notice != null) {
+                shown = notice
                 LaunchedEffect(notice) {
                     delay(4000)
                     model.notice = null
                 }
+            }
+            androidx.compose.animation.AnimatedVisibility(notice != null, Modifier.align(Alignment.BottomCenter), enter = aurumRiseIn(), exit = aurumRiseOut()) {
                 Text(
-                    notice,
+                    shown,
                     style = AurumType.body,
                     color = p.textPrimary,
                     modifier = Modifier
-                        .align(Alignment.BottomCenter)
                         .padding(Spacing.m)
                         .clip(RoundedCornerShape(12.dp))
                         .background(p.surfaceRaised)
@@ -81,7 +100,8 @@ fun ShellScreen(model: AppViewModel) {
 @Composable
 private fun TabItem(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector, isSelected: Boolean, modifier: Modifier, onClick: () -> Unit) {
     val p = LocalPalette.current
-    val color = if (isSelected) p.accent else p.textTertiary
+    val color by animateColorAsState(if (isSelected) p.accent else p.textTertiary, motion(), label = "tab")
+    val lift by animateFloatAsState(if (isSelected) 1.08f else 1f, motion(), label = "tabLift")
     Column(
         modifier
             .heightIn(min = 56.dp)
@@ -91,7 +111,7 @@ private fun TabItem(title: String, icon: androidx.compose.ui.graphics.vector.Ima
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
-        Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(22.dp))
+        Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(22.dp).graphicsLayer { scaleX = lift; scaleY = lift })
         Text(title, style = AurumType.caption, color = color)
     }
 }

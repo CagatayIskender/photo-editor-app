@@ -16,6 +16,7 @@ import com.aurum.core.EditDocument
 import com.aurum.core.Preset
 import com.aurum.core.PresetLinkCodec
 import com.aurum.core.SourceAsset
+import com.aurum.core.VideoProject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,17 +24,18 @@ import java.util.UUID
 
 enum class Tab { salon, create, vault }
 
-/** Features that exist on iOS and are not on Android yet. */
-enum class ComingFeature(val titleKey: String) {
-    video("Video"), templates("Templates"), camera("Camera"),
-    autoStudio("Auto Studio"), motion("3D Motion"), collage("Collage"), carousel("Carousel"),
-}
-
 sealed interface Screen {
     data object Onboarding : Screen
     data object Shell : Screen
     data class Studio(val session: StudioSession) : Screen
-    data class ComingSoon(val feature: ComingFeature) : Screen
+    /** The video editor. [project] is null for a new, empty project (the editor asks for media). */
+    data class Video(val project: VideoProject?, val source: String) : Screen
+    data object Templates : Screen
+    data object Camera : Screen
+    data object AutoStudio : Screen
+    data object DepthMotion : Screen
+    data object Collage : Screen
+    data object Carousel : Screen
 }
 
 /**
@@ -85,16 +87,34 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         openPicker?.invoke()
     }
 
-    fun openComingSoon(feature: ComingFeature) {
-        screen = Screen.ComingSoon(feature)
-    }
+    fun startVideo() { screen = Screen.Video(project = null, source = "create") }
+    fun openVideo(project: VideoProject, source: String) { screen = Screen.Video(project, source) }
+    fun openTemplates() { screen = Screen.Templates }
+    fun openCamera() { screen = Screen.Camera }
+    fun openAutoStudio() { screen = Screen.AutoStudio }
+    fun openDepthMotion() { screen = Screen.DepthMotion }
+    fun openCollage() { screen = Screen.Collage }
+    fun openCarousel() { screen = Screen.Carousel }
+
+    /** Closes any full-screen flow (video, camera, Auto Studio…) and returns to the shell. */
+    fun closeFlow() { screen = Screen.Shell }
 
     fun back() {
         when (val s = screen) {
             is Screen.Studio -> closeStudio(s.session)
-            is Screen.ComingSoon -> screen = Screen.Shell
-            else -> Unit
+            Screen.Onboarding, Screen.Shell -> Unit
+            else -> closeFlow()
         }
+    }
+
+    /**
+     * Opens a photo AURUM made or captured (camera shot, Auto Studio result,
+     * collage) in the Studio. [lookID] is applied first, as on iOS.
+     */
+    fun openCapturedPhoto(uri: Uri, lookID: String? = null) {
+        queuedPreset = null
+        queuedLookID = lookID
+        onPhotoPicked(uri)
     }
 
     /** Called with the photo picker's result. */

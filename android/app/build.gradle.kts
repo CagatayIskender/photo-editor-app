@@ -70,6 +70,21 @@ dependencies {
 
     implementation(libs.play.billing)
 
+    // Video editor, beat templates and 3D Motion export (on-device).
+    implementation(libs.media3.exoplayer)
+    implementation(libs.media3.transformer)
+    implementation(libs.media3.effect)
+    implementation(libs.media3.common)
+    implementation(libs.media3.ui)
+    // Live-look camera.
+    implementation(libs.camerax.core)
+    implementation(libs.camerax.camera2)
+    implementation(libs.camerax.lifecycle)
+    implementation(libs.camerax.view)
+    // Auto Studio: bundled, on-device models only. Nothing is uploaded.
+    implementation(libs.mlkit.face)
+    implementation(libs.mlkit.selfie)
+
     testImplementation(libs.junit)
 }
 

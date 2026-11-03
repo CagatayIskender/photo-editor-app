@@ -27,6 +27,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -102,12 +104,19 @@ fun StudioScreen(model: AppViewModel, session: StudioSession) {
                 when (session.tool) {
                     StudioTool.looks -> LooksPanel(session)
                     StudioTool.adjust -> AdjustPanel(session)
+                    StudioTool.retouch -> RetouchPanel(session)
                     StudioTool.crop -> CropPanel(session)
                     StudioTool.text -> TextPanel(session)
                     StudioTool.stickers -> StickersPanel(session)
                 }
             }
-            Row(Modifier.fillMaxWidth().padding(horizontal = Spacing.xs), horizontalArrangement = Arrangement.SpaceEvenly) {
+            // Six tools: spread across the width when they fit, scroll sideways when they don't.
+            BoxWithConstraints(Modifier.fillMaxWidth()) {
+            val rowWidth = maxWidth
+            Row(
+                Modifier.horizontalScroll(rememberScrollState()).widthIn(min = rowWidth).padding(horizontal = Spacing.xs),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+            ) {
                 for (tool in StudioTool.entries) {
                     val isSelected = session.tool == tool
                     Text(
@@ -121,6 +130,7 @@ fun StudioScreen(model: AppViewModel, session: StudioSession) {
                             .padding(horizontal = 8.dp, vertical = 12.dp),
                     )
                 }
+            }
             }
         }
 

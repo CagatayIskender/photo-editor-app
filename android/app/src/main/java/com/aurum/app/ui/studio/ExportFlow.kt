@@ -39,6 +39,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.aurum.app.imaging.PhotoExporter
+import androidx.compose.animation.animateContentSize
+import com.aurum.app.ui.common.DrawnCheckmark
+import com.aurum.app.ui.common.GoldProgressRing
+import com.aurum.app.ui.common.aurumEntrance
+import com.aurum.app.ui.common.motion
 import com.aurum.app.l10n.tr
 import com.aurum.app.l10n.trDynamic
 import com.aurum.app.ui.AppViewModel
@@ -131,6 +136,8 @@ fun ExportFlow(model: AppViewModel, session: StudioSession, onDismiss: () -> Uni
                 .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
                 .background(p.surface)
                 .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) {}
+                .aurumEntrance(distance = 48.dp)
+                .animateContentSize(motion())
                 .navigationBarsPadding()
                 .padding(Spacing.l),
             verticalArrangement = Arrangement.spacedBy(Spacing.m),
@@ -157,14 +164,15 @@ fun ExportFlow(model: AppViewModel, session: StudioSession, onDismiss: () -> Uni
                                 else tr("Full resolution, no watermark"),
                                 style = AurumType.caption, color = p.textTertiary,
                             )
-                            GoldButton(tr("Save"), onClick = { save(d) })
+                            GoldButton(tr("Save"), onClick = { save(d) }, sheen = true)
                             if (d.watermark) TextAction(tr("Remove mark"), { showPaywall = true })
                         }
                         ExportState.Working -> Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
-                            CircularProgressIndicator(color = p.accent, strokeWidth = 2.dp, modifier = Modifier.size(22.dp))
+                            GoldProgressRing(null, size = 28.dp)
                             Text(tr("Finishing your photo…"), style = AurumType.body, color = p.textSecondary, modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
                         }
                         is ExportState.Saved -> {
+                            DrawnCheckmark(56.dp, Modifier.align(Alignment.CenterHorizontally))
                             Text(tr("Saved to Photos"), style = AurumType.headline, color = p.textPrimary, modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
                             val shareTitle = tr("Share")
                             OutlineButton(shareTitle, onClick = {

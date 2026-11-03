@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.graphics.Matrix
 import android.net.Uri
+import androidx.annotation.RequiresApi
 import android.os.Build
 import androidx.exifinterface.media.ExifInterface
 import com.aurum.core.PixelSize
@@ -18,7 +19,9 @@ object ImageLoader {
     /** The photo's upright size in pixels, without decoding it. */
     fun size(context: Context, uri: Uri): PixelSize? {
         val opts = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, opts) } ?: return null
+        // decodeStream returns null when it only reads bounds, so only a missing stream means failure.
+        val stream = context.contentResolver.openInputStream(uri) ?: return null
+        stream.use { BitmapFactory.decodeStream(it, null, opts) }
         if (opts.outWidth <= 0 || opts.outHeight <= 0) return null
         val turned = orientation(context, uri).let { it.rotation % 180 != 0 }
         return if (turned) PixelSize(opts.outHeight, opts.outWidth) else PixelSize(opts.outWidth, opts.outHeight)
@@ -29,6 +32,7 @@ object ImageLoader {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) decodeModern(context, uri, maxPixelSize) else decodeLegacy(context, uri, maxPixelSize)
     }.getOrNull()
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun decodeModern(context: Context, uri: Uri, maxPixelSize: Int): Bitmap {
         val source = ImageDecoder.createSource(context.contentResolver, uri)
         val bitmap = ImageDecoder.decodeBitmap(source) { decoder, info, _ ->
