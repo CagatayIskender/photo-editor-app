@@ -11,7 +11,7 @@ composeBom = "2024.12.01"
 billing = "7.1.1"
 exifinterface = "1.3.7"
 media3 = "1.5.1"
-camerax = "1.4.1"
+camerax = "1.5.3"
 mlkitFace = "16.1.7"
 mlkitSelfie = "16.0.0-beta6"
 
