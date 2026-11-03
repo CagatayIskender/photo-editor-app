@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -47,8 +48,8 @@ import com.aurum.app.data.DraftSummary
 import com.aurum.app.l10n.tr
 import com.aurum.app.l10n.trDynamic
 import com.aurum.app.ui.AppViewModel
-import com.aurum.app.ui.ComingFeature
 import com.aurum.app.ui.common.AurumIcons
+import com.aurum.app.ui.common.aurumEntrance
 import com.aurum.app.ui.common.CrownBadge
 import com.aurum.app.ui.common.GoldButton
 import com.aurum.app.ui.common.LookThumbnail
@@ -165,9 +166,9 @@ private fun CreateRow(model: AppViewModel) {
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
         SectionTitle(tr("Create"), Modifier.padding(horizontal = Spacing.m))
         Row(Modifier.padding(horizontal = Spacing.m), horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
-            CreateTile(AurumIcons.layers, tr("Video"), tr("Clips and photos"), Modifier.weight(1f)) { model.openComingSoon(ComingFeature.video) }
-            CreateTile(AurumIcons.sparkle, tr("Templates"), tr("Cut to the beat"), Modifier.weight(1f)) { model.openComingSoon(ComingFeature.templates) }
-            CreateTile(AurumIcons.camera, tr("Camera"), tr("Shoot in a look"), Modifier.weight(1f)) { model.openComingSoon(ComingFeature.camera) }
+            CreateTile(AurumIcons.layers, tr("Video"), tr("Clips and photos"), Modifier.weight(1f)) { model.startVideo() }
+            CreateTile(AurumIcons.sparkle, tr("Templates"), tr("Cut to the beat"), Modifier.weight(1f)) { model.openTemplates() }
+            CreateTile(AurumIcons.camera, tr("Camera"), tr("Shoot in a look"), Modifier.weight(1f)) { model.openCamera() }
         }
     }
 }
@@ -175,15 +176,16 @@ private fun CreateRow(model: AppViewModel) {
 /** Auto Studio, 3D Motion, Collage and Carousel; on Android these open a coming-soon page. */
 @Composable
 fun AtelierRow(model: AppViewModel) {
+    data class Entry(val title: String, val subtitle: String, val icon: ImageVector, val open: () -> Unit)
     val entries = listOf(
-        Triple(ComingFeature.autoStudio, "Enhance, retouch, remove", AurumIcons.sparkle),
-        Triple(ComingFeature.motion, "Depth for a still", AurumIcons.layers),
-        Triple(ComingFeature.collage, "Photos, composed", AurumIcons.photo),
-        Triple(ComingFeature.carousel, "One photo, many panels", AurumIcons.more),
+        Entry("Auto Studio", "Enhance, retouch, remove", AurumIcons.sparkle, model::openAutoStudio),
+        Entry("3D Motion", "Depth for a still", AurumIcons.layers, model::openDepthMotion),
+        Entry("Collage", "Photos, composed", AurumIcons.photo, model::openCollage),
+        Entry("Carousel", "One photo, many panels", AurumIcons.more, model::openCarousel),
     )
     LazyRow(contentPadding = PaddingValues(horizontal = Spacing.m), horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
-        items(entries, key = { it.first.name }) { (feature, subtitleKey, icon) ->
-            CreateTile(icon, tr(feature.titleKey), tr(subtitleKey), Modifier.width(150.dp)) { model.openComingSoon(feature) }
+        itemsIndexed(entries, key = { _, e -> e.title }) { index, e ->
+            CreateTile(e.icon, tr(e.title), tr(e.subtitle), Modifier.width(150.dp).aurumEntrance(index)) { e.open() }
         }
     }
 }

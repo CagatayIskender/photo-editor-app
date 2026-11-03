@@ -15,7 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import com.aurum.app.ui.common.motion
-import com.aurum.app.ui.shell.ComingSoonScreen
+import com.aurum.app.ui.autostudio.AutoStudioScreen
+import com.aurum.app.ui.autostudio.DepthMotionScreen
+import com.aurum.app.ui.camera.CameraScreen
+import com.aurum.app.ui.collage.CarouselScreen
+import com.aurum.app.ui.collage.CollageScreen
+import com.aurum.app.ui.templates.TemplatesScreen
+import com.aurum.app.ui.video.VideoEditorScreen
 import com.aurum.app.ui.shell.OnboardingScreen
 import com.aurum.app.ui.shell.ShellScreen
 import com.aurum.app.ui.studio.StudioScreen
@@ -31,21 +37,27 @@ fun AurumApp(model: AppViewModel) {
         model.openPicker = { picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
     }
 
-    BackHandler(enabled = model.screen is Screen.Studio || model.screen is Screen.ComingSoon) { model.back() }
+    BackHandler(enabled = model.screen != Screen.Shell && model.screen != Screen.Onboarding) { model.back() }
 
     val fade = motion<Float>()
     Box(Modifier.fillMaxSize().background(LocalPalette.current.background)) {
         AnimatedContent(
             targetState = model.screen,
             transitionSpec = { fadeIn(fade) togetherWith fadeOut(fade) },
-            contentKey = { it::class },
+            contentKey = { if (it is Screen.Video) "video-${it.project?.id}" else it::class },
             label = "screen",
         ) { screen ->
             when (screen) {
                 Screen.Onboarding -> OnboardingScreen(model)
                 Screen.Shell -> ShellScreen(model)
                 is Screen.Studio -> StudioScreen(model, screen.session)
-                is Screen.ComingSoon -> ComingSoonScreen(screen.feature, onBack = model::back)
+                is Screen.Video -> VideoEditorScreen(model, screen.project, screen.source)
+                Screen.Templates -> TemplatesScreen(model)
+                Screen.Camera -> CameraScreen(model)
+                Screen.AutoStudio -> AutoStudioScreen(model)
+                Screen.DepthMotion -> DepthMotionScreen(model)
+                Screen.Collage -> CollageScreen(model)
+                Screen.Carousel -> CarouselScreen(model)
             }
         }
     }

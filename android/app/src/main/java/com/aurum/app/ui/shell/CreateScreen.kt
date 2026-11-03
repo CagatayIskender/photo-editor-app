@@ -14,7 +14,6 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import com.aurum.app.l10n.tr
 import com.aurum.app.ui.AppViewModel
-import com.aurum.app.ui.ComingFeature
 import com.aurum.app.ui.common.AurumIcons
 import com.aurum.app.ui.common.GoldButton
 import com.aurum.app.ui.common.SectionTitle
@@ -41,9 +40,9 @@ fun CreateScreen(model: AppViewModel) {
         }
         Column(verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
             Row(Modifier.padding(horizontal = Spacing.m), horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
-                CreateTile(AurumIcons.layers, tr("Video"), tr("Clips and photos"), Modifier.weight(1f)) { model.openComingSoon(ComingFeature.video) }
-                CreateTile(AurumIcons.sparkle, tr("Templates"), tr("Cut to the beat"), Modifier.weight(1f)) { model.openComingSoon(ComingFeature.templates) }
-                CreateTile(AurumIcons.camera, tr("Camera"), tr("Shoot in a look"), Modifier.weight(1f)) { model.openComingSoon(ComingFeature.camera) }
+                CreateTile(AurumIcons.layers, tr("Video"), tr("Clips and photos"), Modifier.weight(1f)) { model.startVideo() }
+                CreateTile(AurumIcons.sparkle, tr("Templates"), tr("Cut to the beat"), Modifier.weight(1f)) { model.openTemplates() }
+                CreateTile(AurumIcons.camera, tr("Camera"), tr("Shoot in a look"), Modifier.weight(1f)) { model.openCamera() }
             }
         }
         Column(verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
