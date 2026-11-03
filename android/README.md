@@ -82,7 +82,7 @@ There is also `render/PixelRenderer`: a CPU renderer for looks and adjustments, 
 ### `app`
 - **Onboarding**: the promise, choosing up to three aesthetics, and privacy.
 - **Shell**:
-  - Salon: featured collection, Create tiles, AI atelier tiles, the active drop and creating streak, drafts to continue, and look rows by collection.
+  - Salon: featured collection, Create tiles, Auto Studio tiles, the active drop and creating streak, drafts to continue, and look rows by collection.
   - Create: the photo picker plus tiles.
   - Vault: drafts, and presets you can use, share or delete.
 - **Photo Picker API** (`PickVisualMedia`, images only). AURUM needs no storage permission to read photos. Drafts keep a persisted URI permission where the picker grants one.
@@ -115,7 +115,14 @@ There is also `render/PixelRenderer`: a CPU renderer for looks and adjustments, 
   - When the system "Remove animations" setting is on, every transition becomes a cut. This is `LocalReduceMotion`, which watches `ANIMATOR_DURATION_SCALE`.
   - Controls have content descriptions, roles and selected state.
   - Saving or removing a look and deleting a draft are also available as accessibility actions.
-- **Coming to Android**: Video, Templates, Camera, AI Studio, 3D Motion, Collage and Carousel open a calm page that names the feature and points back to photo editing.
+- **Studio Retouch**: the iOS retouch sheet. Faces come from ML Kit face detection (bundled model, contours and landmarks); `core/render/RetouchRenderer` draws it in the preview and the export.
+- **Video editor** (`ui/video`, `video/`): clips and photos from the picker, trim, split, speed, reverse, transitions, looks, animated effects, text layers, intro/outro cards and imported music with beat detection. Preview and export run through Media3 Transformer with one GPU shader (`AurumFrameEffect`); exports go to `Movies/AURUM`, 1920 px with the mark for free users, up to 4K for members.
+- **Templates** (`ui/templates`): beat templates built with `TemplateBuilder`, then opened in the video editor.
+- **Camera** (`ui/camera`, `camera/`): CameraX with the chosen look applied live (a 25³ LUT on analysis frames), front/back, flash, timer, grid and tap to focus. The shot opens in the Studio wearing the look.
+- **Auto Studio** (`ui/autostudio`, `ondevice/`): auto enhance, portrait blur, background, relight, retouch, straighten, object removal (classic inpainting in `core/Inpainting`) and portrait looks. Everything runs on the phone: ML Kit face detection and selfie segmentation with bundled models, plus pixel processing. Nothing is uploaded and there is no generative AI.
+- **3D Motion**: estimated depth (ground gradient plus the ML Kit person mask), near/far layers with a blur fill, live preview, and MP4 export with MediaCodec.
+- **Collage and Carousel** (`ui/collage`, `collage/`): layouts, pan and zoom per cell, spacing, corners, background; carousel panels for swipe posts.
+- **Motion** (`ui/common/MotionKit.kt`): entrances, press states, shimmer, ambient glow, drawn checkmark and gold progress ring, all still or fade-only when "Remove animations" is on.
 
 ## Rendering, and what is approximated
 
@@ -137,9 +144,10 @@ These are approximations of Core Image, where Core Image has no public formula:
 
 ## Not on Android yet
 
-- Video editor, templates and beat-cut export. The core timing model is ported; the UI and renderer are not.
-- Camera; AI Studio and 3D Motion (and their server calls); Collage and Carousel UI. Their models are in `core`.
-- **Retouch**: the operation is kept and round-trips through JSON, and it still counts as a member item at export. It is not rendered, because face landmarks would need ML Kit or MediaPipe.
+- **3D Motion** always estimates depth: Android has no common way to read Portrait-mode depth maps.
+- **Auto Studio** scene labels are "sky" and "people" only (no bundled scene classifier); the horizon finder, auto tone, red-eye and noise reduction are pixel approximations of the Core Image and Vision versions.
+- **Video**: the preview re-renders about 350 ms after an edit; during a transition the outgoing clip is a held last frame. Bloom has no blur in video.
+- The licensed music library is still empty on both platforms; songs can be imported from Files.
 - **Crop**: aspect presets are centred. There are no drag handles for a free crop rectangle yet; "Free" keeps the current frame.
 - **Member exports** use full resolution up to what the heap allows (`largeHeap`, about 24 bytes per pixel at peak). Larger photos are scaled to fit, which on most devices means roughly 12–25 MP. Tiled rendering would remove that limit.
 - Remote config and catalogue updates use the bundled defaults.

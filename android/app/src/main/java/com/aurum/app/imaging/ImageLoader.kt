@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.graphics.Matrix
 import android.net.Uri
+import androidx.annotation.RequiresApi
 import android.os.Build
 import androidx.exifinterface.media.ExifInterface
 import com.aurum.core.PixelSize
@@ -29,6 +30,7 @@ object ImageLoader {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) decodeModern(context, uri, maxPixelSize) else decodeLegacy(context, uri, maxPixelSize)
     }.getOrNull()
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun decodeModern(context: Context, uri: Uri, maxPixelSize: Int): Bitmap {
         val source = ImageDecoder.createSource(context.contentResolver, uri)
         val bitmap = ImageDecoder.decodeBitmap(source) { decoder, info, _ ->
