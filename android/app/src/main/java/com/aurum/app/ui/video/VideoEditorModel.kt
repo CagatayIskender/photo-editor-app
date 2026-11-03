@@ -103,10 +103,10 @@ class VideoEditorModel(context: Context, val container: AppContainer, initial: V
     private val history = Undoable(initial)
 
     var project by mutableStateOf(initial)
+        private set
 
     /** The project as it was last exported; closing without changes since then needs no warning. */
     var lastSavedProject: VideoProject? = null
-        private set
     var canUndo by mutableStateOf(false)
         private set
     var canRedo by mutableStateOf(false)
