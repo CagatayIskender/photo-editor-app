@@ -85,7 +85,7 @@ fun CarouselScreen(model: AppViewModel) {
     val haptic = LocalHapticFeedback.current
 
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) session.setPhoto(uri)
+        if (uri != null) session.choosePhoto(uri)
     }
     val pick = { picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
     // Android 8 and 9 need a storage permission to add to the photo library.
@@ -127,14 +127,14 @@ fun CarouselScreen(model: AppViewModel) {
                     range = CarouselSession.MIN_PANELS..CarouselSession.MAX_PANELS,
                     label = tr("Panels"),
                     onChange = {
-                        session.setCount(it)
+                        session.updateCount(it)
                         haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                     },
                 )
             }
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.xs)) {
                 CarouselSession.aspects.forEach { aspect ->
-                    Chip(aspect.label, selected = session.aspect == aspect, onClick = { session.setAspect(aspect) })
+                    Chip(aspect.label, selected = session.aspect == aspect, onClick = { session.updateAspect(aspect) })
                 }
                 Spacer(Modifier.weight(1f))
                 TextAction(tr("Change photo"), { pick() })

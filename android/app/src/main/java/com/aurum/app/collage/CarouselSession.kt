@@ -75,20 +75,20 @@ class CarouselSession(
     val panelRects: List<NormalizedRect>
         get() = photoSize?.let { Carousel.panels(it.aspectRatio, count, panelAspect) } ?: emptyList()
 
-    fun setCount(value: Int) {
+    fun updateCount(value: Int) {
         val clamped = clampCount(value)
         if (clamped == count) return
         count = clamped
         refreshPanels()
     }
 
-    fun setAspect(value: AspectPreset) {
+    fun updateAspect(value: AspectPreset) {
         if (value == aspect) return
         aspect = value
         refreshPanels()
     }
 
-    fun setPhoto(uri: Uri) {
+    fun choosePhoto(uri: Uri) {
         scope.launch {
             phase = Phase.Loading
             val loaded = withContext(Dispatchers.IO) {

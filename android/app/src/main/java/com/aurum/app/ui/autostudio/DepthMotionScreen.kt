@@ -113,7 +113,7 @@ fun DepthMotionScreen(model: AppViewModel) {
     val entitlement by container.membership.entitlement.collectAsState()
 
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) state.setPhoto(uri)
+        if (uri != null) state.choosePhoto(uri)
     }
     fun pick() {
         runCatching { picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }

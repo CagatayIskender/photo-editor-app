@@ -68,7 +68,7 @@ class DepthMotionModel(
 
     // Loading
 
-    fun setPhoto(uri: Uri) {
+    fun choosePhoto(uri: Uri) {
         exportJob?.cancel()
         loadJob?.cancel()
         photo = uri
