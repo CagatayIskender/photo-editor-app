@@ -78,6 +78,14 @@ class CollageSession(
     fun add(uris: List<Uri>) {
         scope.launch {
             val sources = withContext(Dispatchers.IO) { uris.mapNotNull(::source) }
+            // More photos than empty cells: move to the smallest free layout that holds them all, so none are dropped.
+            val needed = project.filledCount + sources.size
+            if (needed > project.layout.photoCount) {
+                CollageLayout.library
+                    .filter { it.tier == Tier.free && it.photoCount >= needed }
+                    .minByOrNull { it.photoCount }
+                    ?.let { project = project.withLayout(it) }
+            }
             for (source in sources) {
                 val (next, _) = project.add(source) ?: break
                 project = next

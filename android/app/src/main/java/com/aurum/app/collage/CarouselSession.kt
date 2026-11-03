@@ -158,7 +158,7 @@ class CarouselSession(
                                 if (isFree && index == rects.lastIndex) {
                                     painter.drawWatermark(Canvas(panel), container.brand.watermarkText, panel.width.toFloat(), panel.height.toFloat())
                                 }
-                                exporter.saveToLibrary(panel)
+                                exporter.saveToLibrary(panel, "_${index + 1}")
                             } finally {
                                 panel.recycle()
                             }

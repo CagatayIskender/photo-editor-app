@@ -61,7 +61,8 @@ class PhotoExporter(
     }
 
     /** Saves an already rendered bitmap (collage, carousel panel) to Pictures/AURUM as JPEG. */
-    suspend fun saveToLibrary(bitmap: Bitmap): Uri = withContext(Dispatchers.IO) { save(bitmap) }
+    /** Saves [bitmap] to Pictures/AURUM. [suffix] (e.g. "_2") keeps a series, such as carousel panels, in order. */
+    suspend fun saveToLibrary(bitmap: Bitmap, suffix: String = ""): Uri = withContext(Dispatchers.IO) { save(bitmap, suffix) }
 
     /**
      * How large to decode the photo. Free exports only need enough pixels for
@@ -85,13 +86,13 @@ class PhotoExporter(
         return min(limit, maxLongest.toInt()).coerceAtLeast(256)
     }
 
-    private fun fileName(): String =
-        "AURUM_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".jpg"
+    private fun fileName(suffix: String = ""): String =
+        "AURUM_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + suffix + ".jpg"
 
-    private fun save(bitmap: Bitmap): Uri {
+    private fun save(bitmap: Bitmap, suffix: String = ""): Uri {
         val resolver = context.contentResolver
         val values = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, fileName())
+            put(MediaStore.Images.Media.DISPLAY_NAME, fileName(suffix))
             put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
         }
         val collection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

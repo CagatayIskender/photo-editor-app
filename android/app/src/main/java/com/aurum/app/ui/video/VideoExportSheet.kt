@@ -131,6 +131,7 @@ fun VideoExportSheet(app: AppViewModel, editor: VideoEditorModel, onDismiss: () 
                     if (phase is Phase.Rendering) phase = Phase.Rendering(value.coerceIn(0f, 1f))
                 }
                 container.prefs.recordCreation()
+                editor.lastSavedProject = original
                 if (toPhotos) {
                     VideoRenderer.saveToMovies(context, output)
                     haptics.performHapticFeedback(HapticFeedbackType.LongPress)

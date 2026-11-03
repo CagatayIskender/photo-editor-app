@@ -182,11 +182,12 @@ private fun Editor(app: AppViewModel, project: VideoProject) {
     val model = remember(project.id) { VideoEditorModel(context, app.container, project) }
     DisposableEffect(model) { onDispose { model.close() } }
     var confirmClose by remember { mutableStateOf(false) }
-    BackHandler(enabled = !model.isExportPresented) { confirmClose = true }
+    fun requestClose() { if (model.lastSavedProject == model.project) app.closeFlow() else confirmClose = true }
+    BackHandler(enabled = !model.isExportPresented) { requestClose() }
 
     Box(Modifier.fillMaxSize().background(p.background)) {
         Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
-            TopBar(model, onClose = { confirmClose = true })
+            TopBar(model, onClose = { requestClose() })
             PlayerArea(model, Modifier.weight(1f).fillMaxWidth())
             Transport(model)
             Timeline(model, Modifier.fillMaxWidth().height(112.dp))

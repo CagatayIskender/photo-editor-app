@@ -1,5 +1,6 @@
 package com.aurum.app.camera
 
+import android.util.Log
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
@@ -117,26 +118,34 @@ class LiveCamera(context: Context) {
         val future = ProcessCameraProvider.getInstance(app)
         future.addListener({
             if (released) return@addListener
-            val p = try { future.get() } catch (e: Exception) { failed = true; onReady(false); return@addListener }
+            val p = try { future.get() } catch (e: Exception) {
+                Log.w(TAG, "Camera provider failed", e)
+                failed = true; onReady(false); return@addListener
+            }
             provider = p
-            val selector = if (front) CameraSelector.DEFAULT_FRONT_CAMERA else CameraSelector.DEFAULT_BACK_CAMERA
-            val available = try { p.hasCamera(selector) } catch (e: Exception) { false }
-            if (!available) { failed = true; onReady(false); return@addListener }
+            fun has(s: CameraSelector) = try { p.hasCamera(s) } catch (e: Exception) { Log.w(TAG, "hasCamera failed", e); false }
+            val wanted = if (front) CameraSelector.DEFAULT_FRONT_CAMERA else CameraSelector.DEFAULT_BACK_CAMERA
+            val other = if (front) CameraSelector.DEFAULT_BACK_CAMERA else CameraSelector.DEFAULT_FRONT_CAMERA
+            // Some devices list a lens they don't have: fall back to whichever lens is really there.
+            val useFront = when { has(wanted) -> front; has(other) -> !front; else -> null }
+            if (useFront == null) { Log.w(TAG, "No usable camera"); failed = true; onReady(false); return@addListener }
+            val selector = if (useFront) CameraSelector.DEFAULT_FRONT_CAMERA else CameraSelector.DEFAULT_BACK_CAMERA
             try {
                 p.unbindAll()
                 preview.targetRotation = rotation
                 capture.targetRotation = rotation
                 analysis.targetRotation = rotation
                 preview.setSurfaceProvider(view.surfaceProvider)
-                mirror = front
+                mirror = useFront
                 camera = p.bindToLifecycle(owner, selector, preview, capture, analysis)
                 boundOwner = owner
-                isFront = front
+                isFront = useFront
                 hasFlash = camera?.cameraInfo?.hasFlashUnit() == true
                 if (!hasFlash) capture.flashMode = ImageCapture.FLASH_MODE_OFF
                 failed = false
                 onReady(true)
             } catch (e: Exception) {
+                Log.w(TAG, "Binding the camera failed", e)
                 failed = true
                 onReady(false)
             }
@@ -266,3 +275,5 @@ class LiveCamera(context: Context) {
         }
     }
 }
+
+private const val TAG = "AurumCamera"
